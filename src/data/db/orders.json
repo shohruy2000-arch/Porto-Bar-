@@ -1,0 +1,63 @@
+[
+  {
+    "type": "room",
+    "phone": "+79014039043",
+    "roomNumber": "2225",
+    "items": [
+      {
+        "dishId": "dish-2",
+        "quantity": 4,
+        "priceAtOrder": 450
+      }
+    ],
+    "totalAmount": 1800,
+    "paymentMethod": "receipt",
+    "status": "completed",
+    "id": "order-1780447689945",
+    "createdAt": "2026-06-03T00:48:09.945Z"
+  },
+  {
+    "type": "room",
+    "phone": "+79014039043",
+    "roomNumber": "2225",
+    "items": [
+      {
+        "dishId": "dish-1",
+        "quantity": 1,
+        "priceAtOrder": 680
+      },
+      {
+        "dishId": "dish-2",
+        "quantity": 2,
+        "priceAtOrder": 450
+      }
+    ],
+    "totalAmount": 1580,
+    "paymentMethod": "receipt",
+    "status": "received",
+    "id": "order-1780449360441",
+    "createdAt": "2026-06-03T01:16:00.441Z"
+  },
+  {
+    "type": "room",
+    "phone": "+79014039043",
+    "roomNumber": "2225",
+    "items": [
+      {
+        "dishId": "dish-1",
+        "quantity": 2,
+        "priceAtOrder": 680
+      },
+      {
+        "dishId": "dish-2",
+        "quantity": 2,
+        "priceAtOrder": 450
+      }
+    ],
+    "totalAmount": 2260,
+    "paymentMethod": "receipt",
+    "status": "received",
+    "id": "order-1780449439433",
+    "createdAt": "2026-06-03T01:17:19.433Z"
+  }
+]

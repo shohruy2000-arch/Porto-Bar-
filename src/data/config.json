@@ -1,0 +1,9 @@
+{
+  "botToken": "",
+  "chatId": "",
+  "waiterChatId": "",
+  "waiters": [],
+  "geminiApiKey": "",
+  "vapidPublicKey": "",
+  "vapidPrivateKey": ""
+}

@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  
+  --color-porto-bg: #060a12;
+  --color-porto-card: rgba(15, 23, 42, 0.75);
+  --color-porto-gold: #c5a880;
+  --color-porto-gold-bright: #d4af37;
+  --color-porto-gold-dark: #8f744f;
+  --color-porto-border: rgba(197, 168, 128, 0.28);
+  --color-porto-border-hover: rgba(197, 168, 128, 0.55);
+}
+
+:root {
+  --background: #060a12;
+  --foreground: #f4efea;
+}
+
+body {
+  background-color: var(--color-porto-bg);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Glassmorphism custom styling - increased border thickness to 1.5px */
+.glass-panel {
+  background: rgba(10, 17, 30, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid var(--color-porto-border);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  border-color: var(--color-porto-border-hover);
+  box-shadow: 0 8px 30px rgba(197, 168, 128, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Custom premium scrollbar for category list and general layout */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(6, 10, 18, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-porto-gold-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-porto-gold);
+}
+
+/* Gold Gradient text utilities */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f3e9d8 0%, #c5a880 50%, #8f744f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Decorative sea wave accent divider */
+.wave-divider {
+  width: 100%;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z' fill='%23c5a880' opacity='.15'%3E%3C/path%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Smooth active dot animation for navigation items */
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 4px rgba(197, 168, 128, 0.2);
+  }
+}
+
+.pulse-active {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Ambient glow backgrounds */
+.bg-glow-gold {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 168, 128, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* iOS PWA Safe Area Utilities */
+.safe-top-offset {
+  top: calc(16px + env(safe-area-inset-top, 0px)) !important;
+}
+
+.safe-bottom-offset {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+.safe-bottom-padding {
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+
+/* Hide scrollbars for utility classes */
+.scrollbar-none::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-none,
+.scrollbar-hide {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+/* Custom premium scrollbar for stories carousel */
+.stories-scrollbar::-webkit-scrollbar {
+  height: 2px !important; /* Extremely thin line */
+}
+
+.stories-scrollbar::-webkit-scrollbar-track {
+  background: rgba(197, 168, 128, 0.08) !important;
+  border-radius: 9999px !important;
+}
+
+.stories-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--color-porto-gold-dark), var(--color-porto-gold-bright), var(--color-porto-gold-dark)) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.45) !important;
+}
+
+.stories-scrollbar::-webkit-scrollbar-thumb:active {
+  background: var(--color-porto-gold-bright) !important;
+}
+
+/* ==========================================================================
+   Animated Flowing Gradient Borders for Stories
+   ========================================================================== */
+@keyframes spin-gradient {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.story-animated-border {
+  position: relative;
+  padding: 2px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 10px rgba(212, 175, 55, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.story-animated-border:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 22px rgba(212, 175, 55, 0.5);
+  transform: scale(1.03);
+}
+
+.story-animated-border::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: conic-gradient(
+    from 0deg,
+    #d4af37 0%,
+    #fbbf24 18%,
+    #f43f5e 40%,
+    #c084fc 60%,
+    #38bdf8 80%,
+    #fbbf24 92%,
+    #d4af37 100%
+  );
+  animation: spin-gradient 3.5s linear infinite;
+  z-index: 0;
+}
+
+.story-card-inner {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(1.5rem - 2px);
+  overflow: hidden;
+  background-color: #0c0e14;
+}
+

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "promo-1",
+    "title": {
+      "ru": "10% Скидка гостям гостиницы Аструс",
+      "en": "10% Discount for Astrus Hotel Guests",
+      "zh": "阿斯特鲁斯酒店宾客 9 折优惠"
+    },
+    "description": {
+      "ru": "Покажите ключ от номера (карту гостя) вашему официанту при оформлении счета.",
+      "en": "Present your room key (guest card) to your waiter when requesting the bill.",
+      "zh": "结账时向服务员出示您的房卡（宾客卡）即可享受优惠。"
+    },
+    "image": "/images/interior-1.jpg",
+    "active": true
+  },
+  {
+    "id": "promo-2",
+    "title": {
+      "ru": "Счастливые часы: 1+1 на все десерты!",
+      "en": "Happy Hours: 1+1 on All Desserts!",
+      "zh": "欢乐时光：甜点买一送一！"
+    },
+    "description": {
+      "ru": "Каждый будний день с 16:00 до 18:00 при заказе любого фирменного кофе.",
+      "en": "Every weekday from 4:00 PM to 6:00 PM when ordering any signature coffee.",
+      "zh": "工作日下午 4:00 至 6:00，点购任意招牌咖啡即可享受。"
+    },
+    "image": "/images/interior-4.jpg",
+    "active": true
+  }
+]
