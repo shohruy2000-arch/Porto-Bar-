@@ -772,6 +772,10 @@ export const LoyaltyModal: React.FC<LoyaltyModalProps> = ({ isOpen, onClose, onR
                     {loading ? t('loyalty.reg.loading') : t('loyalty.reg.btn')}
                   </button>
 
+                  <p className="text-[9px] text-gray-400 text-center leading-tight">
+                    Нажимая кнопку регистрации, вы соглашаетесь с Политикой конфиденциальности и обработкой персональных данных (152-ФЗ).
+                  </p>
+
                   <button
                     type="button"
                     onClick={handleLogout}

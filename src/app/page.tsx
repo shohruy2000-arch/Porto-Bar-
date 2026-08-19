@@ -17,9 +17,11 @@ import { CallWaiterModal } from '../components/CallWaiterModal';
 import { RoomServiceModal } from '../components/RoomServiceModal';
 import { LoyaltyModal } from '../components/LoyaltyModal';
 import { DishDetailModal } from '../components/DishDetailModal';
-import PWAInstallPrompt from '../components/PWAInstallPrompt';
 import { StoriesModal } from '../components/StoriesModal';
 import { BookingModal } from '../components/BookingModal';
+import { Footer } from '../components/Footer';
+import { LegalModal, LegalTab } from '../components/LegalModal';
+import { CookieBanner } from '../components/CookieBanner';
 
 const HERO_IMAGES = [
   '/images/interior-1.jpg',
@@ -56,6 +58,13 @@ export default function GuestPage() {
   const [backstageVideoEnabled, setBackstageVideoEnabled] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isPrintedMenuOpen, setIsPrintedMenuOpen] = useState(false);
+  const [isLegalOpen, setIsLegalOpen] = useState(false);
+  const [legalTab, setLegalTab] = useState<LegalTab>('privacy');
+
+  const handleOpenLegal = (tab: LegalTab = 'privacy') => {
+    setLegalTab(tab);
+    setIsLegalOpen(true);
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -873,8 +882,18 @@ export default function GuestPage() {
         )}
       </AnimatePresence>
 
-      {/* PWA Install Banner */}
-      <PWAInstallPrompt />
+      {/* Legal Footer */}
+      <Footer onOpenLegal={handleOpenLegal} />
+
+      {/* Legal Documents Modal (152-FZ, Terms, Requisites, Refund, Alcohol) */}
+      <LegalModal
+        isOpen={isLegalOpen}
+        onClose={() => setIsLegalOpen(false)}
+        initialTab={legalTab}
+      />
+
+      {/* Cookie Consent Banner (152-FZ) */}
+      <CookieBanner onOpenPrivacy={() => handleOpenLegal('privacy')} />
     </div>
   );
 }

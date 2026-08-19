@@ -472,21 +472,26 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                   <ChevronRight className="w-4 h-4" />
                 </button>
               ) : (
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="flex items-center space-x-2 px-6 py-2.5 bg-gradient-to-r from-porto-gold to-porto-gold-bright text-porto-bg rounded-full text-xs font-black uppercase tracking-widest active:scale-95 transition-all cursor-pointer shadow-lg disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <span>{t('btn.sending')}</span>
-                  ) : (
-                    <>
-                      <Check className="w-4 h-4" />
-                      <span>{t('btn.confirm')}</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex flex-col items-end gap-1">
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="flex items-center space-x-2 px-6 py-2.5 bg-gradient-to-r from-porto-gold to-porto-gold-bright text-porto-bg rounded-full text-xs font-black uppercase tracking-widest active:scale-95 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <span>{t('btn.sending')}</span>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>{t('btn.confirm')}</span>
+                      </>
+                    )}
+                  </button>
+                  <span className="text-[8px] text-gray-400 text-right max-w-[200px] leading-tight">
+                    Нажимая кнопку, вы соглашаетесь с Политикой конфиденциальности (152-ФЗ)
+                  </span>
+                </div>
               )}
             </div>
           )}

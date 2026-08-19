@@ -786,21 +786,26 @@ export const RoomServiceModal: React.FC<RoomServiceModalProps> = ({ isOpen, onCl
                 {error && <p className="text-xs text-red-400 text-center font-bold">{error}</p>}
 
                 {/* Confirm Buttons */}
-                <div className="flex space-x-3.5 border-t border-porto-gold/10 pt-3 mt-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setStep('cart')}
-                    className="flex-1 border border-white/10 hover:bg-white/5 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider cursor-pointer"
-                  >
-                    {t('checkout.btnBack')}
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || (orderType === 'delivery' && !isWithinDeliveryRadius)}
-                    className="flex-1 bg-gradient-to-r from-porto-gold-dark via-porto-gold to-porto-gold-bright text-porto-bg font-black py-3.5 rounded-xl text-xs uppercase tracking-widest active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg cursor-pointer"
-                  >
-                    {isSubmitting ? t('btn.sending') : t('checkout.btnSubmit')}
-                  </button>
+                <div className="space-y-2 border-t border-porto-gold/10 pt-3 mt-2 shrink-0">
+                  <div className="flex space-x-3.5">
+                    <button
+                      type="button"
+                      onClick={() => setStep('cart')}
+                      className="flex-1 border border-white/10 hover:bg-white/5 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider cursor-pointer"
+                    >
+                      {t('checkout.btnBack')}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || (orderType === 'delivery' && !isWithinDeliveryRadius)}
+                      className="flex-1 bg-gradient-to-r from-porto-gold-dark via-porto-gold to-porto-gold-bright text-porto-bg font-black py-3.5 rounded-xl text-xs uppercase tracking-widest active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg cursor-pointer"
+                    >
+                      {isSubmitting ? t('btn.sending') : t('checkout.btnSubmit')}
+                    </button>
+                  </div>
+                  <p className="text-[9px] text-gray-400 text-center leading-tight">
+                    Нажимая «{t('checkout.btnSubmit')}», вы соглашаетесь с <span className="text-porto-gold">Политикой конфиденциальности</span> (152-ФЗ) и условиями <span className="text-porto-gold">Публичной оферты</span>.
+                  </p>
                 </div>
               </form>
             )}
