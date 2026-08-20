@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Building, Info, Search, MapPin, Sparkles, Film, Play, Calendar, BookOpen, X, Utensils, Star } from 'lucide-react';
+import { Phone, Building, Info, Search, MapPin, Sparkles, Film, Play, Calendar, BookOpen, X, Utensils, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { menuRepository } from '../data/localMenuRepository';
@@ -64,6 +64,74 @@ export default function GuestPage() {
   const handleOpenLegal = (tab: LegalTab = 'privacy') => {
     setLegalTab(tab);
     setIsLegalOpen(true);
+  };
+
+  // Carousel refs for Recommended & Stories
+  const recommendedScrollRef = useRef<HTMLDivElement | null>(null);
+  const storiesScrollRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollCarousel = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
+    if (!ref.current) return;
+    const scrollAmount = 260;
+    ref.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  // Mouse wheel horizontal scroll listener for PC desktop
+  useEffect(() => {
+    const handleWheel = (el: HTMLDivElement | null, e: WheelEvent) => {
+      if (!el) return;
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY * 1.5;
+      }
+    };
+
+    const recEl = recommendedScrollRef.current;
+    const storiesEl = storiesScrollRef.current;
+
+    const onRecWheel = (e: WheelEvent) => handleWheel(recEl, e);
+    const onStoriesWheel = (e: WheelEvent) => handleWheel(storiesEl, e);
+
+    if (recEl) {
+      recEl.addEventListener('wheel', onRecWheel, { passive: false });
+    }
+    if (storiesEl) {
+      storiesEl.addEventListener('wheel', onStoriesWheel, { passive: false });
+    }
+
+    return () => {
+      if (recEl) recEl.removeEventListener('wheel', onRecWheel);
+      if (storiesEl) storiesEl.removeEventListener('wheel', onStoriesWheel);
+    };
+  }, [dishes.length, stories.length]);
+
+  // Mouse drag-to-scroll for desktop
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const dragDistanceRef = useRef(0);
+
+  const onDragStart = (e: React.MouseEvent, el: HTMLDivElement | null) => {
+    if (!el) return;
+    isDraggingRef.current = true;
+    dragDistanceRef.current = 0;
+    startXRef.current = e.pageX - el.offsetLeft;
+    scrollLeftRef.current = el.scrollLeft;
+  };
+
+  const onDragMove = (e: React.MouseEvent, el: HTMLDivElement | null) => {
+    if (!isDraggingRef.current || !el) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.4;
+    dragDistanceRef.current += Math.abs(walk);
+    el.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const onDragEnd = () => {
+    isDraggingRef.current = false;
   };
 
   useEffect(() => {
@@ -468,8 +536,34 @@ export default function GuestPage() {
                   <Sparkles className="w-4 h-4 text-porto-gold-bright animate-pulse" />
                   <span>{t('stories.newsTitle')}</span>
                 </h3>
+                {/* Desktop Navigation Scroll Controls */}
+                <div className="flex items-center space-x-1.5">
+                  <button
+                    type="button"
+                    onClick={() => scrollCarousel(storiesScrollRef, 'left')}
+                    className="p-1.5 rounded-full bg-white/5 hover:bg-porto-gold/25 border border-white/10 hover:border-porto-gold/50 text-gray-300 hover:text-porto-gold-bright transition-all cursor-pointer shadow-sm active:scale-95"
+                    title="Назад"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollCarousel(storiesScrollRef, 'right')}
+                    className="p-1.5 rounded-full bg-white/5 hover:bg-porto-gold/25 border border-white/10 hover:border-porto-gold/50 text-gray-300 hover:text-porto-gold-bright transition-all cursor-pointer shadow-sm active:scale-95"
+                    title="Вперед"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-3 overflow-x-auto stories-scrollbar pb-4 pt-1 w-full snap-x snap-mandatory px-0.5">
+              <div
+                ref={storiesScrollRef}
+                onMouseDown={(e) => onDragStart(e, storiesScrollRef.current)}
+                onMouseMove={(e) => onDragMove(e, storiesScrollRef.current)}
+                onMouseUp={onDragEnd}
+                onMouseLeave={onDragEnd}
+                className="flex gap-3 overflow-x-auto stories-scrollbar pb-4 pt-1 w-full snap-x snap-mandatory px-0.5 cursor-grab active:cursor-grabbing select-none"
+              >
                 {stories.map((story, index) => {
                   if (!story.enabled) return null;
                   const isVideo = Boolean(story.videoUrl && story.videoUrl.trim() !== '');
@@ -478,6 +572,7 @@ export default function GuestPage() {
                     <div
                       key={story.id}
                       onClick={() => {
+                        if (dragDistanceRef.current > 6) return;
                         setActiveStoryIndex(index);
                         setIsStoriesModalOpen(true);
                       }}
@@ -485,7 +580,7 @@ export default function GuestPage() {
                     >
                       <div className="story-card-inner flex flex-col justify-between p-3">
                         {/* Media Background: Video or Image */}
-                        <div className="absolute inset-0 z-0 overflow-hidden">
+                        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                           {isVideo ? (
                             <video
                               src={mediaUrl}
@@ -505,7 +600,7 @@ export default function GuestPage() {
                         </div>
 
                         {/* High Contrast Gradient Overlays */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/60 z-10" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/60 z-10 pointer-events-none" />
 
                         {/* Top Badge & Title on poster */}
                         <div className="relative z-20 flex flex-col items-start space-y-1">
@@ -589,23 +684,50 @@ export default function GuestPage() {
                   </h3>
                   <span className="w-1.5 h-1.5 rounded-full bg-porto-gold animate-pulse" />
                 </div>
-                <span className="text-[9px] font-bold text-porto-gold uppercase tracking-widest bg-porto-gold/10 px-2 py-0.5 rounded-full border border-porto-gold/20">
-                  {recommendedDishes.length}
-                </span>
+                {/* Desktop Navigation Scroll Controls */}
+                <div className="flex items-center space-x-1.5">
+                  <button
+                    type="button"
+                    onClick={() => scrollCarousel(recommendedScrollRef, 'left')}
+                    className="p-1.5 rounded-full bg-white/5 hover:bg-porto-gold/25 border border-white/10 hover:border-porto-gold/50 text-gray-300 hover:text-porto-gold-bright transition-all cursor-pointer shadow-sm active:scale-95"
+                    title="Назад"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollCarousel(recommendedScrollRef, 'right')}
+                    className="p-1.5 rounded-full bg-white/5 hover:bg-porto-gold/25 border border-white/10 hover:border-porto-gold/50 text-gray-300 hover:text-porto-gold-bright transition-all cursor-pointer shadow-sm active:scale-95"
+                    title="Вперед"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[9px] font-bold text-porto-gold uppercase tracking-widest bg-porto-gold/10 px-2 py-0.5 rounded-full border border-porto-gold/20">
+                    {recommendedDishes.length}
+                  </span>
+                </div>
               </div>
 
-              <div className="flex gap-2.5 overflow-x-auto stories-scrollbar pb-3 w-full snap-x snap-mandatory px-0.5">
+              <div
+                ref={recommendedScrollRef}
+                onMouseDown={(e) => onDragStart(e, recommendedScrollRef.current)}
+                onMouseMove={(e) => onDragMove(e, recommendedScrollRef.current)}
+                onMouseUp={onDragEnd}
+                onMouseLeave={onDragEnd}
+                className="flex gap-2.5 overflow-x-auto stories-scrollbar pb-3 w-full snap-x snap-mandatory px-0.5 cursor-grab active:cursor-grabbing select-none"
+              >
                 {recommendedDishes.map((dish) => (
                   <div
                     key={dish.id}
                     onClick={() => {
+                      if (dragDistanceRef.current > 6) return;
                       setSelectedDish(dish);
                       setIsDetailOpen(true);
                     }}
                     className="group relative bg-[#131722]/95 hover:bg-[#181d2a] border border-white/10 hover:border-porto-gold/40 rounded-2xl p-2.5 w-28 sm:w-32 shrink-0 flex flex-col justify-between cursor-pointer transition-all duration-300 active:scale-95 snap-start shadow-[0_4px_16px_rgba(0,0,0,0.5)]"
                   >
                     {/* Dish image container */}
-                    <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/60 flex items-center justify-center">
+                    <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-black/60 flex items-center justify-center pointer-events-none">
                       {/* Ambient warm glow behind dish */}
                       <div className="absolute inset-0 bg-radial from-amber-500/20 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
                       {dish.image ? (
@@ -620,12 +742,12 @@ export default function GuestPage() {
                     </div>
 
                     {/* Title */}
-                    <h4 className="text-[11px] font-bold text-gray-200 group-hover:text-white leading-tight line-clamp-2 mt-2 min-h-[28px] text-center">
+                    <h4 className="text-[11px] font-bold text-gray-200 group-hover:text-white leading-tight line-clamp-2 mt-2 min-h-[28px] text-center pointer-events-none">
                       {translate(dish.name)}
                     </h4>
 
                     {/* Price */}
-                    <div className="mt-1 text-center">
+                    <div className="mt-1 text-center pointer-events-none">
                       <span className="text-xs font-black text-porto-gold-bright tracking-tight font-sans">
                         {dish.price} ₽
                       </span>
