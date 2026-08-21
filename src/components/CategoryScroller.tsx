@@ -42,7 +42,7 @@ export const CategoryScroller: React.FC<CategoryScrollerProps> = ({
   }, [activeCategoryId]);
 
   return (
-    <div className={`w-full relative z-10 border-b border-porto-gold/10 bg-porto-bg/85 backdrop-blur-md sticky transition-all duration-300 ${isRestaurantClosed ? 'top-[36px]' : 'top-0'}`}>
+    <div className="w-full relative z-30 border-b border-porto-gold/10 bg-porto-bg/95 backdrop-blur-md sticky top-0 transition-all duration-300 shadow-md">
       <div
         ref={containerRef}
         className="flex items-center space-x-2.5 overflow-x-auto py-3.5 px-4 scrollbar-none scroll-smooth"

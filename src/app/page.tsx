@@ -66,6 +66,8 @@ export default function Home() {
   const [heroType, setHeroType] = useState<'video' | 'slideshow'>('slideshow');
   const [heroSlogan, setHeroSlogan] = useState<MultilingualText | null>(null);
   const [statusBannerText, setStatusBannerText] = useState<MultilingualText | null>(null);
+  const [statusBannerSubtitle, setStatusBannerSubtitle] = useState<MultilingualText | null>(null);
+  const [statusBannerVideoUrl, setStatusBannerVideoUrl] = useState('');
   const [printedMenuImage, setPrintedMenuImage] = useState('/images/image_2026-07-01_13-49-49.png');
 
   const handleOpenLegal = (tab: LegalTab = 'privacy') => {
@@ -201,6 +203,8 @@ export default function Home() {
         setHeroType(configData.heroType || 'slideshow');
         setHeroSlogan(configData.heroSlogan || null);
         setStatusBannerText(configData.statusBannerText || null);
+        setStatusBannerSubtitle(configData.statusBannerSubtitle || null);
+        setStatusBannerVideoUrl(configData.statusBannerVideoUrl || '');
         if (configData.printedMenuImage) {
           setPrintedMenuImage(configData.printedMenuImage);
         }
@@ -303,7 +307,7 @@ export default function Home() {
     } else {
       const element = document.getElementById(`category-section-${categoryId}`);
       if (element) {
-        const yOffset = !isOpen ? -111 : -75; // Offset for sticky category bar
+        const yOffset = -75; // Offset for sticky category bar
         const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
@@ -350,7 +354,7 @@ export default function Home() {
 
       const sections = document.querySelectorAll('.category-section');
       let currentActive: string | null = null;
-      const triggerPoint = !isOpen ? 131 : 95; // Trigger point just below sticky header (approx 75px + closed banner height)
+      const triggerPoint = 95; // Trigger point just below sticky header
 
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
@@ -414,18 +418,37 @@ export default function Home() {
 
   return (
     <div className="flex-1 flex flex-col pb-24 md:pb-28">
-      {/* Top Sticky Status Banner (China News style with Yellow Clock) */}
-      <div className="sticky top-0 z-40 bg-[#0a0d14]/95 border-b border-amber-500/20 py-2.5 px-4 shadow-[0_2px_15px_rgba(0,0,0,0.6)] flex items-center justify-center space-x-2 text-center select-none backdrop-blur-md">
-        <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0" />
-        <div className="text-xs tracking-wide leading-tight flex items-center gap-1.5 flex-wrap justify-center font-sans">
-          <span className="font-bold text-amber-300">
-            {statusBannerText
-              ? translate(statusBannerText)
-              : t('promo.cookingTimeBanner').replace('{start}', workHoursStart).replace('{end}', workHoursEnd)}
-          </span>
-          <span className="text-amber-200/85 font-medium">
-            {!isOpen ? t('promo.canPreorder') : t('promo.welcomeOrder')}
-          </span>
+      {/* Top Announcement & Status Banner (Supports background video & custom animated presentation text) */}
+      <div className="relative w-full overflow-hidden bg-[#0a0d14] border-b border-amber-500/25 shadow-[0_2px_20px_rgba(0,0,0,0.6)] select-none z-10">
+        {/* Background Video if configured */}
+        {statusBannerVideoUrl ? (
+          <>
+            <video
+              src={statusBannerVideoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/85 backdrop-blur-[0.5px]" />
+          </>
+        ) : null}
+
+        <div className="relative z-10 py-2.5 px-4 flex items-center justify-center space-x-2 text-center">
+          <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0 animate-pulse" />
+          <div className="text-xs tracking-wide leading-tight flex items-center gap-1.5 flex-wrap justify-center font-sans">
+            <span className="font-bold text-amber-300 drop-shadow-md">
+              {statusBannerText
+                ? translate(statusBannerText)
+                : t('promo.cookingTimeBanner').replace('{start}', workHoursStart).replace('{end}', workHoursEnd)}
+            </span>
+            <span className="text-amber-100/90 font-medium drop-shadow">
+              {statusBannerSubtitle
+                ? translate(statusBannerSubtitle)
+                : (!isOpen ? t('promo.canPreorder') : t('promo.welcomeOrder'))}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -832,7 +855,7 @@ export default function Home() {
                     key={category.id} 
                     id={`category-section-${category.id}`}
                     data-category-id={category.id}
-                    className={`category-section space-y-4 ${!isOpen ? 'scroll-mt-[111px]' : 'scroll-mt-[75px]'}`}
+                    className="category-section space-y-4 scroll-mt-[75px]"
                   >
                     <div className="flex items-center space-x-2 border-b border-porto-gold/10 pb-2">
                       <span className="w-1.5 h-4 bg-porto-gold rounded-full"></span>

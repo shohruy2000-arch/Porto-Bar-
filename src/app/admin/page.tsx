@@ -93,6 +93,12 @@ export default function AdminPage() {
   const [statusBannerTextRU, setStatusBannerTextRU] = useState('');
   const [statusBannerTextEN, setStatusBannerTextEN] = useState('');
   const [statusBannerTextZH, setStatusBannerTextZH] = useState('');
+  const [statusBannerSubtitleRU, setStatusBannerSubtitleRU] = useState('');
+  const [statusBannerSubtitleEN, setStatusBannerSubtitleEN] = useState('');
+  const [statusBannerSubtitleZH, setStatusBannerSubtitleZH] = useState('');
+  const [statusBannerVideoUrl, setStatusBannerVideoUrl] = useState('');
+  const [isBannerVideoUploading, setIsBannerVideoUploading] = useState(false);
+  const [bannerVideoUploadError, setBannerVideoUploadError] = useState('');
   const [printedMenuImage, setPrintedMenuImage] = useState('/images/image_2026-07-01_13-49-49.png');
   const [isHeroVideoUploading, setIsHeroVideoUploading] = useState(false);
   const [isPrintedMenuUploading, setIsPrintedMenuUploading] = useState(false);
@@ -214,6 +220,10 @@ export default function AdminPage() {
         setStatusBannerTextRU(configData.statusBannerText?.ru || '');
         setStatusBannerTextEN(configData.statusBannerText?.en || '');
         setStatusBannerTextZH(configData.statusBannerText?.zh || '');
+        setStatusBannerSubtitleRU(configData.statusBannerSubtitle?.ru || '');
+        setStatusBannerSubtitleEN(configData.statusBannerSubtitle?.en || '');
+        setStatusBannerSubtitleZH(configData.statusBannerSubtitle?.zh || '');
+        setStatusBannerVideoUrl(configData.statusBannerVideoUrl || '');
         setPrintedMenuImage(configData.printedMenuImage || '/images/image_2026-07-01_13-49-49.png');
 
         // Delivery config
@@ -653,6 +663,12 @@ export default function AdminPage() {
             en: statusBannerTextEN,
             zh: statusBannerTextZH
           },
+          statusBannerSubtitle: {
+            ru: statusBannerSubtitleRU,
+            en: statusBannerSubtitleEN,
+            zh: statusBannerSubtitleZH
+          },
+          statusBannerVideoUrl,
           printedMenuImage,
           yandexEdaUrl,
           deliveryRadiusKm: Number(deliveryRadiusKm) || 2,
@@ -704,6 +720,31 @@ export default function AdminPage() {
       setHeroVideoUploadError(err.message || 'Ошибка сети при загрузке');
     } finally {
       setIsHeroVideoUploading(false);
+    }
+  };
+
+  const handleBannerVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsBannerVideoUploading(true);
+    setBannerVideoUploadError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setStatusBannerVideoUrl(data.url);
+      } else {
+        setBannerVideoUploadError(data.error || 'Ошибка загрузки видео');
+      }
+    } catch (err: any) {
+      setBannerVideoUploadError(err.message || 'Ошибка сети при загрузке');
+    } finally {
+      setIsBannerVideoUploading(false);
     }
   };
 
@@ -786,6 +827,12 @@ export default function AdminPage() {
             en: statusBannerTextEN,
             zh: statusBannerTextZH
           },
+          statusBannerSubtitle: {
+            ru: statusBannerSubtitleRU,
+            en: statusBannerSubtitleEN,
+            zh: statusBannerSubtitleZH
+          },
+          statusBannerVideoUrl,
           printedMenuImage,
           smtpHost,
           smtpPort: Number(smtpPort) || 465,
@@ -2394,17 +2441,17 @@ export default function AdminPage() {
             )}
 
             {/* ───────────────────────────────────────────────────────────── */}
-            {/* 1. TOP STATUS BANNER (Часы работы и статус заказов) */}
+            {/* 1. TOP STATUS & ANNOUNCEMENT BANNER */}
             {/* ───────────────────────────────────────────────────────────── */}
             <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
               <div className="flex items-center justify-between border-b border-white/5 pb-3">
                 <div>
                   <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
                     <Clock className="w-4 h-4 text-amber-400" />
-                    <span>1. Верхний статус-баннер (Режим работы кухни)</span>
+                    <span>1. Верхний статус-баннер и анонсы (Фоновое видео и текст)</span>
                   </h4>
                   <p className="text-[10px] text-gray-400 mt-0.5">
-                    Отображается в верхней строке сайта, информируя гостей о времени приема заказов
+                    Отображается в самом верху сайта. Поддерживает фоновое видео, презентации блюд и часы работы
                   </p>
                 </div>
               </div>
@@ -2435,29 +2482,84 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Custom Status Banner Text (optional overrides) */}
+              {/* Status Banner Background Video */}
+              <div className="bg-black/25 border border-porto-gold/20 p-4 rounded-xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-porto-gold uppercase flex items-center gap-1.5">
+                    <Film className="w-3.5 h-3.5 text-porto-gold" />
+                    <span>Фоновое видео для статус-баннера (Необязательно)</span>
+                  </label>
+                  {statusBannerVideoUrl && (
+                    <button
+                      type="button"
+                      onClick={() => setStatusBannerVideoUrl('')}
+                      className="text-[9px] uppercase font-bold text-red-400 hover:text-red-300 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20"
+                    >
+                      Удалить видео
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-300 uppercase">
+                      URL видео (MP4 / WebM)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="/videos/breakfast-intro.mp4 или https://..."
+                      value={statusBannerVideoUrl}
+                      onChange={(e) => setStatusBannerVideoUrl(e.target.value)}
+                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-300 uppercase">
+                      Загрузить видеофайл (до 50МБ)
+                    </label>
+                    <div className="flex items-center space-x-2.5 pt-0.5">
+                      <input
+                        type="file"
+                        accept="video/mp4,video/webm"
+                        onChange={handleBannerVideoUpload}
+                        disabled={isBannerVideoUploading}
+                        className="text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[9px] file:font-bold file:uppercase file:bg-porto-gold/20 file:text-porto-gold hover:file:bg-porto-gold/30 file:cursor-pointer w-full"
+                      />
+                      {isBannerVideoUploading && (
+                        <span className="text-[10px] text-porto-gold font-bold animate-pulse shrink-0">Загрузка...</span>
+                      )}
+                    </div>
+                    {bannerVideoUploadError && (
+                      <p className="text-[9px] text-red-400 font-semibold">{bannerVideoUploadError}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Banner Announcement Text */}
               <div className="space-y-2 pt-2 border-t border-white/5">
                 <label className="text-[9px] font-bold text-gray-400 uppercase">
-                  Пользовательский текст в плашке (Оставьте пустым для автотекста "Готовим с {workHoursStart} до {workHoursEnd}")
+                  Основной текст / анонс (например: "Приходите на завтрак! Презентация новых блюд" или "Готовим с {workHoursStart} до {workHoursEnd}")
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <input
                     type="text"
-                    placeholder={`Например: Готовим с ${workHoursStart} до ${workHoursEnd}.`}
+                    placeholder={`Например: Приходите на завтрак! У нас сегодня презентация новых блюд`}
                     value={statusBannerTextRU}
                     onChange={(e) => setStatusBannerTextRU(e.target.value)}
                     className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
                   />
                   <input
                     type="text"
-                    placeholder={`e.g. Cooking from ${workHoursStart} to ${workHoursEnd}.`}
+                    placeholder={`e.g. Come for breakfast! Presentation of new signature dishes`}
                     value={statusBannerTextEN}
                     onChange={(e) => setStatusBannerTextEN(e.target.value)}
                     className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
                   />
                   <input
                     type="text"
-                    placeholder="营业时间..."
+                    placeholder="欢迎品尝早餐..."
                     value={statusBannerTextZH}
                     onChange={(e) => setStatusBannerTextZH(e.target.value)}
                     className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
@@ -2465,18 +2567,63 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Live Status Preview */}
+              {/* Subtitle / Action Note */}
+              <div className="space-y-2 pt-1">
+                <label className="text-[9px] font-bold text-gray-400 uppercase">
+                  Дополнительный подзаголовок / призыв (Оставьте пустым для автотекста "Ждем ваш заказ" / "Можно сделать предзаказ")
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Например: Ждем вас на 1 этаже в Porto Bar"
+                    value={statusBannerSubtitleRU}
+                    onChange={(e) => setStatusBannerSubtitleRU(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g. Waiting for you on 1st floor"
+                    value={statusBannerSubtitleEN}
+                    onChange={(e) => setStatusBannerSubtitleEN(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                  <input
+                    type="text"
+                    placeholder="副标题..."
+                    value={statusBannerSubtitleZH}
+                    onChange={(e) => setStatusBannerSubtitleZH(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Live Status Preview with Video Background */}
               <div className="pt-2">
                 <p className="text-[9px] font-bold text-gray-500 uppercase mb-1">Предварительный просмотр на сайте:</p>
-                <div className="bg-[#0a0d14] border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-center space-x-2 text-center shadow-inner">
-                  <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0" />
-                  <div className="text-xs tracking-wide flex items-center gap-1.5 flex-wrap justify-center font-sans">
-                    <span className="font-bold text-amber-300">
-                      {statusBannerTextRU.trim() || `Готовим с ${workHoursStart} до ${workHoursEnd}.`}
-                    </span>
-                    <span className="text-amber-200/85 font-medium">
-                      Можно сделать предзаказ.
-                    </span>
+                <div className="relative overflow-hidden bg-[#0a0d14] border border-amber-500/35 rounded-xl p-3 shadow-inner text-center">
+                  {statusBannerVideoUrl && (
+                    <>
+                      <video
+                        src={statusBannerVideoUrl}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/85 backdrop-blur-[0.5px]" />
+                    </>
+                  )}
+                  <div className="relative z-10 flex items-center justify-center space-x-2">
+                    <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0 animate-pulse" />
+                    <div className="text-xs tracking-wide flex items-center gap-1.5 flex-wrap justify-center font-sans">
+                      <span className="font-bold text-amber-300 drop-shadow-md">
+                        {statusBannerTextRU.trim() || `Готовим с ${workHoursStart} до ${workHoursEnd}.`}
+                      </span>
+                      <span className="text-amber-100/90 font-medium drop-shadow">
+                        {statusBannerSubtitleRU.trim() || 'Можно сделать предзаказ.'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

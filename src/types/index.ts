@@ -152,6 +152,8 @@ export interface TelegramConfig {
   heroType?: 'video' | 'slideshow';
   heroSlogan?: MultilingualText;
   statusBannerText?: MultilingualText;
+  statusBannerSubtitle?: MultilingualText;
+  statusBannerVideoUrl?: string;
   printedMenuImage?: string;
   yandexEdaUrl?: string;
   deliveryRadiusKm?: number;
