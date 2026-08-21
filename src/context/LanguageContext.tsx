@@ -119,6 +119,21 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Working hours: from {start} to {end}',
     zh: '营业时间：{start} 至 {end}'
   },
+  'promo.cookingTimeBanner': {
+    ru: 'Готовим с {start} до {end}.',
+    en: 'Cooking from {start} to {end}.',
+    zh: '营业时间 {start} 至 {end}。'
+  },
+  'promo.canPreorder': {
+    ru: 'Можно сделать предзаказ.',
+    en: 'Pre-orders available.',
+    zh: '可提前预订。'
+  },
+  'promo.welcomeOrder': {
+    ru: 'Ждем ваш заказ.',
+    en: 'Taking your orders now.',
+    zh: '欢迎下单。'
+  },
   
   // Admin Login
   'admin.login': { ru: 'Вход в панель управления', en: 'Admin Panel Login', zh: '后台登录' },

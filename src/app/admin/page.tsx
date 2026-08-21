@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '../../context/LanguageContext';
 import { menuRepository } from '../../data/localMenuRepository';
 import { Dish, Category, Promotion, DishLabel, Order, OrderStatus, LoyaltyMember, LoyaltyTier, WaiterCall, Story } from '../../types';
-import { Plus, Trash2, Eye, EyeOff, Edit, ArrowLeft, LogIn, Lock, Settings, FolderPlus, Tag, Sparkles, Search, Award, CheckCircle, AlertCircle, Archive, User, Check, X, ShieldCheck, ShoppingBag, CreditCard, Film, Play, Mail, Globe, Star } from 'lucide-react';
+import { Plus, Trash2, Eye, EyeOff, Edit, ArrowLeft, LogIn, Lock, Settings, FolderPlus, Tag, Sparkles, Search, Award, CheckCircle, AlertCircle, Archive, User, Check, X, ShieldCheck, ShoppingBag, CreditCard, Film, Play, Mail, Globe, Star, Clock, BookOpen, Utensils } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminPage() {
@@ -19,7 +19,7 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState('');
 
   // Tab State
-  const [activeTab, setActiveTab] = useState<'dishes' | 'categories' | 'promotions' | 'orders' | 'loyalty' | 'calls' | 'push' | 'settings' | 'stoplist'>('dishes');
+  const [activeTab, setActiveTab] = useState<'dishes' | 'stoplist' | 'categories' | 'content' | 'promotions' | 'orders' | 'loyalty' | 'calls' | 'push' | 'settings'>('dishes');
 
   // Database State
   const [categories, setCategories] = useState<Category[]>([]);
@@ -81,8 +81,23 @@ export default function AdminPage() {
   const [isTestingIiko, setIsTestingIiko] = useState(false);
 
   // Working Hours State
-  const [workHoursStart, setWorkHoursStart] = useState('12:00');
-  const [workHoursEnd, setWorkHoursEnd] = useState('24:00');
+  const [workHoursStart, setWorkHoursStart] = useState('11:30');
+  const [workHoursEnd, setWorkHoursEnd] = useState('23:30');
+
+  // Hero & Content management states
+  const [heroVideoUrl, setHeroVideoUrl] = useState('');
+  const [heroType, setHeroType] = useState<'video' | 'slideshow'>('slideshow');
+  const [heroSloganRU, setHeroSloganRU] = useState('');
+  const [heroSloganEN, setHeroSloganEN] = useState('');
+  const [heroSloganZH, setHeroSloganZH] = useState('');
+  const [statusBannerTextRU, setStatusBannerTextRU] = useState('');
+  const [statusBannerTextEN, setStatusBannerTextEN] = useState('');
+  const [statusBannerTextZH, setStatusBannerTextZH] = useState('');
+  const [printedMenuImage, setPrintedMenuImage] = useState('/images/image_2026-07-01_13-49-49.png');
+  const [isHeroVideoUploading, setIsHeroVideoUploading] = useState(false);
+  const [isPrintedMenuUploading, setIsPrintedMenuUploading] = useState(false);
+  const [heroVideoUploadError, setHeroVideoUploadError] = useState('');
+  const [contentSuccess, setContentSuccess] = useState('');
 
   // Delivery Settings States
   const [yandexEdaUrl, setYandexEdaUrl] = useState('');
@@ -105,7 +120,7 @@ export default function AdminPage() {
 
   // Stories Video states
   const [stories, setStories] = useState<Story[]>([]);
-  const [backstageVideoEnabled, setBackstageVideoEnabled] = useState(false);
+  const [backstageVideoEnabled, setBackstageVideoEnabled] = useState(true);
   const [isVideoUploadingMap, setIsVideoUploadingMap] = useState<Record<string, boolean>>({});
   const [videoUploadErrorMap, setVideoUploadErrorMap] = useState<Record<string, string>>({});
 
@@ -187,8 +202,19 @@ export default function AdminPage() {
         setSmtpUser(configData.smtpUser || '');
         setVkAppId(configData.vkAppId || '');
         setBotUsername(configData.botUsername || '');
-        setWorkHoursStart(configData.workHoursStart || '12:00');
-        setWorkHoursEnd(configData.workHoursEnd || '24:00');
+        setWorkHoursStart(configData.workHoursStart || '11:30');
+        setWorkHoursEnd(configData.workHoursEnd || '23:30');
+
+        // Hero & Content config
+        setHeroVideoUrl(configData.heroVideoUrl || '');
+        setHeroType(configData.heroType || 'slideshow');
+        setHeroSloganRU(configData.heroSlogan?.ru || '');
+        setHeroSloganEN(configData.heroSlogan?.en || '');
+        setHeroSloganZH(configData.heroSlogan?.zh || '');
+        setStatusBannerTextRU(configData.statusBannerText?.ru || '');
+        setStatusBannerTextEN(configData.statusBannerText?.en || '');
+        setStatusBannerTextZH(configData.statusBannerText?.zh || '');
+        setPrintedMenuImage(configData.printedMenuImage || '/images/image_2026-07-01_13-49-49.png');
 
         // Delivery config
         setYandexEdaUrl(configData.yandexEdaUrl || '');
@@ -615,6 +641,19 @@ export default function AdminPage() {
           vkAppId,
           workHoursStart,
           workHoursEnd,
+          heroVideoUrl,
+          heroType,
+          heroSlogan: {
+            ru: heroSloganRU,
+            en: heroSloganEN,
+            zh: heroSloganZH
+          },
+          statusBannerText: {
+            ru: statusBannerTextRU,
+            en: statusBannerTextEN,
+            zh: statusBannerTextZH
+          },
+          printedMenuImage,
           yandexEdaUrl,
           deliveryRadiusKm: Number(deliveryRadiusKm) || 2,
           restaurantAddress,
@@ -639,6 +678,143 @@ export default function AdminPage() {
     } catch (e) {
       console.error(e);
       alert('Ошибка сохранения настроек');
+    }
+  };
+
+  const handleHeroVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsHeroVideoUploading(true);
+    setHeroVideoUploadError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setHeroVideoUrl(data.url);
+        setHeroType('video');
+      } else {
+        setHeroVideoUploadError(data.error || 'Ошибка загрузки видео');
+      }
+    } catch (err: any) {
+      setHeroVideoUploadError(err.message || 'Ошибка сети при загрузке');
+    } finally {
+      setIsHeroVideoUploading(false);
+    }
+  };
+
+  const handlePrintedMenuUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsPrintedMenuUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setPrintedMenuImage(data.url);
+      } else {
+        alert(data.error || 'Ошибка загрузки изображения');
+      }
+    } catch (err: any) {
+      alert(err.message || 'Ошибка сети при загрузке');
+    } finally {
+      setIsPrintedMenuUploading(false);
+    }
+  };
+
+  const handleTranslateHeroSlogan = async () => {
+    if (!heroSloganRU.trim()) {
+      alert('Введите слоган на русском языке для перевода');
+      return;
+    }
+    setIsTranslating(true);
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'translate-free',
+          textRu: heroSloganRU
+        })
+      });
+      const data = await res.json();
+      if (data.en) setHeroSloganEN(data.en);
+      if (data.zh) setHeroSloganZH(data.zh);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const handleSaveContent = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    try {
+      const res = await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          botToken: botToken === '••••••••••••••••••••••••••••' ? '' : botToken, 
+          chatId: chatId || 'porto_orders', 
+          waiterChatId, 
+          waiters, 
+          geminiApiKey: geminiApiKey === '••••••••••••••••••••••••••••' ? '' : geminiApiKey,
+          geminiProxyUrl,
+          openaiApiKey: openaiApiKey === '••••••••••••••••••••••••••••' ? '' : openaiApiKey,
+          backstageVideoEnabled,
+          stories,
+          workHoursStart,
+          workHoursEnd,
+          heroVideoUrl,
+          heroType,
+          heroSlogan: {
+            ru: heroSloganRU,
+            en: heroSloganEN,
+            zh: heroSloganZH
+          },
+          statusBannerText: {
+            ru: statusBannerTextRU,
+            en: statusBannerTextEN,
+            zh: statusBannerTextZH
+          },
+          printedMenuImage,
+          smtpHost,
+          smtpPort: Number(smtpPort) || 465,
+          smtpUser,
+          smtpPass: smtpPass === '••••••••••••••••••••••••••••' ? '' : smtpPass,
+          vkAppId,
+          yandexEdaUrl,
+          deliveryRadiusKm: Number(deliveryRadiusKm) || 2,
+          restaurantAddress,
+          restaurantLat: Number(restaurantLat) || 55.654060,
+          restaurantLng: Number(restaurantLng) || 37.498877,
+          deliveryFee: Number(deliveryFee) || 0,
+          iikoEnabled,
+          iikoApiLogin,
+          iikoOrganizationId,
+          iikoTerminalGroupId
+        })
+      });
+      if (res.ok) {
+        setContentSuccess('Контент сайта успешно сохранен!');
+        setTimeout(() => setContentSuccess(''), 4000);
+        loadData();
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        alert(errData.error || 'Не удалось сохранить контент');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Ошибка сохранения контента');
     }
   };
 
@@ -1061,7 +1237,7 @@ export default function AdminPage() {
 
       {/* Tabs */}
       <div className="flex flex-wrap border-b border-white/5 pb-0.5 space-x-1 gap-y-1">
-        {(['dishes', 'stoplist', 'categories', 'promotions', 'orders', 'loyalty', 'calls', 'push', 'settings'] as const).map((tab) => {
+        {(['dishes', 'stoplist', 'categories', 'content', 'promotions', 'orders', 'loyalty', 'calls', 'push', 'settings'] as const).map((tab) => {
           const tabLabel =
             tab === 'dishes'
               ? t('admin.tabDishes')
@@ -1069,6 +1245,8 @@ export default function AdminPage() {
               ? 'Стоп-лист'
               : tab === 'categories'
               ? t('admin.tabCategories')
+              : tab === 'content'
+              ? 'Контент сайта'
               : tab === 'promotions'
               ? t('admin.tabPromotions')
               : tab === 'orders'
@@ -2183,7 +2361,841 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* PROMOTIONS TAB */}
+        {/* ══════════════════════════════════════════════════════════════════════════════ */}
+        {/* UNIFIED SITE CONTENT & MEDIA MANAGEMENT TAB */}
+        {/* ══════════════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'content' && (
+          <div className="space-y-6 animate-fade-in text-left">
+            {/* Top Bar with Save Button */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-porto-card/50 p-4 border border-porto-gold/20 rounded-2xl">
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-porto-gold flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-porto-gold-bright" />
+                  <span>Управление контентом и медиа сайта</span>
+                </h3>
+                <p className="text-[10px] text-gray-400 mt-0.5">
+                  Настройка фонового видео/фото первого экрана, слогана, статуса приема заказов, историй и печатного меню
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleSaveContent()}
+                className="bg-gradient-to-r from-porto-gold-dark via-porto-gold to-porto-gold-bright text-porto-bg font-black px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider hover:scale-[1.02] active:scale-95 transition-all shadow-lg cursor-pointer shrink-0"
+              >
+                💾 Сохранить контент
+              </button>
+            </div>
+
+            {/* Success Toast Notification */}
+            {contentSuccess && (
+              <div className="p-3 bg-emerald-500/15 border border-emerald-500/30 rounded-xl text-emerald-400 text-xs font-bold text-center animate-pulse">
+                ✓ {contentSuccess}
+              </div>
+            )}
+
+            {/* ───────────────────────────────────────────────────────────── */}
+            {/* 1. TOP STATUS BANNER (Часы работы и статус заказов) */}
+            {/* ───────────────────────────────────────────────────────────── */}
+            <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-amber-400" />
+                    <span>1. Верхний статус-баннер (Режим работы кухни)</span>
+                  </h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    Отображается в верхней строке сайта, информируя гостей о времени приема заказов
+                  </p>
+                </div>
+              </div>
+
+              {/* Working Hours Times */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-gray-300 uppercase">
+                    Время начала приготовления (Открытие)
+                  </label>
+                  <input
+                    type="time"
+                    value={workHoursStart}
+                    onChange={(e) => setWorkHoursStart(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-mono font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-gray-300 uppercase">
+                    Время окончания приготовления (Закрытие)
+                  </label>
+                  <input
+                    type="time"
+                    value={workHoursEnd}
+                    onChange={(e) => setWorkHoursEnd(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-mono font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Custom Status Banner Text (optional overrides) */}
+              <div className="space-y-2 pt-2 border-t border-white/5">
+                <label className="text-[9px] font-bold text-gray-400 uppercase">
+                  Пользовательский текст в плашке (Оставьте пустым для автотекста "Готовим с {workHoursStart} до {workHoursEnd}")
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <input
+                    type="text"
+                    placeholder={`Например: Готовим с ${workHoursStart} до ${workHoursEnd}.`}
+                    value={statusBannerTextRU}
+                    onChange={(e) => setStatusBannerTextRU(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                  <input
+                    type="text"
+                    placeholder={`e.g. Cooking from ${workHoursStart} to ${workHoursEnd}.`}
+                    value={statusBannerTextEN}
+                    onChange={(e) => setStatusBannerTextEN(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                  <input
+                    type="text"
+                    placeholder="营业时间..."
+                    value={statusBannerTextZH}
+                    onChange={(e) => setStatusBannerTextZH(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Live Status Preview */}
+              <div className="pt-2">
+                <p className="text-[9px] font-bold text-gray-500 uppercase mb-1">Предварительный просмотр на сайте:</p>
+                <div className="bg-[#0a0d14] border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-center space-x-2 text-center shadow-inner">
+                  <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0" />
+                  <div className="text-xs tracking-wide flex items-center gap-1.5 flex-wrap justify-center font-sans">
+                    <span className="font-bold text-amber-300">
+                      {statusBannerTextRU.trim() || `Готовим с ${workHoursStart} до ${workHoursEnd}.`}
+                    </span>
+                    <span className="text-amber-200/85 font-medium">
+                      Можно сделать предзаказ.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ───────────────────────────────────────────────────────────── */}
+            {/* 2. HERO SECTION (Фоновое видео / Фото и Главный слоган) */}
+            {/* ───────────────────────────────────────────────────────────── */}
+            <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
+                    <Film className="w-4 h-4 text-porto-gold" />
+                    <span>2. Главный экран (Фоновое видео / Фото и Слоган)</span>
+                  </h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    Установите фоновое видео с завтраками, блюдами или атмосферой бара, а также продающий слоган
+                  </p>
+                </div>
+              </div>
+
+              {/* Hero Background Type Selector */}
+              <div className="space-y-2">
+                <label className="text-[9px] font-bold text-gray-400 uppercase">Тип фона первого экрана:</label>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center space-x-2 cursor-pointer bg-white/5 border border-white/10 hover:border-porto-gold/40 px-3.5 py-2 rounded-xl text-xs text-white">
+                    <input
+                      type="radio"
+                      name="hero_type"
+                      checked={heroType === 'video'}
+                      onChange={() => setHeroType('video')}
+                      className="text-porto-gold focus:ring-porto-gold"
+                    />
+                    <span className="font-bold">🎬 Фоновое видео (MP4 / WebM)</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer bg-white/5 border border-white/10 hover:border-porto-gold/40 px-3.5 py-2 rounded-xl text-xs text-white">
+                    <input
+                      type="radio"
+                      name="hero_type"
+                      checked={heroType === 'slideshow'}
+                      onChange={() => setHeroType('slideshow')}
+                      className="text-porto-gold focus:ring-porto-gold"
+                    />
+                    <span className="font-bold">🖼️ Фото-слайдшоу интерьера</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Hero Video URL & File Upload */}
+              {heroType === 'video' && (
+                <div className="bg-black/25 border border-porto-gold/20 p-4 rounded-xl space-y-3.5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-bold text-gray-300 uppercase">
+                        Прямая ссылка на видео (URL)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="https://.../breakfast-video.mp4 или /videos/hero.mp4"
+                        value={heroVideoUrl}
+                        onChange={(e) => setHeroVideoUrl(e.target.value)}
+                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-bold text-gray-300 uppercase">
+                        Загрузить видеофайл (MP4, WebM, до 50МБ)
+                      </label>
+                      <div className="flex items-center space-x-2.5 pt-0.5">
+                        <input
+                          type="file"
+                          accept="video/mp4,video/webm"
+                          onChange={handleHeroVideoUpload}
+                          disabled={isHeroVideoUploading}
+                          className="text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[9px] file:font-bold file:uppercase file:bg-porto-gold/20 file:text-porto-gold hover:file:bg-porto-gold/30 file:cursor-pointer w-full"
+                        />
+                        {isHeroVideoUploading && (
+                          <span className="text-[10px] text-porto-gold font-bold animate-pulse shrink-0">Загрузка...</span>
+                        )}
+                      </div>
+                      {heroVideoUploadError && (
+                        <p className="text-[9px] text-red-400 font-semibold">{heroVideoUploadError}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Video Preview Player */}
+                  {heroVideoUrl && (
+                    <div className="pt-2">
+                      <p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Предпросмотр фонового видео:</p>
+                      <div className="relative rounded-xl overflow-hidden border border-white/10 bg-black max-w-md aspect-video">
+                        <video
+                          src={heroVideoUrl}
+                          controls
+                          muted
+                          loop
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Hero Slogan & Subtitles */}
+              <div className="space-y-3 pt-2 border-t border-white/5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-porto-gold uppercase">
+                    Главный текст / слоган первого экрана
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleTranslateHeroSlogan}
+                    disabled={isTranslating}
+                    className="text-[9px] uppercase font-bold bg-porto-gold/15 hover:bg-porto-gold/25 border border-porto-gold/30 text-porto-gold-bright px-2.5 py-1 rounded-lg transition-all cursor-pointer"
+                  >
+                    {isTranslating ? 'Перевод...' : '✨ Автоперевод (Gemini AI)'}
+                  </button>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase">Слоган на русском (RU)</label>
+                  <textarea
+                    rows={2}
+                    placeholder="Например: Изысканные завтраки, авторские блюда и уютная атмосфера в отеле Astrus"
+                    value={heroSloganRU}
+                    onChange={(e) => setHeroSloganRU(e.target.value)}
+                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-serif leading-relaxed"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">English (EN)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Exquisite breakfasts, signature dishes and cozy atmosphere"
+                      value={heroSloganEN}
+                      onChange={(e) => setHeroSloganEN(e.target.value)}
+                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-serif"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">中文 (ZH)</label>
+                    <input
+                      type="text"
+                      placeholder="精美早餐与舒适氛围..."
+                      value={heroSloganZH}
+                      onChange={(e) => setHeroSloganZH(e.target.value)}
+                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-serif"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ───────────────────────────────────────────────────────────── */}
+            {/* 3. STORIES & NEWS CAROUSEL (Истории и события) */}
+            {/* ───────────────────────────────────────────────────────────── */}
+            <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
+                    <Film className="w-4 h-4 text-porto-gold" />
+                    <span>3. Видео-истории и события (Stories)</span>
+                  </h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    Вертикальные истории с видео/фото, анимацией рамок и кнопками быстрого перехода
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={backstageVideoEnabled}
+                    onChange={(e) => setBackstageVideoEnabled(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-9 h-5 bg-porto-bg border border-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-gray-400 after:border-gray-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-porto-gold peer-checked:after:bg-porto-bg"></div>
+                </label>
+              </div>
+
+              {backstageVideoEnabled && (
+                <div className="space-y-4 bg-black/15 p-4 rounded-xl border border-white/5">
+                  {stories.length === 0 ? (
+                    <p className="text-xs text-gray-400 text-center py-4 font-semibold">Список историй пуст. Нажмите «Добавить историю».</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {stories.map((story, index) => (
+                        <div key={story.id} className="border border-white/5 bg-black/20 p-3.5 rounded-xl space-y-3 relative">
+                          <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                            <span className="text-[10px] font-bold text-porto-gold uppercase tracking-wider">История #{index + 1}</span>
+                            <div className="flex items-center space-x-1.5">
+                              {/* Enable/Disable Toggle */}
+                              <label className="text-[9px] text-gray-400 font-semibold cursor-pointer flex items-center space-x-1">
+                                <input
+                                  type="checkbox"
+                                  checked={story.enabled}
+                                  onChange={(e) => {
+                                    const updated = [...stories];
+                                    updated[index] = { ...story, enabled: e.target.checked };
+                                    setStories(updated);
+                                  }}
+                                  className="rounded border-white/10 bg-porto-bg text-porto-gold focus:ring-porto-gold w-3 h-3 cursor-pointer"
+                                />
+                                <span>Активна</span>
+                              </label>
+
+                              {/* Order controls */}
+                              <button
+                                type="button"
+                                disabled={index === 0}
+                                onClick={() => {
+                                  if (index > 0) {
+                                    const updated = [...stories];
+                                    const temp = updated[index];
+                                    updated[index] = updated[index - 1];
+                                    updated[index - 1] = temp;
+                                    setStories(updated);
+                                  }
+                                }}
+                                className="p-1 hover:bg-white/5 rounded text-gray-400 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                                title="Переместить вверх"
+                              >
+                                ↑
+                              </button>
+                              <button
+                                type="button"
+                                disabled={index === stories.length - 1}
+                                onClick={() => {
+                                  if (index < stories.length - 1) {
+                                    const updated = [...stories];
+                                    const temp = updated[index];
+                                    updated[index] = updated[index + 1];
+                                    updated[index + 1] = temp;
+                                    setStories(updated);
+                                  }
+                                }}
+                                className="p-1 hover:bg-white/5 rounded text-gray-400 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
+                                title="Переместить вниз"
+                              >
+                                ↓
+                              </button>
+
+                              {/* Delete button */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setStories(stories.filter(s => s.id !== story.id));
+                                }}
+                                className="text-[9px] uppercase font-bold text-red-400 hover:text-red-300 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 ml-2 cursor-pointer"
+                              >
+                                Удалить
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Story Media (Video or Image) */}
+                          <div className="space-y-2 pt-1">
+                            <div className="flex items-center space-x-4">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Тип медиа:</label>
+                              <div className="flex space-x-3">
+                                <label className="text-xs text-gray-300 flex items-center space-x-1.5 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name={`media_type_${story.id}`}
+                                    checked={!story.imageUrl && Boolean(story.videoUrl || !story.imageUrl)}
+                                    onChange={() => {
+                                      const updated = [...stories];
+                                      updated[index] = { ...story, imageUrl: '' };
+                                      setStories(updated);
+                                    }}
+                                    className="text-porto-gold focus:ring-porto-gold"
+                                  />
+                                  <span>🎬 Видео</span>
+                                </label>
+                                <label className="text-xs text-gray-300 flex items-center space-x-1.5 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name={`media_type_${story.id}`}
+                                    checked={Boolean(story.imageUrl)}
+                                    onChange={() => {
+                                      const updated = [...stories];
+                                      updated[index] = { ...story, videoUrl: '' };
+                                      setStories(updated);
+                                    }}
+                                    className="text-porto-gold focus:ring-porto-gold"
+                                  />
+                                  <span>🖼️ Изображение / Постер</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div className="space-y-1">
+                                <label className="text-[9px] font-bold text-gray-400 uppercase">
+                                  {story.imageUrl ? 'Ссылка на изображение' : 'Прямая ссылка на видео'}
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder={story.imageUrl ? '/uploads/promo_xxxx.jpg или https://...' : '/videos/story_xxxx.mp4 или https://...'}
+                                  value={story.imageUrl || story.videoUrl || ''}
+                                  onChange={(e) => {
+                                    const updated = [...stories];
+                                    if (story.imageUrl) {
+                                      updated[index] = { ...story, imageUrl: e.target.value };
+                                    } else {
+                                      updated[index] = { ...story, videoUrl: e.target.value };
+                                    }
+                                    setStories(updated);
+                                  }}
+                                  className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                                />
+                              </div>
+
+                              <div className="space-y-1">
+                                <label className="text-[9px] font-bold text-gray-400 uppercase">
+                                  {story.imageUrl ? 'Загрузить картинку (JPG, PNG, WebP)' : 'Загрузить видеофайл (макс 50МБ)'}
+                                </label>
+                                <div className="flex items-center space-x-2.5 pt-0.5">
+                                  <input
+                                    type="file"
+                                    accept={story.imageUrl ? 'image/jpeg,image/png,image/webp' : 'video/mp4,video/webm'}
+                                    onChange={(e) => handleStoryMediaUpload(story.id, e, story.imageUrl ? 'image' : 'video')}
+                                    disabled={isVideoUploadingMap[story.id]}
+                                    className="text-xs text-gray-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[9px] file:font-bold file:uppercase file:bg-porto-gold/20 file:text-porto-gold hover:file:bg-porto-gold/30 file:cursor-pointer w-full"
+                                  />
+                                  {isVideoUploadingMap[story.id] && (
+                                    <span className="text-[9px] text-porto-gold font-bold animate-pulse shrink-0">Загрузка...</span>
+                                  )}
+                                </div>
+                                {videoUploadErrorMap[story.id] && (
+                                  <p className="text-[9px] text-red-400 font-semibold">{videoUploadErrorMap[story.id]}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Localized Titles */}
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (RU)</label>
+                              <input
+                                type="text"
+                                placeholder="Например: Завтраки в Porto Bar"
+                                value={story.title?.ru || ''}
+                                onChange={(e) => {
+                                  const updated = [...stories];
+                                  updated[index] = { ...story, title: { ...story.title, ru: e.target.value } };
+                                  setStories(updated);
+                                }}
+                                className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (EN)</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. Breakfast at Porto Bar"
+                                value={story.title?.en || ''}
+                                onChange={(e) => {
+                                  const updated = [...stories];
+                                  updated[index] = { ...story, title: { ...story.title, en: e.target.value } };
+                                  setStories(updated);
+                                }}
+                                className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (ZH)</label>
+                              <input
+                                type="text"
+                                placeholder="故事标题"
+                                value={story.title?.zh || ''}
+                                onChange={(e) => {
+                                  const updated = [...stories];
+                                  updated[index] = { ...story, title: { ...story.title, zh: e.target.value } };
+                                  setStories(updated);
+                                }}
+                                className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Localized Badge & Subtitle */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Стикер/Бейдж (RU) (например: НОВОЕ, АКЦИЯ)</label>
+                              <input
+                                type="text"
+                                placeholder="НОВОЕ МЕНЮ"
+                                value={story.badge?.ru || ''}
+                                onChange={(e) => {
+                                  const updated = [...stories];
+                                  updated[index] = { ...story, badge: { ...story.badge, ru: e.target.value, en: story.badge?.en || '', zh: story.badge?.zh || '' } };
+                                  setStories(updated);
+                                }}
+                                className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-gray-400 uppercase">Подзаголовок / Описание (RU)</label>
+                              <input
+                                type="text"
+                                placeholder="Каждый день с 12:00 до 16:00"
+                                value={story.subtitle?.ru || ''}
+                                onChange={(e) => {
+                                  const updated = [...stories];
+                                  updated[index] = { ...story, subtitle: { ...story.subtitle, ru: e.target.value, en: story.subtitle?.en || '', zh: story.subtitle?.zh || '' } };
+                                  setStories(updated);
+                                }}
+                                className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Action Link & CTA Button Settings */}
+                          <div className="bg-white/5 border border-porto-gold/20 p-3 rounded-lg space-y-3 mt-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs">🔗</span>
+                              <span className="text-[10px] font-bold uppercase text-porto-gold tracking-wider">
+                                Кнопка перехода в историю (Action Link / CTA)
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div className="space-y-1">
+                                <label className="text-[9px] font-bold text-gray-400 uppercase">Действие при нажатии кнопки</label>
+                                <select
+                                  value={story.actionType || 'none'}
+                                  onChange={(e) => {
+                                    const updated = [...stories];
+                                    const val = e.target.value as any;
+                                    updated[index] = { 
+                                      ...story, 
+                                      actionType: val,
+                                      actionTarget: val === 'category' ? (story.actionTarget || categories[0]?.id || '') : story.actionTarget 
+                                    };
+                                    setStories(updated);
+                                  }}
+                                  className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold cursor-pointer font-bold"
+                                >
+                                  <option value="none">Без кнопки перехода</option>
+                                  <option value="category">Перейти к категории меню</option>
+                                  <option value="booking">Открыть бронирование столика</option>
+                                  <option value="cart">Открыть корзину / доставку</option>
+                                  <option value="url">Внешняя ссылка / Свой URL</option>
+                                </select>
+                              </div>
+
+                              {story.actionType === 'category' && (
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Выберите категорию меню</label>
+                                  <select
+                                    value={story.actionTarget || categories[0]?.id || ''}
+                                    onChange={(e) => {
+                                      const updated = [...stories];
+                                      updated[index] = { ...story, actionTarget: e.target.value };
+                                      setStories(updated);
+                                    }}
+                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold cursor-pointer font-bold"
+                                  >
+                                    {categories.map(cat => (
+                                      <option key={cat.id} value={cat.id}>
+                                        {cat.name.ru}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
+
+                              {story.actionType === 'url' && (
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-gray-400 uppercase">URL ссылки (https://...)</label>
+                                  <input
+                                    type="text"
+                                    placeholder="https://eda.yandex.ru/..."
+                                    value={story.actionTarget || ''}
+                                    onChange={(e) => {
+                                      const updated = [...stories];
+                                      updated[index] = { ...story, actionTarget: e.target.value };
+                                      setStories(updated);
+                                    }}
+                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            {story.actionType && story.actionType !== 'none' && (
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (RU)</label>
+                                  <input
+                                    type="text"
+                                    placeholder="Например: Посмотреть завтраки"
+                                    value={story.actionButtonText?.ru || ''}
+                                    onChange={(e) => {
+                                      const updated = [...stories];
+                                      updated[index] = { 
+                                        ...story, 
+                                        actionButtonText: { 
+                                          ...story.actionButtonText, 
+                                          ru: e.target.value, 
+                                          en: story.actionButtonText?.en || '', 
+                                          zh: story.actionButtonText?.zh || '' 
+                                        } 
+                                      };
+                                      setStories(updated);
+                                    }}
+                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (EN)</label>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. View Breakfast Menu"
+                                    value={story.actionButtonText?.en || ''}
+                                    onChange={(e) => {
+                                      const updated = [...stories];
+                                      updated[index] = { 
+                                        ...story, 
+                                        actionButtonText: { 
+                                          ...story.actionButtonText, 
+                                          en: e.target.value, 
+                                          ru: story.actionButtonText?.ru || '', 
+                                          zh: story.actionButtonText?.zh || '' 
+                                        } 
+                                      };
+                                      setStories(updated);
+                                    }}
+                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (ZH)</label>
+                                  <input
+                                    type="text"
+                                    placeholder="查看菜单"
+                                    value={story.actionButtonText?.zh || ''}
+                                    onChange={(e) => {
+                                      const updated = [...stories];
+                                      updated[index] = { 
+                                        ...story, 
+                                        actionButtonText: { 
+                                          ...story.actionButtonText, 
+                                          zh: e.target.value, 
+                                          ru: story.actionButtonText?.ru || '', 
+                                          en: story.actionButtonText?.en || '' 
+                                        } 
+                                      };
+                                      setStories(updated);
+                                    }}
+                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Add story button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newStory: Story = {
+                        id: 'story_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                        videoUrl: '',
+                        imageUrl: '',
+                        title: { ru: '', en: '', zh: '' },
+                        enabled: true,
+                        actionType: 'none'
+                      };
+                      setStories([...stories, newStory]);
+                    }}
+                    className="w-full border border-dashed border-porto-gold/35 hover:border-porto-gold text-porto-gold hover:bg-porto-gold/5 font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    + Добавить историю
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* ───────────────────────────────────────────────────────────── */}
+            {/* 4. PRINTED MENU IMAGE (Оригинальное печатное меню) */}
+            {/* ───────────────────────────────────────────────────────────── */}
+            <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-porto-gold" />
+                    <span>4. Печатное меню ресторана (PDF / Изображение)</span>
+                  </h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    Открывается гостям при нажатии на плавающую кнопку «Печатное меню»
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-300 uppercase">
+                      URL изображения печатного меню
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="/images/image_2026-07-01_13-49-49.png или https://..."
+                      value={printedMenuImage}
+                      onChange={(e) => setPrintedMenuImage(e.target.value)}
+                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-porto-gold font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-300 uppercase">
+                      Загрузить новое изображение печатного меню
+                    </label>
+                    <div className="flex items-center space-x-2.5 pt-0.5">
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handlePrintedMenuUpload}
+                        disabled={isPrintedMenuUploading}
+                        className="text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[9px] file:font-bold file:uppercase file:bg-porto-gold/20 file:text-porto-gold hover:file:bg-porto-gold/30 file:cursor-pointer w-full"
+                      />
+                      {isPrintedMenuUploading && (
+                        <span className="text-[10px] text-porto-gold font-bold animate-pulse shrink-0">Загрузка...</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Printed Menu Preview */}
+                <div>
+                  <p className="text-[9px] font-bold text-gray-400 uppercase mb-1">Предпросмотр печатного меню:</p>
+                  <div className="relative rounded-xl overflow-hidden border border-white/10 bg-black/40 max-h-48 flex items-center justify-center p-2">
+                    {printedMenuImage ? (
+                      <img
+                        src={printedMenuImage}
+                        alt="Printed Menu Preview"
+                        className="max-h-44 object-contain rounded-lg shadow-md"
+                      />
+                    ) : (
+                      <span className="text-xs text-gray-500">Изображение не выбрано</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ───────────────────────────────────────────────────────────── */}
+            {/* 5. RECOMMENDED DISHES (Рекомендуем) */}
+            {/* ───────────────────────────────────────────────────────────── */}
+            <div className="glass-panel p-5 rounded-2xl border border-porto-gold/20 bg-porto-card/40 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-porto-gold flex items-center gap-2">
+                    <Star className="w-4 h-4 text-porto-gold fill-porto-gold" />
+                    <span>5. Блок «Рекомендуем» (Рекомендуемые блюда)</span>
+                  </h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">
+                    Блюда, которые отображаются в компактной горизонтальной карусели «Рекомендуем» на главной странице
+                  </p>
+                </div>
+                <span className="text-[10px] font-bold text-porto-gold bg-porto-gold/10 border border-porto-gold/20 px-2.5 py-1 rounded-full">
+                  Выбрано: {dishes.filter(d => d.isRecommended || d.labels?.includes('recommended')).length}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-72 overflow-y-auto pr-1">
+                {dishes.map((dish) => {
+                  const isRec = Boolean(dish.isRecommended || dish.labels?.includes('recommended'));
+                  return (
+                    <div
+                      key={dish.id}
+                      onClick={() => toggleDishRecommended(dish)}
+                      className={`p-2.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between select-none ${
+                        isRec
+                          ? 'bg-porto-gold/15 border-porto-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                          : 'bg-black/20 border-white/5 hover:border-white/15 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-1">
+                        <div className="w-8 h-8 rounded-lg overflow-hidden bg-black/40 shrink-0">
+                          {dish.image ? (
+                            <img src={dish.image} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <Utensils className="w-4 h-4 text-gray-600 m-2" />
+                          )}
+                        </div>
+                        <Star className={`w-4 h-4 ${isRec ? 'text-porto-gold fill-porto-gold' : 'text-gray-600'}`} />
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-[11px] font-bold text-white leading-tight line-clamp-1">{dish.name.ru}</p>
+                        <p className="text-[10px] text-porto-gold font-bold font-sans mt-0.5">{dish.price} ₽</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Save Button */}
+            <div className="flex justify-end pt-2">
+              <button
+                type="button"
+                onClick={() => handleSaveContent()}
+                className="bg-gradient-to-r from-porto-gold-dark via-porto-gold to-porto-gold-bright text-porto-bg font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider hover:scale-[1.02] active:scale-95 transition-all shadow-xl cursor-pointer"
+              >
+                💾 Сохранить все изменения контента
+              </button>
+            </div>
+          </div>
+        )}
         {activeTab === 'promotions' && (
           <div className="space-y-4">
             <div className="flex justify-between items-center bg-porto-card/50 p-4 border border-porto-gold/10 rounded-2xl">
@@ -3190,433 +4202,7 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Stories Configuration */}
-                <div className="space-y-4 border-t border-white/5 pt-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-[10px] font-bold uppercase text-porto-gold flex items-center gap-1.5">
-                        <Film className="w-3.5 h-3.5 text-porto-gold" />
-                        <span>Видео-истории (Stories)</span>
-                      </h4>
-                      <p className="text-[9px] text-gray-400">Опубликуйте короткие вертикальные видео-истории на главной странице меню</p>
-                    </div>
-                    <label className="relative inline-flex inline-items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={backstageVideoEnabled}
-                        onChange={(e) => setBackstageVideoEnabled(e.target.checked)}
-                        className="sr-only peer"
-                      />
-                      <div className="w-9 h-5 bg-porto-bg border border-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-gray-400 after:border-gray-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-porto-gold peer-checked:after:bg-porto-bg"></div>
-                    </label>
-                  </div>
 
-                  {backstageVideoEnabled && (
-                    <div className="space-y-4 bg-black/15 p-4 rounded-xl border border-white/5 text-left">
-                      {/* Stories List */}
-                      {stories.length === 0 ? (
-                        <p className="text-xs text-gray-400 text-center py-4 font-semibold">Список историй пуст. Нажмите «Добавить историю».</p>
-                      ) : (
-                        <div className="space-y-4">
-                          {stories.map((story, index) => (
-                            <div key={story.id} className="border border-white/5 bg-black/20 p-3 rounded-lg space-y-3 relative">
-                              <div className="flex justify-between items-center pb-2 border-b border-white/5">
-                                <span className="text-[10px] font-bold text-porto-gold uppercase tracking-wider">История #{index + 1}</span>
-                                <div className="flex items-center space-x-1.5">
-                                  {/* Enable/Disable Toggle */}
-                                  <label className="text-[9px] text-gray-400 font-semibold cursor-pointer flex items-center space-x-1">
-                                    <input
-                                      type="checkbox"
-                                      checked={story.enabled}
-                                      onChange={(e) => {
-                                        const updated = [...stories];
-                                        updated[index] = { ...story, enabled: e.target.checked };
-                                        setStories(updated);
-                                      }}
-                                      className="rounded border-white/10 bg-porto-bg text-porto-gold focus:ring-porto-gold w-3 h-3 cursor-pointer"
-                                    />
-                                    <span>Активна</span>
-                                  </label>
-
-                                  {/* Order controls */}
-                                  <button
-                                    type="button"
-                                    disabled={index === 0}
-                                    onClick={() => {
-                                      if (index > 0) {
-                                        const updated = [...stories];
-                                        const temp = updated[index];
-                                        updated[index] = updated[index - 1];
-                                        updated[index - 1] = temp;
-                                        setStories(updated);
-                                      }
-                                    }}
-                                    className="p-1 hover:bg-white/5 rounded text-gray-400 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
-                                    title="Переместить вверх"
-                                  >
-                                    ↑
-                                  </button>
-                                  <button
-                                    type="button"
-                                    disabled={index === stories.length - 1}
-                                    onClick={() => {
-                                      if (index < stories.length - 1) {
-                                        const updated = [...stories];
-                                        const temp = updated[index];
-                                        updated[index] = updated[index + 1];
-                                        updated[index + 1] = temp;
-                                        setStories(updated);
-                                      }
-                                    }}
-                                    className="p-1 hover:bg-white/5 rounded text-gray-400 hover:text-white disabled:opacity-30 disabled:hover:bg-transparent"
-                                    title="Переместить вниз"
-                                  >
-                                    ↓
-                                  </button>
-
-                                  {/* Delete button */}
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setStories(stories.filter(s => s.id !== story.id));
-                                    }}
-                                    className="text-[9px] uppercase font-bold text-red-400 hover:text-red-300 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 ml-2 animate-none"
-                                  >
-                                    Удалить
-                                  </button>
-                                </div>
-                              </div>
-
-                              {/* Story Media (Video or Image) */}
-                              <div className="space-y-2 pt-1">
-                                <div className="flex items-center space-x-4">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Тип медиа:</label>
-                                  <div className="flex space-x-3">
-                                    <label className="text-xs text-gray-300 flex items-center space-x-1.5 cursor-pointer">
-                                      <input
-                                        type="radio"
-                                        name={`media_type_${story.id}`}
-                                        checked={!story.imageUrl && Boolean(story.videoUrl || !story.imageUrl)}
-                                        onChange={() => {
-                                          const updated = [...stories];
-                                          updated[index] = { ...story, imageUrl: '' };
-                                          setStories(updated);
-                                        }}
-                                        className="text-porto-gold focus:ring-porto-gold"
-                                      />
-                                      <span>🎬 Видео</span>
-                                    </label>
-                                    <label className="text-xs text-gray-300 flex items-center space-x-1.5 cursor-pointer">
-                                      <input
-                                        type="radio"
-                                        name={`media_type_${story.id}`}
-                                        checked={Boolean(story.imageUrl)}
-                                        onChange={() => {
-                                          const updated = [...stories];
-                                          updated[index] = { ...story, videoUrl: '' };
-                                          setStories(updated);
-                                        }}
-                                        className="text-porto-gold focus:ring-porto-gold"
-                                      />
-                                      <span>🖼️ Изображение / Постер</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                  <div className="space-y-1">
-                                    <label className="text-[9px] font-bold text-gray-400 uppercase">
-                                      {story.imageUrl ? 'Ссылка на изображение' : 'Прямая ссылка на видео'}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder={story.imageUrl ? '/uploads/promo_xxxx.jpg или https://...' : '/videos/story_xxxx.mp4 или https://...'}
-                                      value={story.imageUrl || story.videoUrl || ''}
-                                      onChange={(e) => {
-                                        const updated = [...stories];
-                                        if (story.imageUrl) {
-                                          updated[index] = { ...story, imageUrl: e.target.value };
-                                        } else {
-                                          updated[index] = { ...story, videoUrl: e.target.value };
-                                        }
-                                        setStories(updated);
-                                      }}
-                                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                    />
-                                  </div>
-
-                                  <div className="space-y-1">
-                                    <label className="text-[9px] font-bold text-gray-400 uppercase">
-                                      {story.imageUrl ? 'Загрузить картинку (JPG, PNG, WebP)' : 'Загрузить видеофайл (макс 50МБ)'}
-                                    </label>
-                                    <div className="flex items-center space-x-2.5 pt-0.5">
-                                      <input
-                                        type="file"
-                                        accept={story.imageUrl ? 'image/jpeg,image/png,image/webp' : 'video/mp4,video/webm'}
-                                        onChange={(e) => handleStoryMediaUpload(story.id, e, story.imageUrl ? 'image' : 'video')}
-                                        disabled={isVideoUploadingMap[story.id]}
-                                        className="text-xs text-gray-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[9px] file:font-bold file:uppercase file:bg-porto-gold/20 file:text-porto-gold hover:file:bg-porto-gold/30 file:cursor-pointer w-full"
-                                      />
-                                      {isVideoUploadingMap[story.id] && (
-                                        <span className="text-[9px] text-porto-gold font-bold animate-pulse shrink-0">Загрузка...</span>
-                                      )}
-                                    </div>
-                                    {videoUploadErrorMap[story.id] && (
-                                      <p className="text-[9px] text-red-400 font-semibold">{videoUploadErrorMap[story.id]}</p>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Localized Titles */}
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (RU)</label>
-                                  <input
-                                    type="text"
-                                    placeholder="Например: Завтраки в Porto Bar"
-                                    value={story.title?.ru || ''}
-                                    onChange={(e) => {
-                                      const updated = [...stories];
-                                      updated[index] = { ...story, title: { ...story.title, ru: e.target.value } };
-                                      setStories(updated);
-                                    }}
-                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (EN)</label>
-                                  <input
-                                    type="text"
-                                    placeholder="e.g. Breakfast at Porto Bar"
-                                    value={story.title?.en || ''}
-                                    onChange={(e) => {
-                                      const updated = [...stories];
-                                      updated[index] = { ...story, title: { ...story.title, en: e.target.value } };
-                                      setStories(updated);
-                                    }}
-                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Заголовок (ZH)</label>
-                                  <input
-                                    type="text"
-                                    placeholder="故事标题"
-                                    value={story.title?.zh || ''}
-                                    onChange={(e) => {
-                                      const updated = [...stories];
-                                      updated[index] = { ...story, title: { ...story.title, zh: e.target.value } };
-                                      setStories(updated);
-                                    }}
-                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                  />
-                                </div>
-                              </div>
-
-                              {/* Localized Badge & Subtitle */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Стикер/Бейдж (RU) (например: НОВОЕ, АКЦИЯ)</label>
-                                  <input
-                                    type="text"
-                                    placeholder="НОВОЕ МЕНЮ"
-                                    value={story.badge?.ru || ''}
-                                    onChange={(e) => {
-                                      const updated = [...stories];
-                                      updated[index] = { ...story, badge: { ...story.badge, ru: e.target.value, en: story.badge?.en || '', zh: story.badge?.zh || '' } };
-                                      setStories(updated);
-                                    }}
-                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-gray-400 uppercase">Подзаголовок / Описание (RU)</label>
-                                  <input
-                                    type="text"
-                                    placeholder="Каждый день с 12:00 до 16:00"
-                                    value={story.subtitle?.ru || ''}
-                                    onChange={(e) => {
-                                      const updated = [...stories];
-                                      updated[index] = { ...story, subtitle: { ...story.subtitle, ru: e.target.value, en: story.subtitle?.en || '', zh: story.subtitle?.zh || '' } };
-                                      setStories(updated);
-                                    }}
-                                    className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
-                                  />
-                                </div>
-                              </div>
-
-                              {/* Action Link & CTA Button Settings */}
-                              <div className="bg-white/5 border border-porto-gold/20 p-3 rounded-lg space-y-3 mt-2">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-xs">🔗</span>
-                                  <span className="text-[10px] font-bold uppercase text-porto-gold tracking-wider">
-                                    Кнопка перехода в историю (Action Link / CTA)
-                                  </span>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                  <div className="space-y-1">
-                                    <label className="text-[9px] font-bold text-gray-400 uppercase">Действие при нажатии кнопки</label>
-                                    <select
-                                      value={story.actionType || 'none'}
-                                      onChange={(e) => {
-                                        const updated = [...stories];
-                                        const val = e.target.value as any;
-                                        updated[index] = { 
-                                          ...story, 
-                                          actionType: val,
-                                          actionTarget: val === 'category' ? (story.actionTarget || categories[0]?.id || '') : story.actionTarget 
-                                        };
-                                        setStories(updated);
-                                      }}
-                                      className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold cursor-pointer font-bold"
-                                    >
-                                      <option value="none">Без кнопки перехода</option>
-                                      <option value="category">Перейти к категории меню</option>
-                                      <option value="booking">Открыть бронирование столика</option>
-                                      <option value="cart">Открыть корзину / доставку</option>
-                                      <option value="url">Внешняя ссылка / Свой URL</option>
-                                    </select>
-                                  </div>
-
-                                  {story.actionType === 'category' && (
-                                    <div className="space-y-1">
-                                      <label className="text-[9px] font-bold text-gray-400 uppercase">Выберите категорию меню</label>
-                                      <select
-                                        value={story.actionTarget || categories[0]?.id || ''}
-                                        onChange={(e) => {
-                                          const updated = [...stories];
-                                          updated[index] = { ...story, actionTarget: e.target.value };
-                                          setStories(updated);
-                                        }}
-                                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold cursor-pointer font-bold"
-                                      >
-                                        {categories.map(cat => (
-                                          <option key={cat.id} value={cat.id}>
-                                            {cat.name.ru}
-                                          </option>
-                                        ))}
-                                      </select>
-                                    </div>
-                                  )}
-
-                                  {story.actionType === 'url' && (
-                                    <div className="space-y-1">
-                                      <label className="text-[9px] font-bold text-gray-400 uppercase">URL ссылки (https://...)</label>
-                                      <input
-                                        type="text"
-                                        placeholder="https://eda.yandex.ru/..."
-                                        value={story.actionTarget || ''}
-                                        onChange={(e) => {
-                                          const updated = [...stories];
-                                          updated[index] = { ...story, actionTarget: e.target.value };
-                                          setStories(updated);
-                                        }}
-                                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold"
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-
-                                {story.actionType && story.actionType !== 'none' && (
-                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-                                    <div className="space-y-1">
-                                      <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (RU)</label>
-                                      <input
-                                        type="text"
-                                        placeholder="Например: Посмотреть завтраки"
-                                        value={story.actionButtonText?.ru || ''}
-                                        onChange={(e) => {
-                                          const updated = [...stories];
-                                          updated[index] = { 
-                                            ...story, 
-                                            actionButtonText: { 
-                                              ...story.actionButtonText, 
-                                              ru: e.target.value, 
-                                              en: story.actionButtonText?.en || '', 
-                                              zh: story.actionButtonText?.zh || '' 
-                                            } 
-                                          };
-                                          setStories(updated);
-                                        }}
-                                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                      />
-                                    </div>
-                                    <div className="space-y-1">
-                                      <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (EN)</label>
-                                      <input
-                                        type="text"
-                                        placeholder="e.g. View Breakfast Menu"
-                                        value={story.actionButtonText?.en || ''}
-                                        onChange={(e) => {
-                                          const updated = [...stories];
-                                          updated[index] = { 
-                                            ...story, 
-                                            actionButtonText: { 
-                                              ...story.actionButtonText, 
-                                              en: e.target.value, 
-                                              ru: story.actionButtonText?.ru || '', 
-                                              zh: story.actionButtonText?.zh || '' 
-                                            } 
-                                          };
-                                          setStories(updated);
-                                        }}
-                                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                      />
-                                    </div>
-                                    <div className="space-y-1">
-                                      <label className="text-[9px] font-bold text-gray-400 uppercase">Текст кнопки (ZH)</label>
-                                      <input
-                                        type="text"
-                                        placeholder="查看菜单"
-                                        value={story.actionButtonText?.zh || ''}
-                                        onChange={(e) => {
-                                          const updated = [...stories];
-                                          updated[index] = { 
-                                            ...story, 
-                                            actionButtonText: { 
-                                              ...story.actionButtonText, 
-                                              zh: e.target.value, 
-                                              ru: story.actionButtonText?.ru || '', 
-                                              en: story.actionButtonText?.en || '' 
-                                            } 
-                                          };
-                                          setStories(updated);
-                                        }}
-                                        className="w-full bg-porto-bg border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-porto-gold font-semibold"
-                                      />
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Add story button */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newStory: Story = {
-                            id: 'story_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-                            videoUrl: '',
-                            imageUrl: '',
-                            title: { ru: '', en: '', zh: '' },
-                            enabled: true,
-                            actionType: 'none'
-                          };
-                          setStories([...stories, newStory]);
-                        }}
-                        className="w-full border border-dashed border-porto-gold/35 hover:border-porto-gold text-porto-gold hover:bg-porto-gold/5 font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-all cursor-pointer"
-                      >
-                        + Добавить историю
-                      </button>
-
-                    </div>
-                  )}
-                </div>
 
                 {/* ══════════════════════════════════════════════════════════ */}
                 {/* iiko Integration */}

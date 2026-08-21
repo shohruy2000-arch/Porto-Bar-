@@ -148,6 +148,11 @@ export interface TelegramConfig {
   stories?: Story[];
   workHoursStart?: string;
   workHoursEnd?: string;
+  heroVideoUrl?: string;
+  heroType?: 'video' | 'slideshow';
+  heroSlogan?: MultilingualText;
+  statusBannerText?: MultilingualText;
+  printedMenuImage?: string;
   yandexEdaUrl?: string;
   deliveryRadiusKm?: number;
   restaurantAddress?: string;

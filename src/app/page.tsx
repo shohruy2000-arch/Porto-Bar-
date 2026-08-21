@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Building, Info, Search, MapPin, Sparkles, Film, Play, Calendar, BookOpen, X, Utensils, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Phone, Building, Info, Search, MapPin, Sparkles, Film, Play, Calendar, BookOpen, X, Utensils, Star, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { menuRepository } from '../data/localMenuRepository';
-import { Dish, Category, Promotion, Story } from '../types';
+import { Dish, Category, Promotion, Story, MultilingualText } from '../types';
 
 import { LanguageSelector } from '../components/LanguageSelector';
 import { CategoryScroller } from '../components/CategoryScroller';
@@ -30,7 +30,7 @@ const HERO_IMAGES = [
   '/images/veranda-2.jpg'
 ];
 
-export default function GuestPage() {
+export default function Home() {
   const { t, translate } = useLanguage();
   const { items } = useCart();
   const menuSectionRef = useRef<HTMLDivElement | null>(null);
@@ -60,6 +60,13 @@ export default function GuestPage() {
   const [isPrintedMenuOpen, setIsPrintedMenuOpen] = useState(false);
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [legalTab, setLegalTab] = useState<LegalTab>('privacy');
+
+  // Hero & Content config states
+  const [heroVideoUrl, setHeroVideoUrl] = useState('');
+  const [heroType, setHeroType] = useState<'video' | 'slideshow'>('slideshow');
+  const [heroSlogan, setHeroSlogan] = useState<MultilingualText | null>(null);
+  const [statusBannerText, setStatusBannerText] = useState<MultilingualText | null>(null);
+  const [printedMenuImage, setPrintedMenuImage] = useState('/images/image_2026-07-01_13-49-49.png');
 
   const handleOpenLegal = (tab: LegalTab = 'privacy') => {
     setLegalTab(tab);
@@ -182,14 +189,21 @@ export default function GuestPage() {
       setDishes(menuData.dishes.filter(d => d.visible));
       setPromotions(menuData.promotions.filter(p => p.active));
 
-      // Fetch Backstage Video config from the api/config endpoint
+      // Fetch Backstage Video & Hero Content config from the api/config endpoint
       const configRes = await fetch('/api/config');
       if (configRes.ok) {
         const configData = await configRes.json();
         setBackstageVideoEnabled(configData.backstageVideoEnabled || false);
         setStories(configData.stories || []);
-        setWorkHoursStart(configData.workHoursStart || '12:00');
-        setWorkHoursEnd(configData.workHoursEnd || '24:00');
+        setWorkHoursStart(configData.workHoursStart || '11:30');
+        setWorkHoursEnd(configData.workHoursEnd || '23:30');
+        setHeroVideoUrl(configData.heroVideoUrl || '');
+        setHeroType(configData.heroType || 'slideshow');
+        setHeroSlogan(configData.heroSlogan || null);
+        setStatusBannerText(configData.statusBannerText || null);
+        if (configData.printedMenuImage) {
+          setPrintedMenuImage(configData.printedMenuImage);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -399,22 +413,21 @@ export default function GuestPage() {
   );
 
   return (
-    <div className={`flex-1 flex flex-col pb-24 md:pb-28 ${!isOpen ? 'pt-[36px]' : ''}`}>
-      {/* Top Sticky Closed Banner */}
-      {!isOpen && (
-        <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-red-950 via-red-900 to-red-950 border-b border-red-500/20 py-2 px-4 shadow-[0_2px_15px_rgba(0,0,0,0.5)] flex items-center justify-center space-x-2 text-center text-red-200 select-none">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+    <div className="flex-1 flex flex-col pb-24 md:pb-28">
+      {/* Top Sticky Status Banner (China News style with Yellow Clock) */}
+      <div className="sticky top-0 z-40 bg-[#0a0d14]/95 border-b border-amber-500/20 py-2.5 px-4 shadow-[0_2px_15px_rgba(0,0,0,0.6)] flex items-center justify-center space-x-2 text-center select-none backdrop-blur-md">
+        <Clock className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20 shrink-0" />
+        <div className="text-xs tracking-wide leading-tight flex items-center gap-1.5 flex-wrap justify-center font-sans">
+          <span className="font-bold text-amber-300">
+            {statusBannerText
+              ? translate(statusBannerText)
+              : t('promo.cookingTimeBanner').replace('{start}', workHoursStart).replace('{end}', workHoursEnd)}
           </span>
-          <div className="text-[11px] font-bold tracking-wide leading-tight">
-            <span>{t('promo.closed')}</span>
-            <span className="opacity-60 font-medium ml-2 border-l border-red-500/30 pl-2">
-              {t('promo.workHoursText').replace('{start}', workHoursStart).replace('{end}', workHoursEnd)}
-            </span>
-          </div>
+          <span className="text-amber-200/85 font-medium">
+            {!isOpen ? t('promo.canPreorder') : t('promo.welcomeOrder')}
+          </span>
         </div>
-      )}
+      </div>
 
       {/* Hero Section */}
       <div className="relative w-full min-h-[85vh] flex flex-col justify-between items-center text-center pb-8 overflow-hidden">
@@ -431,29 +444,40 @@ export default function GuestPage() {
         <div className="absolute safe-top-offset right-4 z-20">
           <LanguageSelector className="relative z-20" />
         </div>
-        {/* Background Slideshow */}
-        <div className="absolute inset-0 z-0">
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={heroIndex}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 0.5, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={HERO_IMAGES[heroIndex]}
-                alt="Porto Bar Ambient Photo"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            </motion.div>
-          </AnimatePresence>
+        {/* Background Video or Slideshow */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {heroType === 'video' && heroVideoUrl ? (
+            <video
+              src={heroVideoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover scale-105"
+            />
+          ) : (
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={heroIndex}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 0.5, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.5 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={HERO_IMAGES[heroIndex]}
+                  alt="Porto Bar Ambient Photo"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </motion.div>
+            </AnimatePresence>
+          )}
           {/* Dark luxury overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-porto-bg/80 via-porto-bg/60 to-porto-bg z-0" />
+          <div className="absolute inset-0 bg-gradient-to-b from-porto-bg/85 via-porto-bg/60 to-porto-bg z-0" />
         </div>
 
         {/* Top Header Logo */}
@@ -486,7 +510,9 @@ export default function GuestPage() {
           >
             <h1 
               className="text-[13px] md:text-base font-serif text-gray-300 leading-relaxed italic select-none"
-              dangerouslySetInnerHTML={{ __html: t('hero.slogan') }}
+              dangerouslySetInnerHTML={{ 
+                __html: heroSlogan ? translate(heroSlogan) : t('hero.slogan') 
+              }}
             />
           </motion.div>
           <div className="flex justify-center mt-4">
@@ -988,7 +1014,7 @@ export default function GuestPage() {
               <div className="flex-1 overflow-auto bg-porto-bg/30 p-4 flex justify-center items-start scrollbar-thin">
                 <div className="relative max-w-full">
                   <img
-                    src="/images/image_2026-07-01_13-49-49.png"
+                    src={printedMenuImage || "/images/image_2026-07-01_13-49-49.png"}
                     alt="Printed Menu"
                     className="max-w-full h-auto rounded-xl border border-white/5 shadow-2xl select-none"
                   />
