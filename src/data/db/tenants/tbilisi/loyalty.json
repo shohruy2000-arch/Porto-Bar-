@@ -1,0 +1,48 @@
+[
+  {
+    "phone": "+79998887766",
+    "name": "Алексей Иванов",
+    "cardNumber": "PB-888-7766",
+    "qrCode": "PB-888-7766",
+    "registrationDate": "01.05.2026",
+    "points": 550,
+    "tier": "Gold",
+    "history": [
+      {
+        "date": "01.05.2026 12:00",
+        "amount": 300,
+        "type": "accrual",
+        "comment": "Регистрация в клубе PORTO"
+      },
+      {
+        "date": "15.05.2026 18:30",
+        "amount": 250,
+        "type": "accrual",
+        "comment": "10% кэшбек за ужин в номере"
+      }
+    ]
+  },
+  {
+    "phone": "+79995554433",
+    "name": "Мария Сидорова",
+    "cardNumber": "PB-555-4433",
+    "qrCode": "PB-555-4433",
+    "registrationDate": "12.05.2026",
+    "points": 120,
+    "tier": "Silver",
+    "history": [
+      {
+        "date": "12.05.2026 15:45",
+        "amount": 100,
+        "type": "accrual",
+        "comment": "Регистрация в клубе PORTO"
+      },
+      {
+        "date": "20.05.2026 14:20",
+        "amount": 20,
+        "type": "accrual",
+        "comment": "Кэшбек за капучино и десерт"
+      }
+    ]
+  }
+]

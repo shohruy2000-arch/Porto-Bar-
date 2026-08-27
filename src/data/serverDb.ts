@@ -1,21 +1,29 @@
 import fs from 'fs';
 import path from 'path';
-import { Dish, Category, Promotion, Order, LoyaltyMember, WaiterCall, PushSubscriptionData, Reservation } from '../types';
+import { Dish, Category, Promotion, Order, LoyaltyMember, WaiterCall, PushSubscriptionData, Reservation, TenantRestaurant, SuperAdminStats } from '../types';
 import { INITIAL_CATEGORIES, INITIAL_DISHES, INITIAL_PROMOTIONS } from './initialMenu';
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data', 'db');
+const TENANTS_DIR = path.join(DATA_DIR, 'tenants');
 
-const getFilePath = (fileName: string) => path.join(DATA_DIR, fileName);
-
-const ensureDirectoryExists = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+const ensureDirectoryExists = (dir: string = DATA_DIR) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 };
 
-const readFile = <T>(fileName: string, defaultData: T): T => {
+const getFilePath = (fileName: string, tenantId?: string) => {
+  if (!tenantId || tenantId === 'porto-bar' || tenantId === 'default') {
+    return path.join(DATA_DIR, fileName);
+  }
+  const tenantDir = path.join(TENANTS_DIR, tenantId);
+  ensureDirectoryExists(tenantDir);
+  return path.join(tenantDir, fileName);
+};
+
+const readFile = <T>(fileName: string, defaultData: T, tenantId?: string): T => {
   ensureDirectoryExists();
-  const filePath = getFilePath(fileName);
+  const filePath = getFilePath(fileName, tenantId);
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2), 'utf-8');
     return defaultData;
@@ -24,19 +32,19 @@ const readFile = <T>(fileName: string, defaultData: T): T => {
     const content = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(content);
   } catch (e) {
-    console.error(`Error reading ${fileName}:`, e);
+    console.error(`Error reading ${fileName} for tenant ${tenantId || 'default'}:`, e);
     return defaultData;
   }
 };
 
-const writeFile = <T>(fileName: string, data: T): boolean => {
+const writeFile = <T>(fileName: string, data: T, tenantId?: string): boolean => {
   ensureDirectoryExists();
-  const filePath = getFilePath(fileName);
+  const filePath = getFilePath(fileName, tenantId);
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
     return true;
   } catch (e) {
-    console.error(`Error writing ${fileName}:`, e);
+    console.error(`Error writing ${fileName} for tenant ${tenantId || 'default'}:`, e);
     return false;
   }
 };
@@ -71,87 +79,154 @@ const INITIAL_LOYALTY: LoyaltyMember[] = [
   }
 ];
 
-let cacheDishes: Dish[] | null = null;
-let cacheCategories: Category[] | null = null;
-let cachePromotions: Promotion[] | null = null;
-let cacheOrders: Order[] | null = null;
-let cacheLoyalty: LoyaltyMember[] | null = null;
-let cacheWaiterCalls: WaiterCall[] | null = null;
-
 export const serverDb = {
-  getDishes: () => {
-    if (!cacheDishes) cacheDishes = readFile<Dish[]>('dishes.json', INITIAL_DISHES);
-    return cacheDishes;
+  // RESTAURANTS (TENANTS)
+  getRestaurants: (): TenantRestaurant[] => {
+    return readFile<TenantRestaurant[]>('restaurants.json', []);
   },
-  saveDishes: (data: Dish[]) => {
-    cacheDishes = data;
-    return writeFile('dishes.json', data);
+  saveRestaurants: (data: TenantRestaurant[]) => {
+    return writeFile('restaurants.json', data);
+  },
+  getRestaurantById: (id: string): TenantRestaurant | null => {
+    const list = serverDb.getRestaurants();
+    return list.find(r => r.id === id || r.slug === id) || null;
+  },
+  getRestaurantByDomain: (domain: string): TenantRestaurant | null => {
+    const list = serverDb.getRestaurants();
+    const cleanDomain = domain.toLowerCase().split(':')[0]; // strip port if any
+    const found = list.find(r => 
+      r.domains.some(d => d.toLowerCase() === cleanDomain) || 
+      r.slug.toLowerCase() === cleanDomain ||
+      cleanDomain.startsWith(`${r.slug.toLowerCase()}.`)
+    );
+    return found || list.find(r => r.id === 'porto-bar') || list[0] || null;
+  },
+  createRestaurant: (data: Omit<TenantRestaurant, 'createdAt'>): TenantRestaurant => {
+    const restaurants = serverDb.getRestaurants();
+    const newRestaurant: TenantRestaurant = {
+      ...data,
+      createdAt: new Date().toISOString(),
+      stats: {
+        totalGmv: 0,
+        totalOrders: 0,
+        activeMembers: 0
+      }
+    };
+    // Initialize tenant directory & seed initial starter data
+    const tenantDir = path.join(TENANTS_DIR, newRestaurant.id);
+    ensureDirectoryExists(tenantDir);
+    writeFile('dishes.json', INITIAL_DISHES, newRestaurant.id);
+    writeFile('categories.json', INITIAL_CATEGORIES, newRestaurant.id);
+    writeFile('promotions.json', INITIAL_PROMOTIONS, newRestaurant.id);
+    writeFile('orders.json', [], newRestaurant.id);
+    writeFile('reservations.json', [], newRestaurant.id);
+    writeFile('waiter_calls.json', [], newRestaurant.id);
+    writeFile('loyalty.json', [], newRestaurant.id);
+    writeFile('push_subscriptions.json', [], newRestaurant.id);
+
+    restaurants.push(newRestaurant);
+    serverDb.saveRestaurants(restaurants);
+    return newRestaurant;
+  },
+  updateRestaurant: (id: string, updatedFields: Partial<TenantRestaurant>): TenantRestaurant | null => {
+    const restaurants = serverDb.getRestaurants();
+    const idx = restaurants.findIndex(r => r.id === id);
+    if (idx === -1) return null;
+    restaurants[idx] = { ...restaurants[idx], ...updatedFields };
+    serverDb.saveRestaurants(restaurants);
+    return restaurants[idx];
+  },
+  deleteRestaurant: (id: string): boolean => {
+    if (id === 'porto-bar') return false; // Protect root
+    let restaurants = serverDb.getRestaurants();
+    restaurants = restaurants.filter(r => r.id !== id);
+    serverDb.saveRestaurants(restaurants);
+    return true;
+  },
+  getSuperAdminStats: (): SuperAdminStats => {
+    const restaurants = serverDb.getRestaurants();
+    const active = restaurants.filter(r => r.status === 'active' || r.status === 'trial');
+    let totalGmv = 0;
+    let totalOrders = 0;
+    let monthlyRevenue = 0;
+
+    restaurants.forEach(r => {
+      totalGmv += (r.stats?.totalGmv || 0);
+      totalOrders += (r.stats?.totalOrders || 0);
+      monthlyRevenue += (r.monthlyPrice || 0);
+    });
+
+    return {
+      totalRestaurants: restaurants.length,
+      activeRestaurants: active.length,
+      totalGmv,
+      totalOrdersMonth: totalOrders,
+      monthlyRevenue
+    };
   },
 
-  getCategories: () => {
-    if (!cacheCategories) cacheCategories = readFile<Category[]>('categories.json', INITIAL_CATEGORIES);
-    return cacheCategories;
+  // DISHES
+  getDishes: (tenantId?: string) => {
+    return readFile<Dish[]>('dishes.json', INITIAL_DISHES, tenantId);
   },
-  saveCategories: (data: Category[]) => {
-    cacheCategories = data;
-    return writeFile('categories.json', data);
-  },
-
-  getPromotions: () => {
-    if (!cachePromotions) cachePromotions = readFile<Promotion[]>('promotions.json', INITIAL_PROMOTIONS);
-    return cachePromotions;
-  },
-  savePromotions: (data: Promotion[]) => {
-    cachePromotions = data;
-    return writeFile('promotions.json', data);
+  saveDishes: (data: Dish[], tenantId?: string) => {
+    return writeFile('dishes.json', data, tenantId);
   },
 
-  getOrders: () => {
-    if (!cacheOrders) cacheOrders = readFile<Order[]>('orders.json', []);
-    return cacheOrders;
+  // CATEGORIES
+  getCategories: (tenantId?: string) => {
+    return readFile<Category[]>('categories.json', INITIAL_CATEGORIES, tenantId);
   },
-  saveOrders: (data: Order[]) => {
-    cacheOrders = data;
-    return writeFile('orders.json', data);
-  },
-
-  getLoyalty: () => {
-    if (!cacheLoyalty) cacheLoyalty = readFile<LoyaltyMember[]>('loyalty.json', INITIAL_LOYALTY);
-    return cacheLoyalty;
-  },
-  saveLoyalty: (data: LoyaltyMember[]) => {
-    cacheLoyalty = data;
-    return writeFile('loyalty.json', data);
+  saveCategories: (data: Category[], tenantId?: string) => {
+    return writeFile('categories.json', data, tenantId);
   },
 
-  getWaiterCalls: () => {
-    if (!cacheWaiterCalls) cacheWaiterCalls = readFile<WaiterCall[]>('waiter_calls.json', []);
-    return cacheWaiterCalls;
+  // PROMOTIONS
+  getPromotions: (tenantId?: string) => {
+    return readFile<Promotion[]>('promotions.json', INITIAL_PROMOTIONS, tenantId);
   },
-  saveWaiterCalls: (data: WaiterCall[]) => {
-    cacheWaiterCalls = data;
-    return writeFile('waiter_calls.json', data);
-  },
-
-  getPushSubscriptions: () => {
-    if (!cachePushSubscriptions) cachePushSubscriptions = readFile<PushSubscriptionData[]>('push_subscriptions.json', []);
-    return cachePushSubscriptions;
-  },
-  savePushSubscriptions: (data: PushSubscriptionData[]) => {
-    cachePushSubscriptions = data;
-    return writeFile('push_subscriptions.json', data);
+  savePromotions: (data: Promotion[], tenantId?: string) => {
+    return writeFile('promotions.json', data, tenantId);
   },
 
-  getReservations: () => {
-    if (!cacheReservations) cacheReservations = readFile<Reservation[]>('reservations.json', []);
-    return cacheReservations;
+  // ORDERS
+  getOrders: (tenantId?: string) => {
+    return readFile<Order[]>('orders.json', [], tenantId);
   },
-  saveReservations: (data: Reservation[]) => {
-    cacheReservations = data;
-    return writeFile('reservations.json', data);
+  saveOrders: (data: Order[], tenantId?: string) => {
+    return writeFile('orders.json', data, tenantId);
+  },
+
+  // LOYALTY
+  getLoyalty: (tenantId?: string) => {
+    return readFile<LoyaltyMember[]>('loyalty.json', INITIAL_LOYALTY, tenantId);
+  },
+  saveLoyalty: (data: LoyaltyMember[], tenantId?: string) => {
+    return writeFile('loyalty.json', data, tenantId);
+  },
+
+  // WAITER CALLS
+  getWaiterCalls: (tenantId?: string) => {
+    return readFile<WaiterCall[]>('waiter_calls.json', [], tenantId);
+  },
+  saveWaiterCalls: (data: WaiterCall[], tenantId?: string) => {
+    return writeFile('waiter_calls.json', data, tenantId);
+  },
+
+  // PUSH SUBSCRIPTIONS
+  getPushSubscriptions: (tenantId?: string) => {
+    return readFile<PushSubscriptionData[]>('push_subscriptions.json', [], tenantId);
+  },
+  savePushSubscriptions: (data: PushSubscriptionData[], tenantId?: string) => {
+    return writeFile('push_subscriptions.json', data, tenantId);
+  },
+
+  // RESERVATIONS
+  getReservations: (tenantId?: string) => {
+    return readFile<Reservation[]>('reservations.json', [], tenantId);
+  },
+  saveReservations: (data: Reservation[], tenantId?: string) => {
+    return writeFile('reservations.json', data, tenantId);
   }
 };
-
-let cachePushSubscriptions: PushSubscriptionData[] | null = null;
-let cacheReservations: Reservation[] | null = null;
 

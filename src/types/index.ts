@@ -8,6 +8,32 @@ export interface MultilingualText {
 
 export type DishLabel = 'new' | 'bestseller' | 'recommended' | 'vegetarian' | 'spicy';
 
+export interface ModifierOption {
+  id: string;
+  groupId: string;
+  name: MultilingualText;
+  priceDelta: number; // e.g. +50 for additional cheese or 0
+  isDefault?: boolean;
+  outOfStock?: boolean;
+}
+
+export interface ModifierGroup {
+  id: string;
+  dishId: string;
+  name: MultilingualText; // e.g. { ru: 'Размер', en: 'Size', zh: '规格' }
+  minSelected: number;    // 0 = optional, 1 = required
+  maxSelected: number;    // 1 = single-choice, >1 = multiple-choice
+  options: ModifierOption[];
+}
+
+export interface SelectedModifier {
+  groupId: string;
+  groupName: string;
+  optionId: string;
+  optionName: string;
+  priceDelta: number;
+}
+
 export interface Dish {
   id: string;
   name: MultilingualText;
@@ -29,6 +55,7 @@ export interface Dish {
   quantityLimit?: number | null;
   isRecommended?: boolean;
   recommendedOrder?: number;
+  modifierGroups?: ModifierGroup[];
 }
 
 export interface Category {
@@ -47,16 +74,19 @@ export interface Promotion {
 export interface OrderItem {
   dish: Dish;
   quantity: number;
+  selectedModifiers?: SelectedModifier[];
 }
 
 // Ordering Ecosystem (Future-Ready)
 export type OrderType = 'room' | 'table' | 'takeaway' | 'delivery';
 export type OrderStatus = 'received' | 'preparing' | 'completed' | 'archived' | 'cancelled';
+export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
 
 export interface OrderDetailItem {
   dishId: string;
   quantity: number;
   priceAtOrder: number;
+  selectedModifiers?: SelectedModifier[];
 }
 
 export interface Order {
@@ -76,13 +106,43 @@ export interface Order {
   deliveryDistance?: number;
   items: OrderDetailItem[];
   totalAmount: number;
-  paymentMethod: 'cash' | 'terminal';
+  paymentMethod: 'cash' | 'terminal' | 'yookassa' | 'sbp';
+  paymentStatus?: PaymentStatus;
+  paymentId?: string; // YooKassa Payment ID
   status: OrderStatus;
   createdAt: string;
   guestName?: string;
   iikoOrderId?: string;    // iiko order UUID after successful sync
   iikoSyncError?: string;  // error message if iiko sync failed
   idempotencyKey?: string; // unique token to prevent double submissions
+  platformFeeRate?: number;       // e.g. 0.03 for 3%
+  platformFeeAmount?: number;     // e.g. totalAmount * platformFeeRate
+  restaurantEarnings?: number;    // e.g. totalAmount - platformFeeAmount
+}
+
+/** DTO for client order creation payload */
+export interface CreateOrderDTO {
+  type: OrderType;
+  phone: string;
+  roomNumber?: string;
+  tableNumber?: string;
+  deliveryAddress?: string;
+  deliveryLat?: number;
+  deliveryLng?: number;
+  deliveryApartment?: string;
+  deliveryEntrance?: string;
+  deliveryFloor?: string;
+  deliveryIntercom?: string;
+  deliveryComment?: string;
+  deliveryDistance?: number;
+  items: OrderDetailItem[];
+  totalAmount: number;
+  paymentMethod: 'cash' | 'terminal' | 'yookassa' | 'sbp';
+  paymentStatus?: PaymentStatus;
+  paymentId?: string;
+  status?: OrderStatus;
+  guestName?: string;
+  idempotencyKey?: string;
 }
 
 // Loyalty System (Porto Premium)
@@ -209,4 +269,63 @@ export interface Reservation {
   wishes?: string;
   createdAt: string;
   idempotencyKey?: string;
+}
+
+export type ThemePreset = 'luxury-dark' | 'clean-light' | 'vivid-fast';
+
+export interface TenantTheme {
+  preset: ThemePreset;
+  primaryColor: string; // e.g. #d4af37 (Gold) or #e11d48 (Ruby)
+  primaryLightColor?: string; // e.g. #f3e5ab
+  primaryDarkColor?: string; // e.g. #aa8010
+  accentColor: string; // e.g. #f59e0b
+  bgColor: string; // e.g. #060a12 or #ffffff
+  bgCardColor: string; // e.g. #0d131f or #f8fafc
+  textColor: string; // e.g. #f3f4f6 or #0f172a
+  logoUrl: string;
+  logoDarkUrl?: string;
+  faviconUrl?: string;
+  fontFamily?: string;
+  customCss?: string;
+}
+
+export interface TenantRestaurant {
+  id: string; // e.g. 'porto-bar', 'steak-wine'
+  slug: string; // e.g. 'porto', 'steak'
+  name: string;
+  legalName?: string;
+  inn?: string;
+  ogrn?: string;
+  domains: string[]; // e.g. ['portobar.ru', 'porto.yourdomain.ru']
+  theme: TenantTheme;
+  status: 'active' | 'trial' | 'suspended';
+  plan: 'starter' | 'business' | 'enterprise';
+  subscriptionExpiresAt?: string;
+  monthlyPrice?: number;
+  adminPassword: string;
+  createdAt: string;
+  contacts?: {
+    phone?: string;
+    email?: string;
+    address?: string;
+    vkUrl?: string;
+    telegramUrl?: string;
+    yandexEdaUrl?: string;
+  };
+  stats?: {
+    totalGmv: number;
+    totalOrders: number;
+    activeMembers: number;
+  };
+}
+
+/** Alias for multi-tenant entity */
+export type Tenant = TenantRestaurant;
+
+export interface SuperAdminStats {
+  totalRestaurants: number;
+  activeRestaurants: number;
+  totalGmv: number;
+  totalOrdersMonth: number;
+  monthlyRevenue: number;
 }

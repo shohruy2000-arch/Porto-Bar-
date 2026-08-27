@@ -1,0 +1,25 @@
+[
+  {
+    "tableNumber": "5",
+    "items": [
+      {
+        "dishId": "dish-1",
+        "name": "Яйца Бенедикт",
+        "price": 680,
+        "quantity": 2
+      },
+      {
+        "dishId": "dish-2",
+        "name": "Авокадо тост",
+        "price": 520,
+        "quantity": 1
+      }
+    ],
+    "totalPrice": 1880,
+    "phone": "+79991234567",
+    "notes": "Тест заказа Steak Wine",
+    "id": "order-1787500802725",
+    "createdAt": "2026-08-23T16:00:02.725Z",
+    "iikoSyncError": "iiko disabled or not configured"
+  }
+]

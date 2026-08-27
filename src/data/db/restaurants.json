@@ -1,0 +1,84 @@
+[
+  {
+    "id": "porto-bar",
+    "slug": "porto",
+    "name": "Porto Bar",
+    "legalName": "ООО «Движение ВВЕРХ И ВПЕРЕД»",
+    "inn": "9729304162",
+    "ogrn": "1217700021912",
+    "domains": [
+      "localhost",
+      "127.0.0.1",
+      "192.124.181.134",
+      "portobar.ru"
+    ],
+    "theme": {
+      "preset": "luxury-dark",
+      "primaryColor": "#d4af37",
+      "primaryLightColor": "#f5e6a8",
+      "primaryDarkColor": "#aa8010",
+      "accentColor": "#f59e0b",
+      "bgColor": "#060a12",
+      "bgCardColor": "#0d131f",
+      "textColor": "#f3f4f6",
+      "logoUrl": "/images/porto-logo.jpg?v=2",
+      "faviconUrl": "/images/porto-app-icon-192.png",
+      "fontFamily": "var(--font-geist-sans)"
+    },
+    "status": "active",
+    "plan": "enterprise",
+    "subscriptionExpiresAt": "2027-01-01T00:00:00.000Z",
+    "monthlyPrice": 9900,
+    "adminPassword": "porto",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "contacts": {
+      "phone": "+7 968 000 22 27",
+      "email": "info@porto-bar.ru",
+      "address": "Ленинский проспект, 146, Москва (Отель Аструс, 1 этаж)"
+    },
+    "stats": {
+      "totalGmv": 1250000,
+      "totalOrders": 340,
+      "activeMembers": 85
+    }
+  },
+  {
+    "id": "steak-wine",
+    "slug": "steak-wine",
+    "name": "Steak & Wine",
+    "legalName": "ООО Стейк Вайн",
+    "inn": "7700000001",
+    "ogrn": "",
+    "domains": [
+      "steak-wine",
+      "steak-wine.ru",
+      "localhost"
+    ],
+    "theme": {
+      "preset": "clean-light",
+      "primaryColor": "#2563eb",
+      "primaryLightColor": "#2563ebcc",
+      "primaryDarkColor": "#2563eb",
+      "accentColor": "#3b82f6",
+      "bgColor": "#f8fafc",
+      "bgCardColor": "#ffffff",
+      "textColor": "#0f172a",
+      "logoUrl": "/images/porto-logo.jpg?v=2"
+    },
+    "status": "active",
+    "plan": "business",
+    "subscriptionExpiresAt": "2026-09-22T15:58:59.661Z",
+    "monthlyPrice": 6900,
+    "adminPassword": "manager123",
+    "contacts": {
+      "phone": "+7 999 123 45 67",
+      "address": "Москва, ул. Тверская, 15"
+    },
+    "createdAt": "2026-08-23T15:58:59.663Z",
+    "stats": {
+      "totalGmv": 0,
+      "totalOrders": 0,
+      "activeMembers": 0
+    }
+  }
+]
