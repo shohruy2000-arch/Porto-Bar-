@@ -43,7 +43,7 @@
     },
     "price": 450,
     "weight": "180 г",
-    "image": "",
+    "image": "/uploads/img_1781136149674_2r7xo8.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -101,16 +101,14 @@
     "weight": "220 г",
     "image": "/images/interior-3.jpg",
     "visible": true,
-    "labels": [
-      "recommended"
-    ],
+    "labels": [],
     "kbju": {
-      "calories": 760,
+      "calories": 610,
       "proteins": 38,
-      "fats": 62,
-      "carbs": 12
+      "fats": 48,
+      "carbs": 8
     },
-    "prepTime": 11
+    "prepTime": 8
   },
   {
     "id": "dish-5",
@@ -118,25 +116,25 @@
     "name": {
       "ru": "Салат Цезарь с тигровыми креветками",
       "en": "Caesar Salad with Tiger Prawns",
-      "zh": "鲜虾凯撒沙拉"
+      "zh": "虎虾凯撒沙拉"
     },
     "description": {
-      "ru": "Хрустящий романо, сочные обжаренные креветки, гренки, сыр пармезан и фирменный соус.",
-      "en": "Crisp romaine lettuce, juicy pan-seared prawns, croutons, parmesan cheese, and house Caesar dressing.",
-      "zh": "清脆罗马生菜、多汁煎虎虾、烤面包丁、帕玛森干酪和招牌凯撒酱。"
+      "ru": "Хрустящий романо, обжаренные креветки, пармезан, чесночные крутоны и домашний соус цезарь.",
+      "en": "Crisp romaine, pan-seared prawns, parmesan, garlic croutons, and house-made caesar dressing.",
+      "zh": "爽脆罗马生菜、煎虎虾、帕玛森干酪、大蒜面包丁和自制凯撒酱。"
     },
     "price": 790,
-    "weight": "250 г",
-    "image": "",
+    "weight": "210 г",
+    "image": "/uploads/migrated_dish_1781103144116_5.png",
     "visible": true,
     "labels": [
       "bestseller"
     ],
     "kbju": {
-      "calories": 410,
+      "calories": 380,
       "proteins": 24,
-      "fats": 26,
-      "carbs": 20
+      "fats": 22,
+      "carbs": 18
     },
     "prepTime": 14
   },
@@ -145,29 +143,28 @@
     "category": "cat-3",
     "name": {
       "ru": "Салат с осьминогом и картофелем",
-      "en": "Octopus and Potato Salad",
-      "zh": "八爪鱼土豆沙拉"
+      "en": "Warm Octopus & Potato Salad",
+      "zh": "温拌章鱼土豆沙拉"
     },
     "description": {
-      "ru": "Обжаренный на гриле осьминог с молодым картофелем, томатами черри, оливками и лимонной заправкой.",
-      "en": "Grilled octopus with baby potatoes, cherry tomatoes, olives, and lemon dressing.",
-      "zh": "烤八爪鱼配小土豆、樱桃番茄、橄榄和柠檬汁。"
+      "ru": "Нежный томленый осьминог, беби-картофель, оливки каламата, вяленые томаты и заправка из трав.",
+      "en": "Tender braised octopus, baby potatoes, kalamata olives, sun-dried tomatoes, and herb dressing.",
+      "zh": "软嫩烩章鱼、小土豆、卡拉马塔橄榄、风干番茄和香草汁。"
     },
     "price": 1450,
-    "weight": "210 г",
-    "image": "/images/interior-1.jpg",
+    "weight": "230 г",
+    "image": "/uploads/migrated_dish_1781103144126_6.jpg",
     "visible": true,
     "labels": [
-      "recommended",
-      "new"
+      "recommended"
     ],
     "kbju": {
-      "calories": 310,
-      "proteins": 18,
-      "fats": 15,
-      "carbs": 25
+      "calories": 340,
+      "proteins": 28,
+      "fats": 16,
+      "carbs": 21
     },
-    "prepTime": 10
+    "prepTime": 18
   },
   {
     "id": "dish-7",
@@ -178,25 +175,25 @@
       "zh": "海鲜冬阴功汤"
     },
     "description": {
-      "ru": "Пряный тайский суп на кокосовом молоке с креветками, кальмарами, мидиями и грибами.",
-      "en": "Spicy Thai soup with coconut milk, prawns, squid, mussels, and mushrooms.",
-      "zh": "泰式酸辣椰奶汤，配以鲜虾、鱿鱼、贻贝和蘑菇。"
+      "ru": "Пряный кокосовый бульон с лемонграссом, тигровыми креветками, кальмарами, мидиями и грибами цаогу.",
+      "en": "Spicy coconut broth with lemongrass, tiger prawns, calamari, mussels, and straw mushrooms.",
+      "zh": "微辣椰奶汤底配柠檬草、虎虾、鱿鱼、青口贝和草菇。"
     },
     "price": 850,
-    "weight": "350 г",
-    "image": "",
+    "weight": "350 мл",
+    "image": "/uploads/migrated_dish_1781103144139_7.png",
     "visible": true,
     "labels": [
       "spicy",
       "bestseller"
     ],
     "kbju": {
-      "calories": 280,
-      "proteins": 20,
-      "fats": 12,
-      "carbs": 16
+      "calories": 310,
+      "proteins": 22,
+      "fats": 18,
+      "carbs": 14
     },
-    "prepTime": 16
+    "prepTime": 15
   },
   {
     "id": "dish-8",
@@ -204,55 +201,55 @@
     "name": {
       "ru": "Средиземноморский Буйабес",
       "en": "Mediterranean Bouillabaisse",
-      "zh": "马赛海鲜鱼汤"
+      "zh": "地中海马赛鱼汤"
     },
     "description": {
-      "ru": "Насыщенный рыбный суп с морепродуктами, белой рыбой, томатами и чесночными тостами.",
-      "en": "Rich fish soup with seafood, white fish, tomatoes, and garlic toasts.",
-      "zh": "浓郁鱼汤配海鲜、白鱼、番茄和大蒜吐司。"
+      "ru": "Наваристый рыбный суп с белой рыбой, лангустинами, мидиями, шафраном и тостами с соусом руй.",
+      "en": "Rich seafood stew with white fish, langoustines, mussels, saffron, and rouille toasts.",
+      "zh": "浓郁海鲜炖汤配白身鱼、海螯虾、青口、藏红花和蒜味辣酱吐司。"
     },
     "price": 980,
-    "weight": "400 г",
-    "image": "",
+    "weight": "400 мл",
+    "image": "/uploads/migrated_dish_1781103144152_8.png",
     "visible": true,
     "labels": [
       "recommended"
     ],
     "kbju": {
-      "calories": 340,
-      "proteins": 30,
-      "fats": 14,
-      "carbs": 18
+      "calories": 390,
+      "proteins": 34,
+      "fats": 19,
+      "carbs": 16
     },
-    "prepTime": 17
+    "prepTime": 20
   },
   {
     "id": "dish-9",
     "category": "cat-5",
     "name": {
       "ru": "Спагетти Карбонара",
-      "en": "Spaghetti Carbonara",
-      "zh": "意式蛋黄培根面"
+      "en": "Classic Spaghetti Carbonara",
+      "zh": "传统意式培根意面"
     },
     "description": {
-      "ru": "Классическая паста с хрустящим гуанчиале, яичным желтком, сыром пекорино романо и черным перцем.",
-      "en": "Classic pasta with crispy guanciale, egg yolk, pecorino romano cheese, and black pepper.",
-      "zh": "经典意面配香脆培根、蛋黄、罗马佩科里诺干酪 и 黑胡椒。"
+      "ru": "Аутентичный рецепт с хрустящей гуанчале, сыром пекорино романо и свежим яичным желтком.",
+      "en": "Authentic recipe with crispy guanciale, pecorino romano, and fresh egg yolk.",
+      "zh": "正宗意式配方：香脆风干猪面颊肉、佩科里诺奶酪和新鲜蛋黄。"
     },
     "price": 620,
-    "weight": "300 г",
-    "image": "",
+    "weight": "280 г",
+    "image": "/uploads/migrated_dish_1781103144162_9.png",
     "visible": true,
     "labels": [
       "bestseller"
     ],
     "kbju": {
-      "calories": 720,
-      "proteins": 26,
+      "calories": 670,
+      "proteins": 24,
       "fats": 36,
-      "carbs": 72
+      "carbs": 62
     },
-    "prepTime": 19
+    "prepTime": 16
   },
   {
     "id": "dish-10",
@@ -263,13 +260,13 @@
       "zh": "玛格丽特披萨"
     },
     "description": {
-      "ru": "Классическая пицца с соусом из спелых томатов, сыром моцарелла и свежим базиликом.",
-      "en": "Classic pizza with ripe tomato sauce, mozzarella cheese, and fresh basil.",
-      "zh": "经典披萨配熟番茄沙司、马苏里拉奶酪和新鲜罗勒。"
+      "ru": "Итальянские томаты San Marzano, моцарелла фьор ди латте и свежий базилик на тонком тесте.",
+      "en": "Italian San Marzano tomatoes, fior di latte mozzarella, and fresh basil on thin crust.",
+      "zh": "意大利圣马扎诺番茄、鲜水牛奶酪和新鲜罗勒薄底披萨。"
     },
     "price": 550,
     "weight": "350 г",
-    "image": "",
+    "image": "/uploads/img_1781204192248_6ckkt2.jpg",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -325,7 +322,7 @@
     },
     "price": 950,
     "weight": "220 г",
-    "image": "",
+    "image": "/uploads/img_1781385529618_w47w1p.png",
     "visible": true,
     "labels": [
       "new"
@@ -353,7 +350,7 @@
     },
     "price": 1200,
     "weight": "300 г",
-    "image": "/images/veranda-1.jpg",
+    "image": "/uploads/migrated_dish_1781103144166_13.jpg",
     "visible": true,
     "labels": [
       "recommended"
@@ -381,7 +378,7 @@
     },
     "price": 1350,
     "weight": "260 г",
-    "image": "/images/veranda-2.jpg",
+    "image": "/uploads/migrated_dish_1781103144167_14.webp",
     "visible": true,
     "labels": [
       "bestseller"
@@ -409,7 +406,7 @@
     },
     "price": 490,
     "weight": "150 г",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144174_15.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -431,13 +428,13 @@
       "zh": "卡布奇诺"
     },
     "description": {
-      "ru": "Классический кофе с молочной пенкой.",
+      "ru": "Классический кофе с шелковистой молочной пенкой.",
       "en": "Classic coffee with milk foam.",
       "zh": "经典咖啡配牛奶泡沫。"
     },
     "price": 280,
     "weight": "200 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144186_16.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -457,13 +454,13 @@
       "zh": "澳白咖啡"
     },
     "description": {
-      "ru": "Двойной эспрессо с горячим молоком.",
+      "ru": "Двойной эспрессо с горячим вспененным молоком.",
       "en": "Double espresso with hot milk.",
       "zh": "双份浓缩咖啡配热牛奶。"
     },
     "price": 320,
     "weight": "200 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144192_17.jpg",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -483,13 +480,13 @@
       "zh": "奶香乌龙茶"
     },
     "description": {
-      "ru": "Китайский оолон с тонким молочно-сливочным ароматом.",
+      "ru": "Китайский улун с тонким молочно-сливочным ароматом.",
       "en": "Chinese oolong with a delicate milky-creamy aroma.",
       "zh": "带有微妙奶香奶油香气的中国乌龙茶。"
     },
     "price": 380,
     "weight": "500 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144200_18.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -515,7 +512,7 @@
     },
     "price": 350,
     "weight": "300 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144211_19.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -543,7 +540,7 @@
     },
     "price": 650,
     "weight": "250 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144228_20.png",
     "visible": true,
     "labels": [
       "bestseller"
