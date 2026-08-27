@@ -179,7 +179,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 890,
     "weight": "390 гр",
-    "image": "",
+    "image": "/images/interior-1.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -208,7 +208,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 720,
     "weight": "330 гр",
-    "image": "",
+    "image": "/uploads/img_1787845231978_gxgqlj.jpg",
     "visible": true,
     "labels": [
       "bestseller"
@@ -236,7 +236,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 850,
     "weight": "330 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144116_5.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -264,7 +264,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 610,
     "weight": "340 гр",
-    "image": "",
+    "image": "/uploads/img_1782821337147_0p02f2.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -293,7 +293,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 510,
     "weight": "330 гр",
-    "image": "",
+    "image": "/images/interior-3.jpg",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -321,7 +321,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 480,
     "weight": "230 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144126_6.jpg",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -347,7 +347,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 760,
     "weight": "230 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144152_8.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -376,7 +376,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "220 гр",
-    "image": "",
+    "image": "/uploads/img_1782043172002_ujqrv0.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -402,7 +402,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 480,
     "weight": "180 гр",
-    "image": "",
+    "image": "/uploads/img_1782043084289_6wzhob.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -430,7 +430,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 690,
     "weight": "360 гр",
-    "image": "",
+    "image": "/uploads/img_1782043391503_e4j9ul.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -458,7 +458,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 1200,
     "weight": "300 гр",
-    "image": "",
+    "image": "/images/interior-2.jpg",
     "visible": true,
     "labels": [
       "recommended"
@@ -486,7 +486,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 1490,
     "weight": "550 гр",
-    "image": "",
+    "image": "/uploads/img_1782043577851_khk7qz.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -515,7 +515,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 550,
     "weight": "350 гр",
-    "image": "",
+    "image": "/uploads/img_1782043693615_e2ini7.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -541,7 +541,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 780,
     "weight": "390 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144139_7.png",
     "visible": true,
     "labels": [
       "spicy",
@@ -570,7 +570,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 750,
     "weight": "350 гр",
-    "image": "",
+    "image": "/uploads/img_1782044065606_eb6mz0.png",
     "visible": true,
     "labels": [
       "vegetarian",
@@ -599,7 +599,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 690,
     "weight": "390 гр",
-    "image": "",
+    "image": "/uploads/img_1781204192248_6ckkt2.jpg",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -627,7 +627,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 790,
     "weight": "420 гр",
-    "image": "",
+    "image": "/uploads/img_1787844825367_2j7152.png",
     "visible": true,
     "labels": [
       "bestseller",
@@ -656,7 +656,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 870,
     "weight": "420 гр",
-    "image": "",
+    "image": "/uploads/img_1787844872356_ibluzc.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -685,7 +685,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 840,
     "weight": "430 гр",
-    "image": "",
+    "image": "/uploads/img_1787845066430_wbg8jh.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -711,7 +711,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 720,
     "weight": "380 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144162_9.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -739,7 +739,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 790,
     "weight": "370 гр",
-    "image": "",
+    "image": "/uploads/img_1787845089916_mhe03m.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -765,7 +765,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 840,
     "weight": "350 гр",
-    "image": "",
+    "image": "/uploads/img_1787845106950_9yuulk.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -793,7 +793,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 980,
     "weight": "380 гр",
-    "image": "",
+    "image": "/uploads/img_1787845270948_f03vr8.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -822,7 +822,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 960,
     "weight": "360/100 гр",
-    "image": "",
+    "image": "/uploads/img_1787844365615_igpd8o.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -851,7 +851,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 690,
     "weight": "300/100 гр",
-    "image": "",
+    "image": "/uploads/img_1782044219210_gmh2wf.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -879,7 +879,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 1350,
     "weight": "350/40 гр",
-    "image": "",
+    "image": "/images/interior-5.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -908,7 +908,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 860,
     "weight": "250 гр",
-    "image": "",
+    "image": "/uploads/img_1787845303297_sj3nb8.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -934,7 +934,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 1490,
     "weight": "430 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144167_14.webp",
     "visible": true,
     "labels": [
       "recommended",
@@ -963,7 +963,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 750,
     "weight": "280 гр",
-    "image": "",
+    "image": "/uploads/img_1787845587628_4cgn1y.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -989,7 +989,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 660,
     "weight": "290 гр",
-    "image": "",
+    "image": "/uploads/img_1787845637261_ecyu7e.png",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -1017,7 +1017,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 990,
     "weight": "340 гр",
-    "image": "",
+    "image": "/uploads/img_1787845691744_i8pzxz.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -1045,7 +1045,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 310,
     "weight": "180 гр",
-    "image": "",
+    "image": "/uploads/img_1787845737534_5mt17k.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1071,7 +1071,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 350,
     "weight": "150 гр",
-    "image": "",
+    "image": "/uploads/img_1787845822053_68rj8z.jpg",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1097,7 +1097,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 360,
     "weight": "150 гр",
-    "image": "",
+    "image": "/uploads/img_1782044414888_uuv754.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1123,7 +1123,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 650,
     "weight": "250 гр",
-    "image": "",
+    "image": "/uploads/img_1787845843477_kor0c9.jpg",
     "visible": true,
     "labels": [
       "vegetarian",
@@ -1152,7 +1152,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "150 гр",
-    "image": "",
+    "image": "/uploads/img_1782044550632_28s57h.png",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -1180,7 +1180,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 280,
     "weight": "125 гр",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144174_15.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1208,7 +1208,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 270,
     "weight": "180/50 гр",
-    "image": "",
+    "image": "/uploads/img_1787846234719_j23ij6.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -1237,7 +1237,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 430,
     "weight": "190 гр",
-    "image": "",
+    "image": "/uploads/img_1787846505754_mgs1iv.jpg",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1263,7 +1263,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 250,
     "weight": "170 гр",
-    "image": "",
+    "image": "/uploads/img_1782044749885_80rvp1.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1289,7 +1289,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "600 мл",
-    "image": "",
+    "image": "/uploads/img_1782994482239_hpok9h.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1315,7 +1315,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "600 мл",
-    "image": "",
+    "image": "/uploads/img_1782994634952_txp2by.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1341,7 +1341,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "600 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144200_18.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1369,7 +1369,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "600 мл",
-    "image": "",
+    "image": "/uploads/img_1782993980297_ign8q1.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1395,7 +1395,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "600 мл",
-    "image": "",
+    "image": "/uploads/img_1782993811136_9nw82n.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -1423,7 +1423,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 220,
     "weight": "40 мл",
-    "image": "",
+    "image": "/uploads/img_1787846575136_eqfaew.webp",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1449,7 +1449,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 260,
     "weight": "150 мл",
-    "image": "",
+    "image": "/uploads/img_1787846544663_473mzh.webp",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1475,7 +1475,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 320,
     "weight": "180 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144186_16.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1503,7 +1503,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 360,
     "weight": "220 мл",
-    "image": "",
+    "image": "/uploads/img_1787846534145_3d67bz.webp",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1529,7 +1529,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 420,
     "weight": "180 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144192_17.jpg",
     "visible": true,
     "labels": [
       "recommended"
@@ -1557,7 +1557,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 450,
     "weight": "220 мл",
-    "image": "",
+    "image": "/uploads/img_1782993697696_70fwrd.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1585,7 +1585,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 380,
     "weight": "400 мл",
-    "image": "",
+    "image": "/uploads/img_1782993385359_t582t3.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1611,7 +1611,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 470,
     "weight": "240 мл",
-    "image": "",
+    "image": "/uploads/img_1782045411272_oia5dj.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -1640,7 +1640,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 390,
     "weight": "250 мл",
-    "image": "",
+    "image": "/uploads/img_1782045790836_d7r8dv.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -1668,7 +1668,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 490,
     "weight": "400 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144211_19.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1696,7 +1696,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 550,
     "weight": "400 мл",
-    "image": "",
+    "image": "/uploads/img_1782046019446_y9p7c1.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -1725,7 +1725,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 550,
     "weight": "400 мл",
-    "image": "",
+    "image": "/uploads/img_1782047823985_o4rtii.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1809,7 +1809,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 410,
     "weight": "330 мл",
-    "image": "",
+    "image": "/uploads/img_1786604578208_ydqziq.png",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1835,7 +1835,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 430,
     "weight": "330 мл",
-    "image": "",
+    "image": "/uploads/img_1787836477753_lmmqxo.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1889,7 +1889,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 450,
     "weight": "330 мл",
-    "image": "",
+    "image": "/uploads/img_1781386010874_kuiz9c.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -1918,7 +1918,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 650,
     "weight": "250 мл",
-    "image": "",
+    "image": "/uploads/img_1781385801171_dojk9p.png",
     "visible": true,
     "labels": [
       "recommended"
@@ -2024,7 +2024,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 650,
     "weight": "200 мл",
-    "image": "",
+    "image": "/uploads/img_1781385753198_0i20ys.png",
     "visible": true,
     "labels": [
       "bestseller"
@@ -2052,7 +2052,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 550,
     "weight": "170 мл",
-    "image": "",
+    "image": "/uploads/migrated_dish_1781103144228_20.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -2081,7 +2081,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 480,
     "weight": "150 мл",
-    "image": "",
+    "image": "/uploads/img_1781281042458_pq08jj.jpg",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -2107,7 +2107,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 550,
     "weight": "250 мл",
-    "image": "",
+    "image": "/uploads/img_1781280911368_zjztt0.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -2136,7 +2136,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 710,
     "weight": "150 мл",
-    "image": "",
+    "image": "/uploads/img_1781271630261_rbs4pv.jpg",
     "visible": true,
     "labels": [
       "recommended"
@@ -2216,7 +2216,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 580,
     "weight": "150 мл",
-    "image": "",
+    "image": "/uploads/img_1781204154176_rads2j.jpg",
     "visible": true,
     "labels": [
       "bestseller"
@@ -2272,7 +2272,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 790,
     "weight": "150 мл",
-    "image": "",
+    "image": "/uploads/img_1781201023228_cc20qi.jpg",
     "visible": true,
     "labels": [
       "recommended",
@@ -2327,7 +2327,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 590,
     "weight": "50 мл",
-    "image": "",
+    "image": "/uploads/img_1781160962284_ot38n1.jpg",
     "visible": true,
     "labels": [
       "recommended"
@@ -2515,7 +2515,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 830,
     "weight": "50 мл",
-    "image": "",
+    "image": "/uploads/img_1781160920903_wx6b2d.png",
     "visible": true,
     "labels": [
       "recommended",
@@ -2544,7 +2544,7 @@ export const INITIAL_DISHES: Dish[] = [
     },
     "price": 720,
     "weight": "50 мл",
-    "image": "",
+    "image": "/uploads/img_1781115410069_nnxu34.png",
     "visible": true,
     "labels": [
       "bestseller"
