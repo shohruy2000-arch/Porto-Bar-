@@ -1,9 +1,73 @@
 {
-  "botToken": "",
-  "chatId": "",
+  "botToken": "8683288137:AAHWHbAiaVhfL1b-dGh4tXK8U_Q5E-SIXcA",
+  "chatId": "-1004481544850",
   "waiterChatId": "",
   "waiters": [],
-  "geminiApiKey": "",
-  "vapidPublicKey": "",
-  "vapidPrivateKey": ""
+  "geminiApiKey": "8683288137:AAHWHbAiaVhfL1b-dGh4tXK8U_Q5E-SIXcA",
+  "geminiProxyUrl": "",
+  "backstageVideoEnabled": true,
+  "stories": [
+    {
+      "id": "story_1787846608023_6wa5",
+      "videoUrl": "/videos/story_1787846799828_3bo5aq.mp4",
+      "imageUrl": "",
+      "title": {
+        "ru": "Ты сладкая булочка 🙃",
+        "en": "Sweet Bakery Delight 🙃",
+        "zh": "甜蜜时刻 🙃"
+      },
+      "enabled": true,
+      "actionType": "none",
+      "badge": {
+        "ru": "Сладкая булочка",
+        "en": "Bakery",
+        "zh": "招牌甜品"
+      },
+      "subtitle": {
+        "ru": "Каждый день с 12:00 до 00:00",
+        "en": "Daily from 12:00 to 00:00",
+        "zh": "每日 12:00 至 00:00"
+      }
+    }
+  ],
+  "workHoursStart": "10:00",
+  "workHoursEnd": "00:00",
+  "heroVideoUrl": "",
+  "heroType": "slideshow",
+  "heroSlogan": {
+    "ru": "1) Выберите блюда в нашем электронном меню\n2) Перейдите в корзину и убедитесь, что ничего не забыли\n3) Выберите способ доставки или заказ в ресторане\n4) Подтвердите и отправьте нам Ваш заказ!",
+    "en": "1) Choose your favorite dishes in our digital menu\n2) Go to cart and verify your order\n3) Select room service delivery or table order\n4) Confirm and send your order with 1 click!",
+    "zh": "1) 在电子菜单中挑选您喜爱的菜品\n2) 进入购物车核对您的点单清单\n3) 选择客房送餐或餐厅堂食\n4) 一键确认并提交您的订单！"
+  },
+  "statusBannerText": {
+    "ru": "Приходите на завтраки к нам в Porto - Bar",
+    "en": "Join us for delicious breakfast at Porto - Bar",
+    "zh": "欢迎光临 Porto - Bar 享用精致早餐"
+  },
+  "statusBannerSubtitle": {
+    "ru": "Новичкам скидка 10%",
+    "en": "10% discount for first-time guests",
+    "zh": "新客尊享 9 折专属优惠"
+  },
+  "statusBannerVideoUrl": "",
+  "printedMenuImage": "/images/image_2026-07-01_13-49-49.png",
+  "smtpHost": "",
+  "smtpPort": 465,
+  "smtpUser": "",
+  "vkAppId": "",
+  "botUsername": "Portobar_bot",
+  "yandexEdaUrl": "",
+  "deliveryRadiusKm": 2,
+  "restaurantAddress": "Ленинский проспект, 146, Москва (Отель Аструс)",
+  "restaurantLat": 55.65406,
+  "restaurantLng": 37.498877,
+  "deliveryFee": 0,
+  "iiko": {
+    "enabled": false,
+    "apiLogin": "",
+    "organizationId": "",
+    "terminalGroupId": ""
+  },
+  "vapidPublicKey": "BB-HcFbMJCHByFsXjrJTuhYpKQv3IBlZAK_oyPwx3N0UFfv4c3RslHUbnQrvfVYRbrfzs_TrZwLn9kh29zGE6os",
+  "vapidPrivateKey": "c4L0NwE1oJ5tsMzXZ4oH6cVNJgjVapn8JHToroPAjLw"
 }

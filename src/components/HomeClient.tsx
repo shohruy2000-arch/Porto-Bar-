@@ -61,7 +61,7 @@ export default function Home({
   initialPromotions = [],
   initialConfig,
 }: HomeClientProps = {}) {
-  const { t, translate } = useLanguage();
+  const { language, t, translate } = useLanguage();
   const { items } = useCart();
   const menuSectionRef = useRef<HTMLDivElement | null>(null);
   const isScrollingRef = useRef(false);
@@ -82,23 +82,25 @@ export default function Home({
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   // Stories Video states
-  const [stories, setStories] = useState<Story[]>([]);
+  const [stories, setStories] = useState<Story[]>(initialConfig?.stories || []);
   const [activeStoryIndex, setActiveStoryIndex] = useState(0);
   const [isStoriesModalOpen, setIsStoriesModalOpen] = useState(false);
-  const [backstageVideoEnabled, setBackstageVideoEnabled] = useState(false);
+  const [backstageVideoEnabled, setBackstageVideoEnabled] = useState(initialConfig?.backstageVideoEnabled ?? false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isPrintedMenuOpen, setIsPrintedMenuOpen] = useState(false);
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [legalTab, setLegalTab] = useState<LegalTab>('privacy');
 
   // Hero & Content config states
-  const [heroVideoUrl, setHeroVideoUrl] = useState('');
-  const [heroType, setHeroType] = useState<'video' | 'slideshow'>('slideshow');
-  const [heroSlogan, setHeroSlogan] = useState<MultilingualText | null>(null);
-  const [statusBannerText, setStatusBannerText] = useState<MultilingualText | null>(null);
-  const [statusBannerSubtitle, setStatusBannerSubtitle] = useState<MultilingualText | null>(null);
-  const [statusBannerVideoUrl, setStatusBannerVideoUrl] = useState('');
-  const [printedMenuImage, setPrintedMenuImage] = useState('/images/image_2026-07-01_13-49-49.png');
+  const [heroVideoUrl, setHeroVideoUrl] = useState(initialConfig?.heroVideoUrl || '');
+  const [heroType, setHeroType] = useState<'video' | 'slideshow'>(initialConfig?.heroType || 'slideshow');
+  const [heroSlogan, setHeroSlogan] = useState<MultilingualText | null>(initialConfig?.heroSlogan || null);
+  const [statusBannerText, setStatusBannerText] = useState<MultilingualText | null>(initialConfig?.statusBannerText || null);
+  const [statusBannerSubtitle, setStatusBannerSubtitle] = useState<MultilingualText | null>(initialConfig?.statusBannerSubtitle || null);
+  const [statusBannerVideoUrl, setStatusBannerVideoUrl] = useState(initialConfig?.statusBannerVideoUrl || '');
+  const [printedMenuImage, setPrintedMenuImage] = useState(initialConfig?.printedMenuImage || '/images/image_2026-07-01_13-49-49.png');
+  const [workHoursStart, setWorkHoursStart] = useState(initialConfig?.workHoursStart || '10:00');
+  const [workHoursEnd, setWorkHoursEnd] = useState(initialConfig?.workHoursEnd || '00:00');
 
   const handleOpenLegal = (tab: LegalTab = 'privacy') => {
     setLegalTab(tab);
@@ -207,9 +209,7 @@ export default function Home({
   // Hero slideshow index
   const [heroIndex, setHeroIndex] = useState(0);
 
-  // Working hours and open status states
-  const [workHoursStart, setWorkHoursStart] = useState('12:00');
-  const [workHoursEnd, setWorkHoursEnd] = useState('24:00');
+  // Open status state
   const [isOpen, setIsOpen] = useState(true);
 
   // Load menu data from repository
@@ -575,21 +575,80 @@ export default function Home({
           )}
         </div>
 
-        {/* Center Slogan */}
-        <div className="z-10 px-6 max-w-lg min-h-[160px] flex flex-col justify-center items-center mt-8 md:mt-12">
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="relative px-6 py-4 bg-white/[0.02] border border-white/5 rounded-2xl backdrop-blur-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-center max-w-md"
-          >
-            <h1 
-              className="text-[13px] md:text-base font-serif text-gray-300 leading-relaxed italic select-none"
-              dangerouslySetInnerHTML={{ 
-                __html: heroSlogan ? translate(heroSlogan) : t('hero.slogan') 
-              }}
-            />
-          </motion.div>
+        {/* Center Slogan / Order Guide */}
+        <div className="z-10 px-4 sm:px-6 max-w-lg w-full min-h-[160px] flex flex-col justify-center items-center mt-6 md:mt-10">
+          {(() => {
+            const rawText = heroSlogan ? translate(heroSlogan) : t('hero.slogan');
+            if (!rawText) return null;
+
+            // Check if text has numbered steps or newlines
+            const isStepInstruction = /(?:^|\s|\n)[1-4][\)\.]/.test(rawText) || rawText.includes('\n');
+
+            if (isStepInstruction) {
+              const parsedSteps = rawText
+                .split(/(?:^|\n|\s*)(?:[1-4][\)\.]|\d+[\)\.])\s*/)
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0);
+
+              const stepItems = parsedSteps.length >= 2
+                ? parsedSteps
+                : rawText.split('\n').map((s) => s.trim()).filter(Boolean);
+
+              return (
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="w-full relative overflow-hidden rounded-2xl bg-gradient-to-b from-black/85 via-black/75 to-black/90 backdrop-blur-xl border border-porto-gold/35 p-4 sm:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.12)] text-left"
+                >
+                  {/* Glowing Top Line */}
+                  <div className="absolute top-0 left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-porto-gold-bright to-transparent shadow-[0_0_12px_rgba(212,175,55,0.9)]" />
+
+                  {/* Header Badge */}
+                  <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
+                    <div className="flex items-center space-x-2">
+                      <Sparkles className="w-3.5 h-3.5 text-porto-gold-bright animate-pulse" />
+                      <span className="text-[11px] sm:text-xs font-black tracking-wider uppercase text-porto-gold-bright font-sans">
+                        {language === 'ru' ? 'Как сделать заказ' : language === 'zh' ? '如何点餐指南' : 'How to Order Guide'}
+                      </span>
+                    </div>
+                    <span className="text-[9px] uppercase tracking-widest text-porto-gold/90 font-bold px-2.5 py-0.5 rounded-full bg-porto-gold/10 border border-porto-gold/25 font-sans">
+                      {language === 'ru' ? '4 простых шага' : language === 'zh' ? '4个步骤' : '4 Easy Steps'}
+                    </span>
+                  </div>
+
+                  {/* Steps List */}
+                  <div className="space-y-2.5">
+                    {stepItems.map((step, idx) => (
+                      <div key={idx} className="flex items-start space-x-3 group">
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-porto-gold-bright via-porto-gold to-porto-gold-dark text-black font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_8px_rgba(212,175,55,0.4)] font-sans">
+                          {idx + 1}
+                        </div>
+                        <p className="text-[12px] sm:text-[13px] text-gray-200 font-sans leading-snug font-medium tracking-wide">
+                          {step}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            }
+
+            // Classic quotation card
+            return (
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="relative px-6 py-4 bg-white/[0.02] border border-white/5 rounded-2xl backdrop-blur-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-center max-w-md"
+              >
+                <h1
+                  className="text-[13px] md:text-base font-serif text-gray-300 leading-relaxed italic select-none"
+                  dangerouslySetInnerHTML={{ __html: rawText }}
+                />
+              </motion.div>
+            );
+          })()}
           <div className="flex justify-center mt-4">
             <span className="w-16 h-[1px] bg-porto-gold/30"></span>
           </div>
