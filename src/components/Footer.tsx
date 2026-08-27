@@ -14,13 +14,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
     <footer className="w-full max-w-md mx-auto px-4 pt-8 pb-16 text-center space-y-5 border-t border-white/5 mt-8">
       {/* Brand logo / title */}
       <div className="space-y-1 flex flex-col items-center">
-        <div className="relative w-48 h-auto">
+        <div className="relative w-40 h-14">
           <img
-            src="/images/porto-header-logo.png"
+            src="/images/porto-logo.jpg?v=2"
             alt="PORTO-BAR"
-            className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]"
+            className="w-full h-full object-contain invert mix-blend-screen filter brightness-150 contrast-125"
           />
         </div>
+        <p className="text-[9px] tracking-[0.25em] text-porto-gold font-bold uppercase mt-1">
+          Hotel Astrus • Moscow
+        </p>
       </div>
 
       {/* Legal Organization Info (ООО Движение ВВЕРХ И ВПЕРЕД) */}

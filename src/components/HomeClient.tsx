@@ -559,13 +559,16 @@ export default function Home({
               initial={{ y: -30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative w-64 sm:w-80 h-auto flex flex-col items-center px-2"
+              className="relative w-44 h-16 flex flex-col items-center"
             >
               <img
-                src="/images/porto-header-logo.png"
-                alt="PORTO-BAR HOTEL ASTRUS"
-                className="w-full h-auto object-contain filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
+                src="/images/porto-logo.jpg?v=2"
+                alt="PORTO-BAR"
+                className="w-full h-full object-contain invert mix-blend-screen filter brightness-150 contrast-125"
               />
+              <p className="text-[10px] tracking-[0.25em] text-porto-gold font-bold uppercase mt-2.5 text-center">
+                Hotel Astrus • Moscow
+              </p>
             </motion.div>
           )}
         </div>
