@@ -1,492 +1,1130 @@
 [
   {
-    "id": "dish-1",
-    "category": "cat-1",
+    "id": "dish-sal-1",
+    "category": "cat-salads",
     "name": {
-      "ru": "Яйца Бенедикт с лососем",
-      "en": "Eggs Benedict with Salmon",
-      "zh": "烟熏三文鱼班尼迪克蛋"
+      "ru": "Салат Иль Питторо",
+      "en": "Il Pittore Salad",
+      "zh": "画家沙拉"
     },
     "description": {
-      "ru": "Нежные яйца пашот с малосольным лососем и голландским соусом на хрустящей бриоши.",
-      "en": "Poached eggs with lightly salted salmon and hollandaise sauce on a crispy brioche.",
-      "zh": "香脆布里欧修面包配水波蛋、微咸三文鱼和荷兰酱。"
+      "ru": "Фирменный салат с морепродуктами, свежей зеленью, томатами черри и соусом от шефа.",
+      "en": "Signature salad with seafood, fresh greens, cherry tomatoes, and chef dressing.",
+      "zh": "招牌海鲜沙拉配新鲜蔬菜、樱桃番茄和主厨特调酱汁。"
     },
-    "price": 680,
-    "weight": "240 г",
-    "image": "/images/interior-4.jpg",
+    "price": 890,
+    "weight": "390 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 340,
+      "proteins": 24,
+      "fats": 18,
+      "carbs": 12
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-sal-2",
+    "category": "cat-salads",
+    "name": {
+      "ru": "Цезарь с курицей",
+      "en": "Chicken Caesar Salad",
+      "zh": "鸡肉凯撒沙拉"
+    },
+    "description": {
+      "ru": "Хрустящий романо, сочное куриное филе гриль, пармезан, крутоны и соус цезарь.",
+      "en": "Crisp romaine, grilled chicken breast, parmesan, croutons, and caesar dressing.",
+      "zh": "爽脆罗马生菜、多汁烤鸡胸肉、帕玛森干酪、面包丁和凯撒酱。"
+    },
+    "price": 720,
+    "weight": "330 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 420,
+      "proteins": 32,
+      "fats": 22,
+      "carbs": 16
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-sal-3",
+    "category": "cat-salads",
+    "name": {
+      "ru": "Цезарь с креветками",
+      "en": "Prawn Caesar Salad",
+      "zh": "鲜虾凯撒沙拉"
+    },
+    "description": {
+      "ru": "Хрустящий романо, обжаренные тигровые креветки, пармезан, чесночные крутоны и классический соус цезарь.",
+      "en": "Crisp romaine, pan-seared tiger prawns, parmesan, garlic croutons, and classic caesar dressing.",
+      "zh": "爽脆罗马生菜、煎虎虾、帕玛森干酪、蒜香面包丁和经典凯撒酱。"
+    },
+    "price": 850,
+    "weight": "330 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 380,
+      "proteins": 26,
+      "fats": 20,
+      "carbs": 15
+    },
+    "prepTime": 14
+  },
+  {
+    "id": "dish-sal-4",
+    "category": "cat-salads",
+    "name": {
+      "ru": "Салат с хрустящими баклажанами и страчателлой",
+      "en": "Crispy Eggplant & Stracciatella Salad",
+      "zh": "脆皮茄子配丝翠奇亚奶酪沙拉"
+    },
+    "description": {
+      "ru": "Хрустящие баклажаны в сладком чили, нежная страчателла, свежие томаты и ароматная кинза.",
+      "en": "Crispy eggplants glazed in sweet chili, creamy stracciatella, ripe tomatoes, and fresh cilantro.",
+      "zh": "甜辣脆皮茄子、细腻丝翠奇亚奶酪、熟番茄和新鲜香菜。"
+    },
+    "price": 610,
+    "weight": "340 гр",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
       "new"
     ],
     "kbju": {
-      "calories": 540,
-      "proteins": 26,
-      "fats": 34,
-      "carbs": 32
+      "calories": 360,
+      "proteins": 12,
+      "fats": 24,
+      "carbs": 26
     },
     "prepTime": 12
   },
   {
-    "id": "dish-2",
-    "category": "cat-1",
+    "id": "dish-sal-5",
+    "category": "cat-salads",
     "name": {
-      "ru": "Сырники из фермерского творога",
-      "en": "Farm Cottage Cheese Pancakes",
-      "zh": "农庄自制奶渣饼"
+      "ru": "Салат со свежими овощами и песто",
+      "en": "Fresh Vegetables & Pesto Salad",
+      "zh": "时蔬配香蒜青酱沙拉"
     },
     "description": {
-      "ru": "Подаются с фермерской сметаной и малиновым конфитюром.",
-      "en": "Served with farm sour cream and raspberry coulis.",
-      "zh": "配以农庄酸奶油和覆盆子果酱。"
+      "ru": "Хрустящие огурцы, сладкие томаты, болгарский перец, микс зелени и домашний генуэзский песто.",
+      "en": "Crispy cucumbers, sweet tomatoes, bell peppers, mixed greens, and homemade Genovese pesto.",
+      "zh": "爽脆黄瓜、甜番茄、彩椒、什锦蔬菜和自制热那亚罗勒青酱。"
     },
-    "price": 450,
-    "weight": "180 г",
-    "image": "/uploads/img_1781136149674_2r7xo8.png",
-    "visible": true,
-    "labels": [
-      "bestseller"
-    ],
-    "kbju": {
-      "calories": 360,
-      "proteins": 20,
-      "fats": 14,
-      "carbs": 38
-    },
-    "prepTime": 13
-  },
-  {
-    "id": "dish-3",
-    "category": "cat-2",
-    "name": {
-      "ru": "Брускетта с томатами и базиликом",
-      "en": "Tomato & Basil Bruschetta",
-      "zh": "意式番茄罗勒烤面包"
-    },
-    "description": {
-      "ru": "Хрустящий чиабатта с ароматными томатами, чесноком, базиликом и бальзамическим кремом.",
-      "en": "Crispy ciabatta with fragrant tomatoes, garlic, basil, and balsamic reduction.",
-      "zh": "香脆夏巴塔面包配芳香番茄、大蒜、罗勒和巴萨米克醋。"
-    },
-    "price": 390,
-    "weight": "150 г",
-    "image": "/images/interior-2.jpg",
+    "price": 510,
+    "weight": "330 гр",
+    "image": "",
     "visible": true,
     "labels": [
       "vegetarian"
     ],
     "kbju": {
-      "calories": 220,
-      "proteins": 6,
-      "fats": 9,
-      "carbs": 29
+      "calories": 210,
+      "proteins": 5,
+      "fats": 16,
+      "carbs": 14
     },
     "prepTime": 10
   },
   {
-    "id": "dish-4",
-    "category": "cat-2",
+    "id": "dish-str-1",
+    "category": "cat-starters",
     "name": {
-      "ru": "Плато средиземноморских сыров",
-      "en": "Mediterranean Cheese Platter",
-      "zh": "地中海干酪拼盘"
+      "ru": "Сельдь с картофелем",
+      "en": "Herring with Potatoes",
+      "zh": "鲱鱼配土豆"
     },
     "description": {
-      "ru": "Ассорти из благородных сыров: пармезан, горгонзола, пекорино, подается с медом и орехами.",
-      "en": "Assortment of fine cheeses: parmesan, gorgonzola, pecorino, served with honey and nuts.",
-      "zh": "精选干酪拼盘：帕玛森、戈贡佐拉、佩科里诺，配以蜂蜜和坚果。"
+      "ru": "Слабосоленая сельдь с отварным беби-картофелем, маринованным красным луком и зеленью.",
+      "en": "Lightly salted herring with boiled baby potatoes, pickled red onions, and fresh dill.",
+      "zh": "微咸鲱鱼配煮小土豆、腌红洋葱和新鲜莳萝。"
     },
-    "price": 1100,
-    "weight": "220 г",
-    "image": "/images/interior-3.jpg",
+    "price": 480,
+    "weight": "230 гр",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
-      "calories": 610,
-      "proteins": 38,
-      "fats": 48,
-      "carbs": 8
+      "calories": 310,
+      "proteins": 18,
+      "fats": 17,
+      "carbs": 22
     },
-    "prepTime": 8
+    "prepTime": 10
   },
   {
-    "id": "dish-5",
-    "category": "cat-3",
+    "id": "dish-str-2",
+    "category": "cat-starters",
     "name": {
-      "ru": "Салат Цезарь с тигровыми креветками",
-      "en": "Caesar Salad with Tiger Prawns",
-      "zh": "虎虾凯撒沙拉"
+      "ru": "Креветки в соусе биск с фокачча",
+      "en": "Prawns in Bisque Sauce with Focaccia",
+      "zh": "龙虾浓汁虾配佛卡夏"
     },
     "description": {
-      "ru": "Хрустящий романо, обжаренные креветки, пармезан, чесночные крутоны и домашний соус цезарь.",
-      "en": "Crisp romaine, pan-seared prawns, parmesan, garlic croutons, and house-made caesar dressing.",
-      "zh": "爽脆罗马生菜、煎虎虾、帕玛森干酪、大蒜面包丁和自制凯撒酱。"
+      "ru": "Тигровые креветки в насыщенном соусе из морепродуктов с добавлением белого вина и хрустящей теплой фокаччей.",
+      "en": "Tiger prawns in rich seafood bisque with white wine, served with warm crispy focaccia.",
+      "zh": "白葡萄酒风味浓郁海鲜浓汤虎虾，配香脆热佛卡夏面包。"
     },
-    "price": 790,
-    "weight": "210 г",
-    "image": "/uploads/migrated_dish_1781103144116_5.png",
+    "price": 760,
+    "weight": "230 гр",
+    "image": "",
     "visible": true,
     "labels": [
+      "recommended",
       "bestseller"
     ],
     "kbju": {
-      "calories": 380,
-      "proteins": 24,
+      "calories": 420,
+      "proteins": 28,
       "fats": 22,
-      "carbs": 18
+      "carbs": 26
     },
     "prepTime": 14
   },
   {
-    "id": "dish-6",
-    "category": "cat-3",
+    "id": "dish-str-3",
+    "category": "cat-starters",
     "name": {
-      "ru": "Салат с осьминогом и картофелем",
-      "en": "Warm Octopus & Potato Salad",
-      "zh": "温拌章鱼土豆沙拉"
+      "ru": "Гренки чесночные",
+      "en": "Garlic Rye Croutons",
+      "zh": "蒜香黑麦面包干"
     },
     "description": {
-      "ru": "Нежный томленый осьминог, беби-картофель, оливки каламата, вяленые томаты и заправка из трав.",
-      "en": "Tender braised octopus, baby potatoes, kalamata olives, sun-dried tomatoes, and herb dressing.",
-      "zh": "软嫩烩章鱼、小土豆、卡拉马塔橄榄、风干番茄和香草汁。"
+      "ru": "Хрустящие бородинские гренки с чесноком, морской солью и фирменным сырным соусом.",
+      "en": "Crispy rye croutons with garlic, sea salt, and signature cheese dipping sauce.",
+      "zh": "香脆黑麦面包干配大蒜、海盐和招牌芝士蘸酱。"
     },
-    "price": 1450,
-    "weight": "230 г",
-    "image": "/uploads/migrated_dish_1781103144126_6.jpg",
+    "price": 390,
+    "weight": "220 гр",
+    "image": "",
     "visible": true,
-    "labels": [
-      "recommended"
-    ],
+    "labels": [],
     "kbju": {
-      "calories": 340,
-      "proteins": 28,
-      "fats": 16,
-      "carbs": 21
+      "calories": 450,
+      "proteins": 9,
+      "fats": 26,
+      "carbs": 48
     },
-    "prepTime": 18
+    "prepTime": 10
   },
   {
-    "id": "dish-7",
-    "category": "cat-4",
+    "id": "dish-str-4",
+    "category": "cat-starters",
     "name": {
-      "ru": "Суп Том Ям с морепродуктами",
-      "en": "Seafood Tom Yum Soup",
-      "zh": "海鲜冬阴功汤"
+      "ru": "Сырные палочки",
+      "en": "Crispy Cheese Sticks",
+      "zh": "香脆芝士棒"
     },
     "description": {
-      "ru": "Пряный кокосовый бульон с лемонграссом, тигровыми креветками, кальмарами, мидиями и грибами цаогу.",
-      "en": "Spicy coconut broth with lemongrass, tiger prawns, calamari, mussels, and straw mushrooms.",
-      "zh": "微辣椰奶汤底配柠檬草、虎虾、鱿鱼、青口贝和草菇。"
+      "ru": "Тянущаяся моцарелла в золотистой хрустящей панировке с ягодным соусом.",
+      "en": "Melted mozzarella in golden crispy breading, served with wild berry sauce.",
+      "zh": "金黄拉丝马苏里拉芝士条配野生浆果酱。"
     },
-    "price": 850,
-    "weight": "350 мл",
-    "image": "/uploads/migrated_dish_1781103144139_7.png",
-    "visible": true,
-    "labels": [
-      "spicy",
-      "bestseller"
-    ],
-    "kbju": {
-      "calories": 310,
-      "proteins": 22,
-      "fats": 18,
-      "carbs": 14
-    },
-    "prepTime": 15
-  },
-  {
-    "id": "dish-8",
-    "category": "cat-4",
-    "name": {
-      "ru": "Средиземноморский Буйабес",
-      "en": "Mediterranean Bouillabaisse",
-      "zh": "地中海马赛鱼汤"
-    },
-    "description": {
-      "ru": "Наваристый рыбный суп с белой рыбой, лангустинами, мидиями, шафраном и тостами с соусом руй.",
-      "en": "Rich seafood stew with white fish, langoustines, mussels, saffron, and rouille toasts.",
-      "zh": "浓郁海鲜炖汤配白身鱼、海螯虾、青口、藏红花和蒜味辣酱吐司。"
-    },
-    "price": 980,
-    "weight": "400 мл",
-    "image": "/uploads/migrated_dish_1781103144152_8.png",
-    "visible": true,
-    "labels": [
-      "recommended"
-    ],
-    "kbju": {
-      "calories": 390,
-      "proteins": 34,
-      "fats": 19,
-      "carbs": 16
-    },
-    "prepTime": 20
-  },
-  {
-    "id": "dish-9",
-    "category": "cat-5",
-    "name": {
-      "ru": "Спагетти Карбонара",
-      "en": "Classic Spaghetti Carbonara",
-      "zh": "传统意式培根意面"
-    },
-    "description": {
-      "ru": "Аутентичный рецепт с хрустящей гуанчале, сыром пекорино романо и свежим яичным желтком.",
-      "en": "Authentic recipe with crispy guanciale, pecorino romano, and fresh egg yolk.",
-      "zh": "正宗意式配方：香脆风干猪面颊肉、佩科里诺奶酪和新鲜蛋黄。"
-    },
-    "price": 620,
-    "weight": "280 г",
-    "image": "/uploads/migrated_dish_1781103144162_9.png",
+    "price": 480,
+    "weight": "180 гр",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
     ],
     "kbju": {
-      "calories": 670,
+      "calories": 520,
       "proteins": 24,
-      "fats": 36,
-      "carbs": 62
+      "fats": 34,
+      "carbs": 32
     },
-    "prepTime": 16
+    "prepTime": 10
   },
   {
-    "id": "dish-10",
-    "category": "cat-6",
+    "id": "dish-str-5",
+    "category": "cat-starters",
     "name": {
-      "ru": "Пицца Маргарита",
-      "en": "Pizza Margherita",
-      "zh": "玛格丽特披萨"
+      "ru": "Цезарь ролл с картофелем фри",
+      "en": "Caesar Roll with French Fries",
+      "zh": "凯撒鸡肉卷配薯条"
     },
     "description": {
-      "ru": "Итальянские томаты San Marzano, моцарелла фьор ди латте и свежий базилик на тонком тесте.",
-      "en": "Italian San Marzano tomatoes, fior di latte mozzarella, and fresh basil on thin crust.",
-      "zh": "意大利圣马扎诺番茄、鲜水牛奶酪和新鲜罗勒薄底披萨。"
+      "ru": "Пшеничный ролл с сочной курочкой, томатами, сыром пармезан и соусом цезарь, подается с хрустящим фри.",
+      "en": "Wheat wrap with juicy chicken, tomatoes, parmesan, and caesar sauce, served with crispy fries.",
+      "zh": "小麦卷饼包裹多汁鸡肉、番茄、帕玛森芝士和凯撒酱，配酥脆薯条。"
     },
-    "price": 550,
-    "weight": "350 г",
-    "image": "/uploads/img_1781204192248_6ckkt2.jpg",
+    "price": 690,
+    "weight": "360 гр",
+    "image": "",
     "visible": true,
     "labels": [
-      "vegetarian"
+      "bestseller"
     ],
     "kbju": {
-      "calories": 840,
-      "proteins": 34,
-      "fats": 30,
-      "carbs": 108
+      "calories": 680,
+      "proteins": 28,
+      "fats": 32,
+      "carbs": 72
     },
-    "prepTime": 20
+    "prepTime": 12
   },
   {
-    "id": "dish-11",
-    "category": "cat-7",
+    "id": "dish-str-6",
+    "category": "cat-starters",
     "name": {
-      "ru": "Филе-Миньон с соусом Порто",
-      "en": "Filet Mignon with Porto Sauce",
-      "zh": "菲力牛排配波特酒汁"
+      "ru": "Сет из брускетт",
+      "en": "Bruschetta Assortment Set",
+      "zh": "意式烤面包拼盘"
     },
     "description": {
-      "ru": "Нежнейшая говяжья вырезка с запеченными овощами и соусом на основе красного портвейна.",
-      "en": "Tender beef tenderloin with roasted vegetables and red port wine reduction sauce.",
-      "zh": "极嫩牛里脊配烤时蔬和红波特红酒调制沙司。"
+      "ru": "Ассорти брускетт: с томатами и базиликом, со страчателлой и вялеными томатами, с малосольным лососем.",
+      "en": "Bruschetta trio: tomato & basil, stracciatella with sun-dried tomatoes, cured salmon.",
+      "zh": "精选烤面包三味：番茄罗勒、丝翠奇亚风干番茄、腌三文鱼。"
     },
-    "price": 1850,
-    "weight": "250 г",
-    "image": "/images/interior-5.jpg",
+    "price": 1200,
+    "weight": "300 гр",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
     ],
     "kbju": {
       "calories": 510,
-      "proteins": 42,
-      "fats": 32,
-      "carbs": 14
+      "proteins": 22,
+      "fats": 26,
+      "carbs": 49
     },
-    "prepTime": 23
+    "prepTime": 14
   },
   {
-    "id": "dish-12",
-    "category": "cat-7",
+    "id": "dish-str-7",
+    "category": "cat-starters",
     "name": {
-      "ru": "Утиная грудка с ягодным соусом",
-      "en": "Duck Breast with Berry Sauce",
-      "zh": "鸭胸配浆果沙司"
+      "ru": "Пивной сет",
+      "en": "Beer Snack Platter",
+      "zh": "啤酒综合小吃大拼盘"
     },
     "description": {
-      "ru": "Сочная утиная грудка с карамелизированной грушей и кисло-сладким соусом из лесных ягод.",
-      "en": "Juicy duck breast with caramelized pear and sweet & sour wild berry sauce.",
-      "zh": "多汁鸭胸配焦糖梨和野生浆果酸甜沙司。"
+      "ru": "Большой сет для компании: чесночные гренки, сырные палочки, куриные наггетсы, картофель фри и два соуса.",
+      "en": "Grand sharing platter: garlic croutons, cheese sticks, chicken nuggets, french fries, and two sauces.",
+      "zh": "超值聚会大拼盘：蒜香面包干、芝士棒、炸鸡块、薯条和双色蘸酱。"
     },
-    "price": 950,
-    "weight": "220 г",
-    "image": "/uploads/img_1781385529618_w47w1p.png",
+    "price": 1490,
+    "weight": "550 гр",
+    "image": "",
     "visible": true,
     "labels": [
-      "new"
+      "recommended",
+      "bestseller"
     ],
     "kbju": {
-      "calories": 460,
-      "proteins": 32,
-      "fats": 28,
-      "carbs": 20
+      "calories": 1150,
+      "proteins": 48,
+      "fats": 62,
+      "carbs": 104
     },
-    "prepTime": 24
+    "prepTime": 16
   },
   {
-    "id": "dish-13",
-    "category": "cat-8",
+    "id": "dish-soup-1",
+    "category": "cat-soups",
     "name": {
-      "ru": "Дорадо на гриле с травами",
-      "en": "Grilled Seabream with Herbs",
-      "zh": "烤金头鲷配香草"
+      "ru": "Куриный суп с гренками",
+      "en": "Chicken Soup with Croutons",
+      "zh": "鸡汤配面包丁"
     },
     "description": {
-      "ru": "Целая дорадо, запеченная с розмарином, тимьяном и лимоном, подается с оливковым маслом.",
-      "en": "Whole seabream baked with rosemary, thyme, and lemon, served with olive oil.",
-      "zh": "整条金头鲷加入迷迭香、百里香和柠檬烤制，配以橄榄油。"
+      "ru": "Прозрачный домашний бульон с нежным куриным филе, лапшой, перепелиным яйцом и зеленью.",
+      "en": "Clear homemade chicken broth with tender chicken, noodles, quail egg, and fresh herbs.",
+      "zh": "清炖自制鸡汤配嫩鸡肉、手工面条、鹌鹑蛋和香草。"
     },
-    "price": 1200,
-    "weight": "300 г",
-    "image": "/uploads/migrated_dish_1781103144166_13.jpg",
+    "price": 550,
+    "weight": "350 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 240,
+      "proteins": 22,
+      "fats": 8,
+      "carbs": 20
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-soup-2",
+    "category": "cat-soups",
+    "name": {
+      "ru": "Том Ям",
+      "en": "Tom Yum Kung",
+      "zh": "冬阴功海鲜汤"
+    },
+    "description": {
+      "ru": "Классический тайский суп на кокосовом молоке с тигровыми креветками, кальмарами, мидиями и грибами.",
+      "en": "Classic Thai soup with coconut milk, tiger prawns, calamari, mussels, and mushrooms.",
+      "zh": "经典泰式椰浆冬阴功汤，含虎虾、鱿鱼、青口和草菇。"
+    },
+    "price": 780,
+    "weight": "390 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "spicy",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 360,
+      "proteins": 28,
+      "fats": 18,
+      "carbs": 16
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-soup-3",
+    "category": "cat-soups",
+    "name": {
+      "ru": "Томатный суп со страчателлой",
+      "en": "Tomato Soup with Stracciatella",
+      "zh": "番茄浓汤配丝翠奇亚奶酪"
+    },
+    "description": {
+      "ru": "Бархатистый суп из спелых итальянских томатов со свежей сливочной страчателлой и маслом базилика.",
+      "en": "Velvety Italian tomato soup with fresh creamy stracciatella and basil oil.",
+      "zh": "丝滑意大利番茄浓汤配新鲜丝翠奇亚奶酪和罗勒油。"
+    },
+    "price": 750,
+    "weight": "350 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "vegetarian",
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 290,
+      "proteins": 11,
+      "fats": 17,
+      "carbs": 23
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-piz-1",
+    "category": "cat-pizza",
+    "name": {
+      "ru": "Пицца Маргарита",
+      "en": "Pizza Margherita",
+      "zh": "玛格丽特披萨"
+    },
+    "description": {
+      "ru": "Традиционная неаполитанская пицца с томатным соусом San Marzano, моцареллой и базиликом.",
+      "en": "Traditional Neapolitan pizza with San Marzano tomato sauce, mozzarella, and fresh basil.",
+      "zh": "传统那不勒斯披萨配圣马扎诺番茄酱、马苏里拉芝士和新鲜罗勒。"
+    },
+    "price": 690,
+    "weight": "390 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "vegetarian"
+    ],
+    "kbju": {
+      "calories": 820,
+      "proteins": 32,
+      "fats": 28,
+      "carbs": 108
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-piz-2",
+    "category": "cat-pizza",
+    "name": {
+      "ru": "Пицца Пепперони",
+      "en": "Pepperoni Pizza",
+      "zh": "辣味香肠披萨"
+    },
+    "description": {
+      "ru": "Острая пикантная колбаса пепперони, томатный соус, моцарелла и орегано.",
+      "en": "Spicy pepperoni salami, rich tomato sauce, melted mozzarella, and oregano.",
+      "zh": "意式辣香肠、浓郁番茄酱、融化马苏里拉和牛至叶。"
+    },
+    "price": 790,
+    "weight": "420 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller",
+      "spicy"
+    ],
+    "kbju": {
+      "calories": 960,
+      "proteins": 40,
+      "fats": 42,
+      "carbs": 106
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-piz-3",
+    "category": "cat-pizza",
+    "name": {
+      "ru": "Пицца Четыре сыра",
+      "en": "Quattro Formaggi Pizza",
+      "zh": "四种芝士披萨"
+    },
+    "description": {
+      "ru": "Благородный микс сыров: моцарелла, горгонзола с голубой плесенью, пармезан и эмменталь.",
+      "en": "Noble blend of cheeses: mozzarella, gorgonzola blue cheese, parmesan, and emmental.",
+      "zh": "四种精选干酪：马苏里拉、蓝纹戈贡佐拉、帕玛森和埃曼塔。"
+    },
+    "price": 870,
+    "weight": "420 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "vegetarian"
+    ],
+    "kbju": {
+      "calories": 1020,
+      "proteins": 44,
+      "fats": 48,
+      "carbs": 102
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-piz-4",
+    "category": "cat-pizza",
+    "name": {
+      "ru": "Пицца Ветчина и грибы",
+      "en": "Ham & Mushrooms Pizza",
+      "zh": "火腿蘑菇披萨"
+    },
+    "description": {
+      "ru": "Нежная ветчина из индейки, свежие шампиньоны, моцарелла и томатный соус.",
+      "en": "Tender turkey ham, fresh button mushrooms, mozzarella, and tomato sauce.",
+      "zh": "鲜嫩火腿、新鲜口蘑、马苏里拉芝士和番茄酱。"
+    },
+    "price": 840,
+    "weight": "430 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 890,
+      "proteins": 38,
+      "fats": 32,
+      "carbs": 110
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-pas-1",
+    "category": "cat-pasta",
+    "name": {
+      "ru": "Паста Карбонара",
+      "en": "Spaghetti Carbonara",
+      "zh": "传统培根意面"
+    },
+    "description": {
+      "ru": "Спагетти с хрустящей гуанчале, сыром пекорино романо, пармезаном и свежим яичным желтком.",
+      "en": "Spaghetti with crispy guanciale, pecorino romano, parmesan, and fresh egg yolk.",
+      "zh": "经典意面配风干猪面颊肉、罗马羊奶酪、帕玛森和蛋黄。"
+    },
+    "price": 720,
+    "weight": "380 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 720,
+      "proteins": 28,
+      "fats": 38,
+      "carbs": 68
+    },
+    "prepTime": 14
+  },
+  {
+    "id": "dish-pas-2",
+    "category": "cat-pasta",
+    "name": {
+      "ru": "Паста Песто курица и грибы",
+      "en": "Pesto Chicken & Mushrooms Pasta",
+      "zh": "青酱鸡肉蘑菇意面"
+    },
+    "description": {
+      "ru": "Паста пенне с нежным куриным филе, шампиньонами, соусом песто и сливками.",
+      "en": "Penne pasta with chicken breast, button mushrooms, basil pesto, and light cream.",
+      "zh": "斜管面配鸡胸肉、口蘑、罗勒青酱和淡奶油。"
+    },
+    "price": 790,
+    "weight": "370 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 650,
+      "proteins": 34,
+      "fats": 28,
+      "carbs": 66
+    },
+    "prepTime": 14
+  },
+  {
+    "id": "dish-pas-3",
+    "category": "cat-pasta",
+    "name": {
+      "ru": "Феттучини с креветками в собственном соку",
+      "en": "Fettuccine with Prawns in Bisque",
+      "zh": "海鲜浓汁虾仁宽面"
+    },
+    "description": {
+      "ru": "Шелковистые феттучини с тигровыми креветками, томатами черри и соусом из морепродуктов.",
+      "en": "Silky fettuccine with tiger prawns, cherry tomatoes, and rich seafood bisque.",
+      "zh": "宽意面配多汁虎虾、樱桃番茄和鲜美海鲜浓汁。"
+    },
+    "price": 840,
+    "weight": "350 гр",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
     ],
     "kbju": {
-      "calories": 320,
-      "proteins": 36,
-      "fats": 15,
-      "carbs": 3
+      "calories": 580,
+      "proteins": 29,
+      "fats": 22,
+      "carbs": 65
     },
-    "prepTime": 25
+    "prepTime": 15
   },
   {
-    "id": "dish-14",
-    "category": "cat-8",
+    "id": "dish-pas-4",
+    "category": "cat-pasta",
     "name": {
-      "ru": "Лосось Fusion с имбирным соусом",
-      "en": "Ginger Glazed Fusion Salmon",
-      "zh": "姜汁融合三文鱼"
+      "ru": "Паста с морепродуктами",
+      "en": "Seafood Marinara Pasta",
+      "zh": "综合海鲜意面"
     },
     "description": {
-      "ru": "Нежное филе лосося с диким рисом под имбирно-соевой глазурью с кунжутом.",
-      "en": "Tender salmon fillet with wild rice under a ginger-soy glaze and sesame seeds.",
-      "zh": "鲜嫩三文鱼排配野生米饭，淋上生姜酱油汁和芝麻。"
+      "ru": "Паста с тигровыми креветками, кальмарами, мидиями в ракушках и белым вином.",
+      "en": "Linguine pasta with tiger prawns, calamari, shell mussels, and white wine reduction.",
+      "zh": "意面配虎虾、鱿鱼、带壳青口和白葡萄酒酱汁。"
+    },
+    "price": 980,
+    "weight": "380 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 620,
+      "proteins": 36,
+      "fats": 20,
+      "carbs": 70
+    },
+    "prepTime": 16
+  },
+  {
+    "id": "dish-brg-1",
+    "category": "cat-burgers",
+    "name": {
+      "ru": "Бургер от шефа с картофелем фри",
+      "en": "Chef Signature Burger with Fries",
+      "zh": "主厨招牌汉堡配薯条"
+    },
+    "description": {
+      "ru": "Мраморная говядина Black Angus, хрустящий бекон, сыр чеддер, карамелизированный лук, соус барбекю и порция фри.",
+      "en": "Black Angus prime beef patty, crispy bacon, cheddar, caramelized onions, BBQ sauce, and french fries.",
+      "zh": "黑安格斯牛肉饼、香脆培根、切达芝士、焦糖洋葱、烧烤酱配薯条。"
+    },
+    "price": 960,
+    "weight": "360/100 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 1080,
+      "proteins": 48,
+      "fats": 56,
+      "carbs": 96
+    },
+    "prepTime": 16
+  },
+  {
+    "id": "dish-brg-2",
+    "category": "cat-burgers",
+    "name": {
+      "ru": "Бургер классический",
+      "en": "Classic Cheeseburger with Fries",
+      "zh": "经典芝士汉堡配薯条"
+    },
+    "description": {
+      "ru": "Сочная котлета из 100% говядины, сыр чеддер, маринованный огурчик, лист салата, томаты и фри.",
+      "en": "100% beef patty, melted cheddar, pickles, fresh lettuce, tomato, and french fries.",
+      "zh": "100%纯牛肉饼、融化切达芝士、酸黄瓜、生菜、番茄配薯条。"
+    },
+    "price": 690,
+    "weight": "300/100 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 850,
+      "proteins": 38,
+      "fats": 42,
+      "carbs": 80
+    },
+    "prepTime": 14
+  },
+  {
+    "id": "dish-main-1",
+    "category": "cat-mains",
+    "name": {
+      "ru": "Филе Миньон Тарколато",
+      "en": "Filet Mignon Torcolato",
+      "zh": "托尔科拉托菲力牛排"
+    },
+    "description": {
+      "ru": "Премиальная говяжья вырезка зернового откорма с запеченными овощами и винным соусом Тарколато.",
+      "en": "Grain-fed prime beef tenderloin with roasted garden vegetables and Torcolato wine sauce.",
+      "zh": "精选谷饲牛里脊排配烤时蔬及托尔科拉托红酒汁。"
     },
     "price": 1350,
-    "weight": "260 г",
-    "image": "/uploads/migrated_dish_1781103144167_14.webp",
+    "weight": "350/40 гр",
+    "image": "",
     "visible": true,
     "labels": [
+      "recommended",
       "bestseller"
     ],
     "kbju": {
-      "calories": 480,
-      "proteins": 34,
-      "fats": 24,
-      "carbs": 30
+      "calories": 590,
+      "proteins": 46,
+      "fats": 34,
+      "carbs": 16
     },
-    "prepTime": 26
+    "prepTime": 20
   },
   {
-    "id": "dish-15",
-    "category": "cat-9",
+    "id": "dish-main-2",
+    "category": "cat-mains",
     "name": {
-      "ru": "Тирамису Классико",
-      "en": "Classic Tiramisu",
-      "zh": "经典提拉米苏"
+      "ru": "Бифштекс с яйцом",
+      "en": "Beef Steak with Fried Egg",
+      "zh": "煎蛋牛排饼"
     },
     "description": {
-      "ru": "Воздушный крем маскарпоне с печеньем савоярди, пропитанным крепким эспрессо и ликером Amaretto.",
-      "en": "Light mascarpone cream with savoiardi ladyfingers soaked in strong espresso and Amaretto liqueur.",
-      "zh": "轻盈马苏里拉奶酪奶油配浸泡在浓咖啡和阿玛雷托酒中的手指饼干。"
+      "ru": "Рубленый бифштекс из отборной говядины с глазуньей, маринованным луком и пикантным мясным соусом.",
+      "en": "Minced prime beef steak topped with sunny-side-up egg, pickled onions, and savory gravy.",
+      "zh": "优质手打牛肉饼配溏心煎蛋、腌洋葱和浓肉汁。"
     },
-    "price": 490,
-    "weight": "150 г",
-    "image": "/uploads/migrated_dish_1781103144174_15.png",
+    "price": 860,
+    "weight": "250 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 540,
+      "proteins": 42,
+      "fats": 38,
+      "carbs": 6
+    },
+    "prepTime": 16
+  },
+  {
+    "id": "dish-main-3",
+    "category": "cat-mains",
+    "name": {
+      "ru": "Стейк лосося со шпинатом",
+      "en": "Salmon Steak with Creamy Spinach",
+      "zh": "三文鱼排配奶油菠菜"
+    },
+    "description": {
+      "ru": "Атлантический лосось на гриле с томленым сливочным шпинатом и долькой лимона.",
+      "en": "Grilled Atlantic salmon fillet served with braised creamy spinach and lemon wedge.",
+      "zh": "烤大西洋三文鱼排配嫩滑奶油菠菜和柠檬角。"
+    },
+    "price": 1490,
+    "weight": "430 гр",
+    "image": "",
     "visible": true,
     "labels": [
+      "recommended",
       "bestseller"
     ],
     "kbju": {
-      "calories": 430,
-      "proteins": 7,
-      "fats": 25,
+      "calories": 580,
+      "proteins": 44,
+      "fats": 38,
+      "carbs": 8
+    },
+    "prepTime": 18
+  },
+  {
+    "id": "dish-main-4",
+    "category": "cat-mains",
+    "name": {
+      "ru": "Шницель куриный с пармезаном",
+      "en": "Crispy Chicken Schnitzel with Parmesan",
+      "zh": "帕玛森香脆鸡排"
+    },
+    "description": {
+      "ru": "Хрустящий шницель из куриного филе в золотистой панировке с сыром пармезан и соусом тар-тар.",
+      "en": "Crispy chicken breast schnitzel in golden breadcrumbs with parmesan and tartar sauce.",
+      "zh": "黄金脆皮鸡胸肉排配帕玛森干酪和塔塔酱。"
+    },
+    "price": 750,
+    "weight": "280 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 520,
+      "proteins": 38,
+      "fats": 26,
+      "carbs": 32
+    },
+    "prepTime": 15
+  },
+  {
+    "id": "dish-foc-1",
+    "category": "cat-focaccia",
+    "name": {
+      "ru": "Фокачча с песто и пармезаном",
+      "en": "Focaccia with Pesto & Parmesan",
+      "zh": "罗勒青酱帕玛森佛卡夏"
+    },
+    "description": {
+      "ru": "Хрустящая итальянская лепешка из дровяной печи с генуэзским соусом песто и выдержанным пармезаном.",
+      "en": "Crispy Italian hearth bread with Genovese basil pesto and aged parmesan cheese.",
+      "zh": "意式炉烤脆皮佛卡夏大饼配热那亚罗勒青酱和陈年帕玛森。"
+    },
+    "price": 660,
+    "weight": "290 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "vegetarian"
+    ],
+    "kbju": {
+      "calories": 540,
+      "proteins": 16,
+      "fats": 22,
+      "carbs": 68
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-foc-2",
+    "category": "cat-focaccia",
+    "name": {
+      "ru": "Фокачча с креветками и рукколой",
+      "en": "Focaccia with Prawns & Arugula",
+      "zh": "鲜虾芝麻菜佛卡夏"
+    },
+    "description": {
+      "ru": "Теплая фокачча с обжаренными тигровыми креветками, свежей рукколой, сливочным сыром и крем-бальзамиком.",
+      "en": "Warm focaccia with sauteed tiger prawns, fresh arugula, cream cheese, and balsamic reduction.",
+      "zh": "热佛卡夏饼配煎虎虾、新鲜芝麻菜、奶油芝士和巴萨米克醋膏。"
+    },
+    "price": 990,
+    "weight": "340 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 590,
+      "proteins": 26,
+      "fats": 24,
+      "carbs": 66
+    },
+    "prepTime": 14
+  },
+  {
+    "id": "dish-side-1",
+    "category": "cat-sides",
+    "name": {
+      "ru": "Картофель Фри",
+      "en": "French Fries",
+      "zh": "炸薯条"
+    },
+    "description": {
+      "ru": "Золотистый хрустящий картофель фри с морской солью.",
+      "en": "Golden crispy french fries seasoned with sea salt.",
+      "zh": "金黄香脆薯条配海盐。"
+    },
+    "price": 310,
+    "weight": "180 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 340,
+      "proteins": 4,
+      "fats": 16,
       "carbs": 44
     },
-    "prepTime": 9
+    "prepTime": 8
   },
   {
-    "id": "dish-16",
-    "category": "cat-10",
+    "id": "dish-side-2",
+    "category": "cat-sides",
     "name": {
-      "ru": "Капучино",
-      "en": "Cappuccino",
-      "zh": "卡布奇诺"
+      "ru": "Картофельные шарики",
+      "en": "Crispy Potato Croquettes",
+      "zh": "炸土豆丸子"
     },
     "description": {
-      "ru": "Классический кофе с шелковистой молочной пенкой.",
-      "en": "Classic coffee with milk foam.",
-      "zh": "经典咖啡配牛奶泡沫。"
+      "ru": "Нежные картофельные крокеты в хрустящей панировке.",
+      "en": "Tender potato croquettes in crispy golden crust.",
+      "zh": "酥脆土豆泥丸子。"
+    },
+    "price": 350,
+    "weight": "150 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 310,
+      "proteins": 4,
+      "fats": 14,
+      "carbs": 40
+    },
+    "prepTime": 8
+  },
+  {
+    "id": "dish-side-3",
+    "category": "cat-sides",
+    "name": {
+      "ru": "Картофельное пюре",
+      "en": "Mashed Potatoes",
+      "zh": "奶油土豆泥"
+    },
+    "description": {
+      "ru": "Классическое сливочное пюре из отборного картофеля со сливочным маслом и молоком.",
+      "en": "Creamy mashed potatoes with fresh butter and warm milk.",
+      "zh": "香浓黄油奶油土豆泥。"
+    },
+    "price": 360,
+    "weight": "150 гр",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 190,
+      "proteins": 3,
+      "fats": 9,
+      "carbs": 24
+    },
+    "prepTime": 6
+  },
+  {
+    "id": "dish-side-4",
+    "category": "cat-sides",
+    "name": {
+      "ru": "Овощи гриль",
+      "en": "Grilled Vegetables",
+      "zh": "烤时令蔬菜"
+    },
+    "description": {
+      "ru": "Цукини, баклажаны, болгарский перец, томаты и шампиньоны на углях с прованскими травами.",
+      "en": "Zucchini, eggplant, bell peppers, tomatoes, and mushrooms grilled with Provencal herbs.",
+      "zh": "炭烤西葫芦、茄子、彩椒、番茄和口蘑配普罗旺斯香草。"
+    },
+    "price": 650,
+    "weight": "250 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "vegetarian",
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 140,
+      "proteins": 4,
+      "fats": 6,
+      "carbs": 18
+    },
+    "prepTime": 12
+  },
+  {
+    "id": "dish-side-5",
+    "category": "cat-sides",
+    "name": {
+      "ru": "Бейби картофель",
+      "en": "Baby Roasted Potatoes",
+      "zh": "香烤小土豆"
+    },
+    "description": {
+      "ru": "Молодой картофель, запеченный с чесноком и розмарином в оливковом масле.",
+      "en": "Baby potatoes roasted with garlic, rosemary, and extra virgin olive oil.",
+      "zh": "特级初榨橄榄油大蒜迷迭香烤小土豆。"
+    },
+    "price": 390,
+    "weight": "150 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "vegetarian"
+    ],
+    "kbju": {
+      "calories": 220,
+      "proteins": 4,
+      "fats": 8,
+      "carbs": 32
+    },
+    "prepTime": 10
+  },
+  {
+    "id": "dish-des-1",
+    "category": "cat-desserts",
+    "name": {
+      "ru": "Профитроли с горьким шоколадом",
+      "en": "Dark Chocolate Profiteroles",
+      "zh": "黑巧克力泡芙"
+    },
+    "description": {
+      "ru": "Воздушные заварные пирожные с нежным сливочно-ванильным кремом под теплым соусом из горького бельгийского шоколада.",
+      "en": "Choux pastry puffs filled with vanilla cream, drenched in warm Belgian dark chocolate sauce.",
+      "zh": "香草奶油泡芙淋上温热比利时黑巧克力甘纳许。"
     },
     "price": 280,
-    "weight": "200 мл",
-    "image": "/uploads/migrated_dish_1781103144186_16.png",
+    "weight": "125 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 390,
+      "proteins": 6,
+      "fats": 24,
+      "carbs": 38
+    },
+    "prepTime": 6
+  },
+  {
+    "id": "dish-des-2",
+    "category": "cat-desserts",
+    "name": {
+      "ru": "Шоколадный фонтан",
+      "en": "Chocolate Lava Cake",
+      "zh": "熔岩巧克力蛋糕"
+    },
+    "description": {
+      "ru": "Теплый шоколадный кекс с жидкой тающей сердцевиной, подается с шариком пломбира.",
+      "en": "Warm chocolate fondant with molten center, served with vanilla ice cream.",
+      "zh": "温热流心熔岩蛋糕配香草冰淇淋球。"
+    },
+    "price": 270,
+    "weight": "180/50 гр",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 510,
+      "proteins": 8,
+      "fats": 32,
+      "carbs": 48
+    },
+    "prepTime": 10
+  },
+  {
+    "id": "dish-des-3",
+    "category": "cat-desserts",
+    "name": {
+      "ru": "Панакота",
+      "en": "Classic Panna Cotta",
+      "zh": "意式奶冻"
+    },
+    "description": {
+      "ru": "Нежнейший сливочный итальянский десерт с натуральной ванилью и ягодным кули.",
+      "en": "Silky Italian cream pudding with natural vanilla bean and wild berry coulis.",
+      "zh": "丝滑意式香草鲜奶冻配野生浆果果酱。"
+    },
+    "price": 430,
+    "weight": "190 гр",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
-      "calories": 110,
+      "calories": 320,
       "proteins": 5,
-      "fats": 6,
-      "carbs": 9
+      "fats": 20,
+      "carbs": 29
     },
-    "prepTime": 3
+    "prepTime": 5
   },
   {
-    "id": "dish-17",
-    "category": "cat-10",
+    "id": "dish-des-4",
+    "category": "cat-desserts",
     "name": {
-      "ru": "Флэт Уайт",
-      "en": "Flat White",
-      "zh": "澳白咖啡"
+      "ru": "Хлебная корзина",
+      "en": "Bread Basket with Butter",
+      "zh": "手工面包篮配黄油"
     },
     "description": {
-      "ru": "Двойной эспрессо с горячим вспененным молоком.",
-      "en": "Double espresso with hot milk.",
-      "zh": "双份浓缩咖啡配热牛奶。"
+      "ru": "Ассорти из свежеиспеченного ремесленного хлеба: чиабатта, бородинский и багет со сливочным маслом.",
+      "en": "Fresh artisanal bread assortment: ciabatta, rye, and French baguette with whipped butter.",
+      "zh": "新鲜现烤手工面包拼盘：夏巴塔、黑麦和法棍配香草黄油。"
     },
-    "price": 320,
-    "weight": "200 мл",
-    "image": "/uploads/migrated_dish_1781103144192_17.jpg",
+    "price": 250,
+    "weight": "170 гр",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
-      "calories": 130,
-      "proteins": 7,
-      "fats": 7,
-      "carbs": 11
+      "calories": 340,
+      "proteins": 8,
+      "fats": 10,
+      "carbs": 54
     },
-    "prepTime": 4
+    "prepTime": 5
   },
   {
-    "id": "dish-18",
-    "category": "cat-11",
+    "id": "dish-tea-1",
+    "category": "cat-tea",
     "name": {
-      "ru": "Чай Молочный Улун",
-      "en": "Milk Oolong Tea",
-      "zh": "奶香乌龙茶"
+      "ru": "Чай Ассам",
+      "en": "Assam Black Tea",
+      "zh": "阿萨姆红茶"
     },
     "description": {
-      "ru": "Китайский улун с тонким молочно-сливочным ароматом.",
-      "en": "Chinese oolong with a delicate milky-creamy aroma.",
-      "zh": "带有微妙奶香奶油香气的中国乌龙茶。"
+      "ru": "Индийский классический черный чай с насыщенным терпким вкусом и солодовым ароматом.",
+      "en": "Classic Indian black tea with rich, malty flavor and deep amber infusion.",
+      "zh": "经典印度阿萨姆红茶，汤色红浓，香气醇厚。"
     },
-    "price": 380,
-    "weight": "500 мл",
-    "image": "/uploads/migrated_dish_1781103144200_18.png",
+    "price": 390,
+    "weight": "600 мл",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -498,51 +1136,761 @@
     "prepTime": 5
   },
   {
-    "id": "dish-19",
-    "category": "cat-12",
+    "id": "dish-tea-2",
+    "category": "cat-tea",
     "name": {
-      "ru": "Лимонад Цитрус-Имбирь",
-      "en": "Citrus Ginger Lemonade",
-      "zh": "柑橘生姜柠檬汽水"
+      "ru": "Чай Сенча",
+      "en": "Sencha Green Tea",
+      "zh": "日式煎茶"
     },
     "description": {
-      "ru": "Освежающий домашний лимонад с лимоном, апельсином, грейпфрутом и соком свежего имбиря.",
-      "en": "Refreshing homemade lemonade with lemon, orange, grapefruit, and fresh ginger juice.",
-      "zh": "自制清爽柠檬汽水配柠檬、橙子、西柚和新鲜生姜汁。"
+      "ru": "Традиционный зеленый чай с мягким освежающим вкусом и травяными нотами.",
+      "en": "Traditional Japanese green tea with delicate vegetal notes and crisp finish.",
+      "zh": "传统日式煎茶，口感清爽回甘。"
     },
-    "price": 350,
-    "weight": "300 мл",
-    "image": "/uploads/migrated_dish_1781103144211_19.png",
+    "price": 390,
+    "weight": "600 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 0,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 5
+  },
+  {
+    "id": "dish-tea-3",
+    "category": "cat-tea",
+    "name": {
+      "ru": "Чай Молочный улун",
+      "en": "Milk Oolong Tea",
+      "zh": "金萱奶香乌龙"
+    },
+    "description": {
+      "ru": "Китайский полуферментированный чай с шелковистым молочно-карамельным ароматом.",
+      "en": "Silk Taiwanese oolong tea with natural sweet milk and caramel aroma.",
+      "zh": "高山优质金萱乌龙茶，带有天然丝滑奶香。"
+    },
+    "price": 390,
+    "weight": "600 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 0,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 5
+  },
+  {
+    "id": "dish-tea-4",
+    "category": "cat-tea",
+    "name": {
+      "ru": "Чай Жасминовый",
+      "en": "Jasmine Floral Green Tea",
+      "zh": "茉莉花茶"
+    },
+    "description": {
+      "ru": "Зеленый чай с цветами белого жасмина, обладающий тонким весенним ароматом.",
+      "en": "Delicate green tea scented with fresh white jasmine blossoms.",
+      "zh": "精选绿茶窨制天然茉莉鲜花，香气清雅。"
+    },
+    "price": 390,
+    "weight": "600 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 0,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 5
+  },
+  {
+    "id": "dish-tea-5",
+    "category": "cat-tea",
+    "name": {
+      "ru": "Травяной сбор",
+      "en": "Herbal Infusion Tea",
+      "zh": "天然草本养生茶"
+    },
+    "description": {
+      "ru": "Ароматный сбор из ромашки, мяты, липы, чабреца и шиповника.",
+      "en": "Soothing blend of chamomile, peppermint, linden blossoms, thyme, and rosehip.",
+      "zh": "洋甘菊、薄荷、椴树花、百里香和玫瑰果草本茶。"
+    },
+    "price": 390,
+    "weight": "600 мл",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
     ],
     "kbju": {
-      "calories": 95,
+      "calories": 0,
       "proteins": 0,
       "fats": 0,
-      "carbs": 23
+      "carbs": 0
+    },
+    "prepTime": 5
+  },
+  {
+    "id": "dish-cof-1",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Эспрессо",
+      "en": "Espresso",
+      "zh": "意式浓缩咖啡"
+    },
+    "description": {
+      "ru": "Крепкий классический шот 100% арабики с плотной золотистой пенкой крема.",
+      "en": "Single shot of 100% specialty Arabica with velvety golden crema.",
+      "zh": "100%阿拉比卡经典单份浓缩咖啡配浓郁油脂。"
+    },
+    "price": 220,
+    "weight": "40 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 5,
+      "proteins": 0.2,
+      "fats": 0,
+      "carbs": 1
     },
     "prepTime": 3
   },
   {
-    "id": "dish-20",
-    "category": "cat-13",
+    "id": "dish-cof-2",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Американо",
+      "en": "Americano",
+      "zh": "美式咖啡"
+    },
+    "description": {
+      "ru": "Двойной эспрессо с горячей водой для мягкого и чистого кофейного вкуса.",
+      "en": "Double espresso diluted with hot water for smooth and balanced taste.",
+      "zh": "双份浓缩咖啡加入热水，口感纯正顺滑。"
+    },
+    "price": 260,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 8,
+      "proteins": 0.3,
+      "fats": 0,
+      "carbs": 1.5
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-cof-3",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Капучино",
+      "en": "Cappuccino",
+      "zh": "卡布奇诺"
+    },
+    "description": {
+      "ru": "Сбалансированный эспрессо с горячим вспененным молоком и шелковистой пенкой.",
+      "en": "Balanced espresso with steamed milk and velvety dense foam.",
+      "zh": "经典意式浓缩配蒸奶和绵密奶泡。"
+    },
+    "price": 320,
+    "weight": "180 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 6,
+      "fats": 5,
+      "carbs": 9
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-cof-4",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Латте",
+      "en": "Caffe Latte",
+      "zh": "拿铁咖啡"
+    },
+    "description": {
+      "ru": "Нежный молочный кофейный напиток с легкой пенкой.",
+      "en": "Smooth and milky espresso drink with thin layer of microfoam.",
+      "zh": "浓郁奶香拿铁咖啡配细腻奶泡。"
+    },
+    "price": 360,
+    "weight": "220 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 140,
+      "proteins": 7,
+      "fats": 7,
+      "carbs": 12
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-cof-5",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Флет уайт",
+      "en": "Flat White",
+      "zh": "澳白咖啡"
+    },
+    "description": {
+      "ru": "Двойной шот эспрессо с бархатистым молоком для ценителей насыщенного вкуса.",
+      "en": "Double shot of rich espresso with finely textured microfoam milk.",
+      "zh": "双份浓缩咖啡融合丝滑微奶泡。"
+    },
+    "price": 420,
+    "weight": "180 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 120,
+      "proteins": 6,
+      "fats": 6,
+      "carbs": 10
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-cof-6",
+    "category": "cat-coffee",
+    "name": {
+      "ru": "Раф",
+      "en": "Raf Coffee",
+      "zh": "俄式拉夫咖啡"
+    },
+    "description": {
+      "ru": "Взбитый эспрессо с нежными сливками 10% и натуральным ванильным сахаром.",
+      "en": "Espresso whipped together with cream and natural Madagascar vanilla sugar.",
+      "zh": "浓缩咖啡与鲜奶油及天然香草糖一同打发。"
+    },
+    "price": 450,
+    "weight": "220 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 230,
+      "proteins": 4,
+      "fats": 16,
+      "carbs": 18
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-icof-1",
+    "category": "cat-iced-coffee",
+    "name": {
+      "ru": "Айс Латте",
+      "en": "Iced Latte",
+      "zh": "冰拿铁"
+    },
+    "description": {
+      "ru": "Освежающий эспрессо с холодным молоком и кубиками льда.",
+      "en": "Chilled espresso poured over cold fresh milk and ice cubes.",
+      "zh": "香浓浓缩咖啡配冰牛奶与冰块。"
+    },
+    "price": 380,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 130,
+      "proteins": 6,
+      "fats": 6,
+      "carbs": 11
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-icof-2",
+    "category": "cat-iced-coffee",
+    "name": {
+      "ru": "Бамбл",
+      "en": "Bumble Coffee",
+      "zh": "大黄蜂冰咖啡"
+    },
+    "description": {
+      "ru": "Трендовый слоеный напиток из эспрессо, свежевыжатого апельсинового сока и карамельного сиропа со льдом.",
+      "en": "Layered iced drink with double espresso, fresh orange juice, and caramel syrup.",
+      "zh": "分层冰饮：双份浓缩咖啡、鲜榨橙汁与焦糖糖浆。"
+    },
+    "price": 470,
+    "weight": "240 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 160,
+      "proteins": 2,
+      "fats": 0.5,
+      "carbs": 36
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-icof-3",
+    "category": "cat-iced-coffee",
+    "name": {
+      "ru": "Эспрессо-тоник",
+      "en": "Espresso Tonic",
+      "zh": "浓缩咖啡汤力水"
+    },
+    "description": {
+      "ru": "Шот ароматного эспрессо с освежающим индийским тоником, лаймом и льдом.",
+      "en": "Fresh espresso pulled over crisp Indian tonic water, lime, and crushed ice.",
+      "zh": "香浓浓缩咖啡配清爽印度汤力水、青柠与冰块。"
+    },
+    "price": 390,
+    "weight": "250 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 85,
+      "proteins": 0.5,
+      "fats": 0,
+      "carbs": 20
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-lem-1",
+    "category": "cat-lemonades",
+    "name": {
+      "ru": "Цитрусовый лимонад",
+      "en": "Citrus Fresh Lemonade",
+      "zh": "鲜柑橘柠檬汽水"
+    },
+    "description": {
+      "ru": "Освежающий лимонад со свежим апельсином, грейпфрутом, лимоном и мятой.",
+      "en": "Sparkling lemonade with fresh orange, grapefruit, lemon, and mint.",
+      "zh": "鲜橙、西柚、柠檬配薄荷清爽汽水。"
+    },
+    "price": 490,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 120,
+      "proteins": 1,
+      "fats": 0,
+      "carbs": 28
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-lem-2",
+    "category": "cat-lemonades",
+    "name": {
+      "ru": "Лимонад Малина-маракуйя",
+      "en": "Raspberry Passion Fruit Lemonade",
+      "zh": "覆盆子百香果柠檬汽水"
+    },
+    "description": {
+      "ru": "Яркий тропический лимонад с пюре спелой малины, экзотической маракуйей и содовой.",
+      "en": "Exotic tropical lemonade with wild raspberry puree, passion fruit, and sparkling soda.",
+      "zh": "野生覆盆子果酱配热带百香果苏打汽水。"
+    },
+    "price": 550,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 150,
+      "proteins": 1,
+      "fats": 0,
+      "carbs": 36
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-lem-3",
+    "category": "cat-lemonades",
+    "name": {
+      "ru": "Мохито безалкогольный",
+      "en": "Virgin Mojito",
+      "zh": "无酒精莫吉托"
+    },
+    "description": {
+      "ru": "Классический освежающий микс из свежего лайма, мяты, тростникового сахара и газированной воды со льдом.",
+      "en": "Refreshing blend of fresh lime juice, crushed mint, cane sugar, and chilled soda.",
+      "zh": "新鲜青柠、捣碎薄荷、甘蔗糖和苏打水。"
+    },
+    "price": 550,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 0.5,
+      "fats": 0,
+      "carbs": 26
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-lem-4",
+    "category": "cat-lemonades",
+    "name": {
+      "ru": "Зелёный чай с бергамотом и яблоком",
+      "en": "Iced Green Tea with Bergamot & Apple",
+      "zh": "佛手柑苹果冰绿茶"
+    },
+    "description": {
+      "ru": "Холодный чай с натуральным бергамотом, дольками зеленого яблока и свежей мятой.",
+      "en": "Chilled green tea infused with bergamot, crisp green apple slices, and fresh mint.",
+      "zh": "天然佛手柑绿茶配脆青苹果片与新鲜薄荷。"
+    },
+    "price": 550,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "new"
+    ],
+    "kbju": {
+      "calories": 95,
+      "proteins": 0.5,
+      "fats": 0,
+      "carbs": 23
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-lem-5",
+    "category": "cat-lemonades",
+    "name": {
+      "ru": "Чёрный чай с малиной и барбарисом",
+      "en": "Iced Black Tea with Raspberry & Barberry",
+      "zh": "覆盆子伏牛花冰红茶"
+    },
+    "description": {
+      "ru": "Освежающий черный чай с ягодами сочной малины, барбарисом и цитрусовыми нотками.",
+      "en": "Crisp iced black tea with ripe raspberries, tart barberries, and citrus twist.",
+      "zh": "清爽冰红茶配覆盆子、酸甜伏牛花果和柑橘香。"
+    },
+    "price": 550,
+    "weight": "400 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "new"
+    ],
+    "kbju": {
+      "calories": 105,
+      "proteins": 0.5,
+      "fats": 0,
+      "carbs": 25
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-shk-1",
+    "category": "cat-shakes",
+    "name": {
+      "ru": "Молочный коктейль Ванильный",
+      "en": "Vanilla Milkshake",
+      "zh": "经典香草奶昔"
+    },
+    "description": {
+      "ru": "Классический густой милкшейк из сливочного пломбира, молока и натуральной ванили.",
+      "en": "Thick and creamy classic milkshake made with premium vanilla ice cream and fresh milk.",
+      "zh": "香浓牛奶与特级香草冰淇淋奶昔。"
+    },
+    "price": 410,
+    "weight": "330 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 340,
+      "proteins": 7,
+      "fats": 14,
+      "carbs": 46
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-shk-2",
+    "category": "cat-shakes",
+    "name": {
+      "ru": "Молочный коктейль Клубничный",
+      "en": "Strawberry Milkshake",
+      "zh": "草莓奶昔"
+    },
+    "description": {
+      "ru": "Нежный молочный коктейль с пломбиром и пюре из спелой садовой клубники.",
+      "en": "Creamy milkshake with vanilla ice cream and sweet strawberry puree.",
+      "zh": "香草冰淇淋融合新鲜草莓果酱奶昔。"
+    },
+    "price": 430,
+    "weight": "330 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 360,
+      "proteins": 7,
+      "fats": 14,
+      "carbs": 50
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-shk-3",
+    "category": "cat-shakes",
+    "name": {
+      "ru": "Молочный коктейль Шоколадный",
+      "en": "Chocolate Milkshake",
+      "zh": "巧克力奶昔"
+    },
+    "description": {
+      "ru": "Густой молочный коктейль с шоколадным мороженым и какао.",
+      "en": "Rich chocolate milkshake with dark cocoa and chocolate gelato.",
+      "zh": "浓郁巧克力冰淇淋与可可奶昔。"
+    },
+    "price": 430,
+    "weight": "330 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 380,
+      "proteins": 8,
+      "fats": 16,
+      "carbs": 52
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-shk-4",
+    "category": "cat-shakes",
+    "name": {
+      "ru": "Молочный коктейль Oreo",
+      "en": "Oreo Cookie Milkshake",
+      "zh": "奥利奥饼干奶昔"
+    },
+    "description": {
+      "ru": "Сливочный милкшейк с кусочками печенья Oreo и шоколадной крошкой.",
+      "en": "Indulgent creamy milkshake blended with crunchy Oreo cookies and chocolate chips.",
+      "zh": "香浓奶昔融入酥脆奥利奥饼干碎与巧克力屑。"
+    },
+    "price": 450,
+    "weight": "330 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 420,
+      "proteins": 8,
+      "fats": 18,
+      "carbs": 58
+    },
+    "prepTime": 5
+  },
+  {
+    "id": "dish-frsh-1",
+    "category": "cat-fresh",
+    "name": {
+      "ru": "Свежевыжатый сок (Апельсин / Грейпфрут)",
+      "en": "Fresh Squeezed Juice (Orange / Grapefruit)",
+      "zh": "鲜榨果汁（甜橙 / 西柚）"
+    },
+    "description": {
+      "ru": "100% натуральный свежевыжатый сок из отборных апельсинов или спелого грейпфрута на ваш выбор.",
+      "en": "100% freshly squeezed juice made to order from premium oranges or pink grapefruit.",
+      "zh": "100%现榨纯正果汁：精选甜橙或西柚任选。"
+    },
+    "price": 650,
+    "weight": "250 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 2,
+      "fats": 0.5,
+      "carbs": 24
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-soft-1",
+    "category": "cat-soft-drinks",
+    "name": {
+      "ru": "Кола / Фанта / Спрайт",
+      "en": "Cola / Fanta / Sprite",
+      "zh": "可乐 / 芬达 / 雪碧"
+    },
+    "description": {
+      "ru": "Классические газированные прохладительные напитки в стекле.",
+      "en": "Classic chilled carbonated soft drinks in glass bottle.",
+      "zh": "经典玻璃瓶装碳酸汽水。"
+    },
+    "price": 310,
+    "weight": "330 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 140,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 35
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-soft-2",
+    "category": "cat-soft-drinks",
+    "name": {
+      "ru": "Вода минеральная газ / б/г",
+      "en": "Mineral Water (Sparkling / Still)",
+      "zh": "矿泉水（气泡 / 纯净）"
+    },
+    "description": {
+      "ru": "Природная минеральная вода высшей категории.",
+      "en": "Natural premium mineral water, sparkling or still.",
+      "zh": "特级天然矿泉水（含气 / 不含气）。"
+    },
+    "price": 310,
+    "weight": "500 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 0,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-soft-3",
+    "category": "cat-soft-drinks",
+    "name": {
+      "ru": "Сок в ассортименте",
+      "en": "Juice in Assortment",
+      "zh": "精选果汁"
+    },
+    "description": {
+      "ru": "Яблоко, вишня, томат, апельсин или персик на ваш выбор.",
+      "en": "Apple, cherry, tomato, orange, or peach at your choice.",
+      "zh": "苹果、樱桃、番茄、橙汁或桃汁任选。"
+    },
+    "price": 280,
+    "weight": "250 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 115,
+      "proteins": 1,
+      "fats": 0,
+      "carbs": 27
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-cock-1",
+    "category": "cat-cocktails",
+    "name": {
+      "ru": "Лонг-Айленд",
+      "en": "Long Island Iced Tea",
+      "zh": "长岛冰茶鸡尾酒"
+    },
+    "description": {
+      "ru": "Легендарный крепкий микс из водки, рома, джина, текилы, трипл сек, лимонного сока и колы.",
+      "en": "Legendary potent cocktail with vodka, rum, gin, tequila, triple sec, lemon juice, and cola.",
+      "zh": "经典烈性鸡尾酒：伏特加、朗姆、金酒、龙舌兰、白橙皮酒、柠檬汁与可乐。"
+    },
+    "price": 650,
+    "weight": "200 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 280,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 32
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-cock-2",
+    "category": "cat-cocktails",
     "name": {
       "ru": "Апероль Шприц",
       "en": "Aperol Spritz",
       "zh": "阿佩罗起泡鸡尾酒"
     },
     "description": {
-      "ru": "Игристое вино, аперитив Aperol, газированная вода, ломтик апельсина.",
-      "en": "Sparkling wine, Aperol aperitif, soda water, orange slice.",
-      "zh": "起泡酒、阿佩罗开胃酒、苏打水、橙子片。"
+      "ru": "Итальянский аперитив Aperol, сухое игристое вино Просекко, содовая и ломтик свежего апельсина.",
+      "en": "Italian Aperol aperitif, crisp Prosecco sparkling wine, soda, and fresh orange slice.",
+      "zh": "意大利阿佩罗开胃酒、干型起泡酒、苏打水与鲜橙片。"
     },
-    "price": 650,
-    "weight": "250 мл",
-    "image": "/uploads/migrated_dish_1781103144228_20.png",
+    "price": 550,
+    "weight": "170 мл",
+    "image": "",
     "visible": true,
     "labels": [
+      "recommended",
       "bestseller"
     ],
     "kbju": {
@@ -552,5 +1900,550 @@
       "carbs": 24
     },
     "prepTime": 4
+  },
+  {
+    "id": "dish-cock-3",
+    "category": "cat-cocktails",
+    "name": {
+      "ru": "Куба-Либре",
+      "en": "Cuba Libre",
+      "zh": "自由古巴鸡尾酒"
+    },
+    "description": {
+      "ru": "Золотой карибский ром, кола, сок лайма и лед.",
+      "en": "Golden Caribbean rum, cola, fresh lime juice, and ice.",
+      "zh": "金朗姆酒、可乐、新鲜青柠汁与冰块。"
+    },
+    "price": 480,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 195,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 22
+    },
+    "prepTime": 3
+  },
+  {
+    "id": "dish-cock-4",
+    "category": "cat-cocktails",
+    "name": {
+      "ru": "Лимончелло Шприц",
+      "en": "Limoncello Spritz",
+      "zh": "柠檬利口起泡鸡尾酒"
+    },
+    "description": {
+      "ru": "Итальянский ликер Лимончелло, Просекко, содовая, веточка розмарина и лимон.",
+      "en": "Italian Limoncello liqueur, Prosecco, sparkling soda, rosemary sprig, and lemon.",
+      "zh": "意大利柠檬酒、起泡酒、苏打水、迷迭香与柠檬。"
+    },
+    "price": 550,
+    "weight": "250 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "new"
+    ],
+    "kbju": {
+      "calories": 180,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 22
+    },
+    "prepTime": 4
+  },
+  {
+    "id": "dish-wine-1",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Кьянти (Италия, сухое)",
+      "en": "Chianti DOCG (Italy, Dry)",
+      "zh": "意大利基安蒂干红葡萄酒"
+    },
+    "description": {
+      "ru": "Тосканское сухое красное вино с ароматом вишни, специй и гармоничным бархатистым вкусом. (150 мл / бутылка 750 мл 3550₽)",
+      "en": "Tuscan dry red wine with aromas of wild cherries, spices, and harmonious finish.",
+      "zh": "托斯卡纳干红葡萄酒，充满野樱桃与香料风味。"
+    },
+    "price": 710,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 125,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 4
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-2",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Каберне Совиньон (Чили, сухое)",
+      "en": "Cabernet Sauvignon (Chile, Dry)",
+      "zh": "智利赤霞珠干红葡萄酒"
+    },
+    "description": {
+      "ru": "Насыщенное красное сухое вино с нотами черной смородины, сливы и темного шоколада. (150 мл / бутылка 750 мл 2800₽)",
+      "en": "Full-bodied Chilean red wine with notes of blackcurrant, plum, and dark chocolate.",
+      "zh": "智利浓郁干红，带有黑加仑、李子与黑巧克力香气。"
+    },
+    "price": 580,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 125,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 4
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-3",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Кастро реджано (Испания, п/сл)",
+      "en": "Castro Regiano (Spain, Semi-Sweet)",
+      "zh": "西班牙卡斯特罗半甜红葡萄酒"
+    },
+    "description": {
+      "ru": "Испанское полусладкое красное вино с ярким фруктово-ягодным букетом. (150 мл / бутылка 750 мл 2600₽)",
+      "en": "Spanish semi-sweet red wine with vibrant berry bouquet and mellow finish.",
+      "zh": "西班牙半甜红葡萄酒，果香甜美圆润。"
+    },
+    "price": 540,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 135,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 8
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-4",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Пино Гриджио (Италия, сухое)",
+      "en": "Pinot Grigio delle Venezie (Italy, Dry)",
+      "zh": "意大利灰皮诺干白葡萄酒"
+    },
+    "description": {
+      "ru": "Элегантное белое сухое вино с ароматами белых цветов, зеленого яблока и минеральным послевкусием. (150 мл / бутылка 750 мл 2900₽)",
+      "en": "Elegant dry white wine with floral notes, green apple, and crisp mineral finish.",
+      "zh": "意大利优雅干白，白花与青苹果香气，清脆矿物质感。"
+    },
+    "price": 580,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 120,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 3
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-5",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Рислинг (Германия, сухое)",
+      "en": "Riesling Trocken (Germany, Dry)",
+      "zh": "德国雷司令干白葡萄酒"
+    },
+    "description": {
+      "ru": "Освежающее белое вино с хрустящей кислотностью, нотками белого персика, лайма и минералов. (150 мл / бутылка 750 мл 3050₽)",
+      "en": "Crisp German Riesling with notes of white peach, lime zest, and fine minerality.",
+      "zh": "德国清爽雷司令，白桃与青柠香气，酸度怡人。"
+    },
+    "price": 610,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 120,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 3.5
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-6",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Просекко (Италия, брют)",
+      "en": "Prosecco DOC (Italy, Brut)",
+      "zh": "意大利普罗塞克天然绝干起泡酒"
+    },
+    "description": {
+      "ru": "Итальянское игристое вино с тонким перляжем, ароматом спелых яблок и цитрусовых. (150 мл / бутылка 750 мл 3300₽)",
+      "en": "Italian sparkling wine with fine bubbles, aromas of golden apple, and citrus notes.",
+      "zh": "意大利经典起泡酒，气泡细腻，金苹果与柑橘清香。"
+    },
+    "price": 790,
+    "weight": "150 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 115,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 3
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-wine-7",
+    "category": "cat-wine",
+    "name": {
+      "ru": "Фризанте (розовое, п/сл, бутылка)",
+      "en": "Frizzante Rosato (Pink Semi-Sweet, Bottle)",
+      "zh": "粉红半甜微起泡酒（整瓶）"
+    },
+    "description": {
+      "ru": "Игристое розовое полусладкое вино с ягодным ароматом малины и земляники. (бутылка 750 мл)",
+      "en": "Semi-sweet pink sparkling wine with aromatic raspberry and wild strawberry notes.",
+      "zh": "粉红微起泡酒，充满覆盆子与野草莓芳香（整瓶750ml）。"
+    },
+    "price": 2500,
+    "weight": "750 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 550,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 35
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-1",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Водка Мон Блан",
+      "en": "Mont Blanc Vodka",
+      "zh": "勃朗峰伏特加"
+    },
+    "description": {
+      "ru": "Французская премиальная водка из отборной пшеницы и чистейшей альпийской воды.",
+      "en": "French premium vodka distilled from selected winter wheat and Alpine spring water.",
+      "zh": "法国高级冬小麦与阿尔卑斯泉水伏特加。"
+    },
+    "price": 590,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 115,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-2",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Водка Балчуг XXI век",
+      "en": "Balchug XXI Century Vodka",
+      "zh": "巴尔楚格21世纪伏特加"
+    },
+    "description": {
+      "ru": "Особая солодовая водка с мягким бархатным вкусом.",
+      "en": "Malt artisanal Russian vodka with smooth, velvety character.",
+      "zh": "俄罗斯精酿麦芽伏特加，口感柔和顺滑。"
+    },
+    "price": 350,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 115,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-3",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Водка Балчуг XVI",
+      "en": "Balchug XVI Century Vodka",
+      "zh": "巴尔楚格16世纪伏特加"
+    },
+    "description": {
+      "ru": "Традиционная бессолодовая водка, созданная по старинным русским рецептам.",
+      "en": "Traditional non-malt vodka crafted according to historic Russian recipes.",
+      "zh": "传统俄罗斯古典配方纯净伏特加。"
+    },
+    "price": 350,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 115,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-4",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Водка Чистые росы",
+      "en": "Chistye Rosy Organic Vodka",
+      "zh": "纯净晨露有机伏特加"
+    },
+    "description": {
+      "ru": "Первая сертифицированная органическая водка России на основе пшеничного спирта Альфа.",
+      "en": "Russia first certified organic vodka crafted from organic wheat spirit.",
+      "zh": "俄罗斯首款认证有机特级小麦伏特加。"
+    },
+    "price": 490,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 115,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-5",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Коньяк Старейшина NOBLE",
+      "en": "Stareyshina NOBLE Cognac",
+      "zh": "尊贵长者特酿白兰地"
+    },
+    "description": {
+      "ru": "Выдержанный коньяк из отборных испанских дистиллятов с нотами шоколада и дуба.",
+      "en": "Aged brandy made from Spanish distillates with notes of chocolate and oak.",
+      "zh": "陈酿白兰地，带有黑巧克力与橡木陈香。"
+    },
+    "price": 690,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended"
+    ],
+    "kbju": {
+      "calories": 120,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.5
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-6",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Коньяк Гранд Ереван",
+      "en": "Grand Yerevan Armenian Cognac",
+      "zh": "大埃里温亚美尼亚白兰地"
+    },
+    "description": {
+      "ru": "Армянский коньяк с глубоким янтарным цветом, нотами сухофруктов и ванили.",
+      "en": "Armenian brandy with amber color, notes of dried fruits and sweet vanilla.",
+      "zh": "亚美尼亚传统白兰地，干果与香草芳香。"
+    },
+    "price": 590,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 120,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.5
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-7",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Коньяк Коктебель",
+      "en": "Koktebel Cognac",
+      "zh": "科克特贝尔白兰地"
+    },
+    "description": {
+      "ru": "Классический коньяк с бархатным вкусом и миндальным послевкусием.",
+      "en": "Classic brandy with velvety taste and subtle almond finish.",
+      "zh": "经典柔和白兰地，微带杏仁回味。"
+    },
+    "price": 390,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 120,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.5
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-8",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Виски Чивас Ригал 12 лет",
+      "en": "Chivas Regal 12 YO Blended Scotch",
+      "zh": "芝华士12年苏格兰威士忌"
+    },
+    "description": {
+      "ru": "Премиальный шотландский купажированный виски с нотами диких трав, вереска, меда и яблока.",
+      "en": "Premium blended Scotch whisky with rich notes of honey, vanilla, and ripe apple.",
+      "zh": "苏格兰高级调配威士忌，蜂蜜、香草与熟苹果香气。"
+    },
+    "price": 830,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "recommended",
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.1
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-9",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Виски Джек Дэниелс",
+      "en": "Jack Daniel’s Tennessee Whiskey",
+      "zh": "杰克丹尼田纳西威士忌"
+    },
+    "description": {
+      "ru": "Американский виски, фильтрованный через кленовый уголь, с мягким карамельно-ванильным вкусом.",
+      "en": "Iconic Tennessee whiskey charcoal-mellowed with hints of caramel and vanilla.",
+      "zh": "经典田纳西威士忌，枫木炭柔化，焦糖香草风味。"
+    },
+    "price": 720,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.1
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-10",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Виски Джемисон",
+      "en": "Jameson Irish Whiskey",
+      "zh": "尊美生爱尔兰威士忌"
+    },
+    "description": {
+      "ru": "Ирландский виски тройной дистилляции с исключительно мягким и цветочным вкусом.",
+      "en": "Triple-distilled Irish whiskey renowned for its smooth and floral balance.",
+      "zh": "爱尔兰三重蒸馏威士忌，柔滑平衡。"
+    },
+    "price": 670,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [
+      "bestseller"
+    ],
+    "kbju": {
+      "calories": 110,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.1
+    },
+    "prepTime": 2
+  },
+  {
+    "id": "dish-spr-11",
+    "category": "cat-spirits",
+    "name": {
+      "ru": "Виски Глен Иглс 6 лет",
+      "en": "Glen Eagles 6 YO Whisky",
+      "zh": "鹰谷6年威士忌"
+    },
+    "description": {
+      "ru": "Выдержанный виски с гармоничным вкусом, нотками сухофруктов и дуба.",
+      "en": "Aged whisky with harmonious taste, notes of dried fruits and toasted oak.",
+      "zh": "陈酿威士忌，干果与烘烤橡木香气。"
+    },
+    "price": 560,
+    "weight": "50 мл",
+    "image": "",
+    "visible": true,
+    "labels": [],
+    "kbju": {
+      "calories": 110,
+      "proteins": 0,
+      "fats": 0,
+      "carbs": 0.1
+    },
+    "prepTime": 2
   }
 ]

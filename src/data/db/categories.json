@@ -1,22 +1,6 @@
 [
   {
-    "id": "cat-1",
-    "name": {
-      "ru": "Завтраки",
-      "en": "Breakfasts",
-      "zh": "早餐"
-    }
-  },
-  {
-    "id": "cat-2",
-    "name": {
-      "ru": "Закуски",
-      "en": "Starters",
-      "zh": "前菜"
-    }
-  },
-  {
-    "id": "cat-3",
+    "id": "cat-salads",
     "name": {
       "ru": "Салаты",
       "en": "Salads",
@@ -24,15 +8,23 @@
     }
   },
   {
-    "id": "cat-4",
+    "id": "cat-starters",
     "name": {
-      "ru": "Супы",
-      "en": "Soups",
-      "zh": "汤"
+      "ru": "Закуски",
+      "en": "Starters",
+      "zh": "前菜与小吃"
     }
   },
   {
-    "id": "cat-5",
+    "id": "cat-soups",
+    "name": {
+      "ru": "Супы",
+      "en": "Soups",
+      "zh": "汤品"
+    }
+  },
+  {
+    "id": "cat-pasta",
     "name": {
       "ru": "Паста",
       "en": "Pasta",
@@ -40,7 +32,7 @@
     }
   },
   {
-    "id": "cat-6",
+    "id": "cat-pizza",
     "name": {
       "ru": "Пицца",
       "en": "Pizza",
@@ -48,31 +40,55 @@
     }
   },
   {
-    "id": "cat-7",
+    "id": "cat-burgers",
+    "name": {
+      "ru": "Бургеры",
+      "en": "Burgers",
+      "zh": "汉堡"
+    }
+  },
+  {
+    "id": "cat-mains",
     "name": {
       "ru": "Горячие блюда",
-      "en": "Main dishes",
-      "zh": "热菜"
+      "en": "Main Dishes",
+      "zh": "热菜主食"
     }
   },
   {
-    "id": "cat-8",
+    "id": "cat-focaccia",
     "name": {
-      "ru": "Рыба и морепродукты",
-      "en": "Fish & Seafood",
-      "zh": "鱼和海鲜"
+      "ru": "Фокачча",
+      "en": "Focaccia",
+      "zh": "意式佛卡夏"
     }
   },
   {
-    "id": "cat-9",
+    "id": "cat-sides",
+    "name": {
+      "ru": "Гарниры",
+      "en": "Side Dishes",
+      "zh": "配菜"
+    }
+  },
+  {
+    "id": "cat-desserts",
     "name": {
       "ru": "Десерты",
       "en": "Desserts",
-      "zh": "甜点"
+      "zh": "甜品"
     }
   },
   {
-    "id": "cat-10",
+    "id": "cat-tea",
+    "name": {
+      "ru": "Чай",
+      "en": "Tea",
+      "zh": "茶饮"
+    }
+  },
+  {
+    "id": "cat-coffee",
     "name": {
       "ru": "Кофе",
       "en": "Coffee",
@@ -80,27 +96,67 @@
     }
   },
   {
-    "id": "cat-11",
+    "id": "cat-iced-coffee",
     "name": {
-      "ru": "Чай",
-      "en": "Tea",
-      "zh": "茶"
+      "ru": "Холодный кофе",
+      "en": "Iced Coffee",
+      "zh": "冷萃咖啡"
     }
   },
   {
-    "id": "cat-12",
+    "id": "cat-lemonades",
     "name": {
-      "ru": "Напитки",
-      "en": "Drinks",
+      "ru": "Лимонады",
+      "en": "Lemonades",
+      "zh": "柠檬汽水"
+    }
+  },
+  {
+    "id": "cat-shakes",
+    "name": {
+      "ru": "Молочные коктейли",
+      "en": "Milkshakes",
+      "zh": "奶昔"
+    }
+  },
+  {
+    "id": "cat-fresh",
+    "name": {
+      "ru": "Фреши",
+      "en": "Fresh Juices",
+      "zh": "鲜榨果汁"
+    }
+  },
+  {
+    "id": "cat-soft-drinks",
+    "name": {
+      "ru": "Безалкогольные напитки",
+      "en": "Soft Drinks",
       "zh": "软饮"
     }
   },
   {
-    "id": "cat-13",
+    "id": "cat-cocktails",
     "name": {
-      "ru": "Бар",
-      "en": "Bar",
-      "zh": "酒吧"
+      "ru": "Коктейли",
+      "en": "Cocktails",
+      "zh": "鸡尾酒"
+    }
+  },
+  {
+    "id": "cat-wine",
+    "name": {
+      "ru": "Вино",
+      "en": "Wine",
+      "zh": "葡萄酒"
+    }
+  },
+  {
+    "id": "cat-spirits",
+    "name": {
+      "ru": "Крепкий алкоголь",
+      "en": "Spirits",
+      "zh": "烈酒"
     }
   }
 ]
