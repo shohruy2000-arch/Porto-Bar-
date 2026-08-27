@@ -535,18 +535,16 @@ export default function Home({
 
         {/* Top Header Logo */}
         <div className="z-10 flex flex-col items-center" style={{ marginTop: 'calc(40px + env(safe-area-inset-top, 0px))' }}>
-          {initialTenant && initialTenant.slug && initialTenant.slug !== 'porto-bar' ? (
+          {initialTenant && initialTenant.slug && initialTenant.slug !== 'porto-bar' && initialTenant.slug !== 'porto' && initialTenant.id !== 'porto-bar' ? (
             <motion.div
               initial={{ y: -30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8 }}
               className="flex flex-col items-center text-center px-4"
             >
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-2xl border border-white/15 mb-2.5 bg-white/5 backdrop-blur-md">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-porto-gold/20 to-porto-bg border border-porto-gold/30 flex items-center justify-center text-3xl shadow-lg shadow-black/40 mb-2">
                 {initialTenant.slug === 'the-bull' ? '🥩' :
-                 initialTenant.slug === 'chinanews' ? '🐉' :
-                 initialTenant.slug === 'matcha-tokyo' ? '🍵' :
-                 initialTenant.slug === 'bella-napoli' ? '🍕' :
+                 initialTenant.slug === 'chinanews' ? '🥢' :
                  initialTenant.slug === 'tbilisi' ? '🍷' : '🍽️'}
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white font-serif tracking-tight drop-shadow-md">
@@ -561,14 +559,14 @@ export default function Home({
               initial={{ y: -30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative w-44 h-16 flex flex-col items-center"
+              className="relative w-48 h-20 flex flex-col items-center"
             >
               <img
                 src="/images/porto-logo.jpg?v=2"
                 alt="PORTO-BAR"
-                className="w-full h-full object-contain invert mix-blend-screen filter brightness-150 contrast-125"
+                className="w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
               />
-              <p className="text-[10px] tracking-[0.25em] text-porto-gold font-bold uppercase mt-2.5 text-center">
+              <p className="text-[10px] tracking-[0.25em] text-porto-gold font-bold uppercase mt-2 text-center">
                 Hotel Astrus • Moscow
               </p>
             </motion.div>

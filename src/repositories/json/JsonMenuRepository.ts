@@ -70,14 +70,7 @@ export class JsonMenuRepository implements IMenuRepository {
   // ─────────────────────────────────────────────
 
   public async getCategories(tenantId: string): Promise<Category[]> {
-    const key = tenantId || 'default';
-    const cached = this.categoriesCache.get(key);
-    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return cached.data;
-    }
-    const categories = this.readJsonFile<Category[]>('categories.json', INITIAL_CATEGORIES, tenantId);
-    this.categoriesCache.set(key, { data: categories, timestamp: Date.now() });
-    return categories;
+    return this.readJsonFile<Category[]>('categories.json', INITIAL_CATEGORIES, tenantId);
   }
 
   public async getCategoryById(tenantId: string, id: string): Promise<Category | null> {
@@ -123,14 +116,7 @@ export class JsonMenuRepository implements IMenuRepository {
   // ─────────────────────────────────────────────
 
   public async getDishes(tenantId: string): Promise<Dish[]> {
-    const key = tenantId || 'default';
-    const cached = this.dishesCache.get(key);
-    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return cached.data;
-    }
-    const dishes = this.readJsonFile<Dish[]>('dishes.json', INITIAL_DISHES, tenantId);
-    this.dishesCache.set(key, { data: dishes, timestamp: Date.now() });
-    return dishes;
+    return this.readJsonFile<Dish[]>('dishes.json', INITIAL_DISHES, tenantId);
   }
 
   public async getDishById(tenantId: string, id: string): Promise<Dish | null> {
@@ -146,7 +132,6 @@ export class JsonMenuRepository implements IMenuRepository {
     };
     dishes.push(newDish);
     this.writeJsonFile('dishes.json', dishes, tenantId);
-    this.dishesCache.set(tenantId || 'default', { data: dishes, timestamp: Date.now() });
     return newDish;
   }
 
@@ -157,7 +142,6 @@ export class JsonMenuRepository implements IMenuRepository {
 
     dishes[idx] = { ...dishes[idx], ...data };
     this.writeJsonFile('dishes.json', dishes, tenantId);
-    this.dishesCache.set(tenantId || 'default', { data: dishes, timestamp: Date.now() });
     return dishes[idx];
   }
 
@@ -167,7 +151,6 @@ export class JsonMenuRepository implements IMenuRepository {
     if (filtered.length === dishes.length) return false;
 
     this.writeJsonFile('dishes.json', filtered, tenantId);
-    this.dishesCache.set(tenantId || 'default', { data: filtered, timestamp: Date.now() });
     return true;
   }
 
@@ -176,14 +159,7 @@ export class JsonMenuRepository implements IMenuRepository {
   // ─────────────────────────────────────────────
 
   public async getPromotions(tenantId: string): Promise<Promotion[]> {
-    const key = tenantId || 'default';
-    const cached = this.promotionsCache.get(key);
-    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return cached.data;
-    }
-    const promos = this.readJsonFile<Promotion[]>('promotions.json', INITIAL_PROMOTIONS, tenantId);
-    this.promotionsCache.set(key, { data: promos, timestamp: Date.now() });
-    return promos;
+    return this.readJsonFile<Promotion[]>('promotions.json', INITIAL_PROMOTIONS, tenantId);
   }
 
   public async getPromotionById(tenantId: string, id: string): Promise<Promotion | null> {
