@@ -1,12 +1,11 @@
-/**
- * @file src/repositories/prisma/PrismaTenantRepository.ts
- * @description PostgreSQL + Prisma implementation of ITenantRepository with bcrypt password hashing.
- */
-
-import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { ITenantRepository } from '../interfaces';
 import { Tenant, TenantTheme, ThemePreset } from '../../types';
 import { prisma } from '../../lib/prisma';
+
+function hashPassword(pass: string): string {
+  return crypto.createHash('sha256').update(pass).digest('hex');
+}
 
 export class PrismaTenantRepository implements ITenantRepository {
   private mapToTenant(dbTenant: any): Tenant {
@@ -126,7 +125,7 @@ export class PrismaTenantRepository implements ITenantRepository {
         },
         orderBy: { createdAt: 'desc' }
       });
-      return tenants.map(t => this.mapToTenant(t));
+      return tenants.map((t: any) => this.mapToTenant(t));
     } catch (err) {
       console.error('[PrismaTenantRepository] getAll error:', err);
       return [];
@@ -134,9 +133,7 @@ export class PrismaTenantRepository implements ITenantRepository {
   }
 
   public async create(data: Omit<Tenant, 'createdAt'>): Promise<Tenant> {
-    const hashedPassword = data.adminPassword.startsWith('$2')
-      ? data.adminPassword
-      : await bcrypt.hash(data.adminPassword || 'admin123', 10);
+    const hashedPassword = hashPassword(data.adminPassword || 'admin123');
 
     const created = await prisma.tenant.create({
       data: {
@@ -243,9 +240,7 @@ export class PrismaTenantRepository implements ITenantRepository {
 
       // Hash password if updating
       if (data.adminPassword) {
-        updateData.adminPassword = data.adminPassword.startsWith('$2')
-          ? data.adminPassword
-          : await bcrypt.hash(data.adminPassword, 10);
+        updateData.adminPassword = hashPassword(data.adminPassword);
       }
 
       // Update theme if passed

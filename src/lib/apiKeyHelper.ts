@@ -67,10 +67,12 @@ export async function verifyApiKey(key: string, requiredPermission?: string): Pr
     }
 
     // Update lastUsedAt asynchronously (non-blocking)
-    prisma.tenantApiKey.update({
-      where: { id: keyRecord.id },
-      data: { lastUsedAt: new Date() }
-    }).catch(err => console.error('Failed to update lastUsedAt for API key:', err));
+    if (prisma?.tenantApiKey) {
+      prisma.tenantApiKey.update({
+        where: { id: keyRecord.id },
+        data: { lastUsedAt: new Date() }
+      }).catch((err: any) => console.error('Failed to update lastUsedAt for API key:', err));
+    }
 
     return {
       valid: true,

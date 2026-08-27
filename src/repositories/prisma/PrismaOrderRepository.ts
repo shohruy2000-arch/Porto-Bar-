@@ -42,7 +42,7 @@ export class PrismaOrderRepository implements IOrderRepository {
         where: whereClause,
         orderBy: { createdAt: 'desc' }
       });
-      return orders.map(o => this.mapToOrder(o));
+      return orders.map((o: any) => this.mapToOrder(o));
     } catch (err) {
       console.error('[PrismaOrderRepository] getOrders error:', err);
       return [];

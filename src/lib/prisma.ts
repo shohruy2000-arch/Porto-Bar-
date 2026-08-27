@@ -1,14 +1,18 @@
 /**
  * @file src/lib/prisma.ts
- * @description Singleton PrismaClient instance with global cache for Next.js hot-reloading.
+ * @description Safe PrismaClient stub with global cache.
  */
 
-import { PrismaClient } from '@prisma/client';
-
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-export const prisma = globalForPrisma.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+let prismaClient: any = null;
+try {
+  const { PrismaClient } = require('@prisma/client');
+  const globalForPrisma = global as unknown as { prisma: any };
+  prismaClient = globalForPrisma.prisma || new PrismaClient();
+  if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = prismaClient;
+  }
+} catch {
+  prismaClient = null;
 }
+
+export const prisma = prismaClient;

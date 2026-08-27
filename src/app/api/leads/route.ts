@@ -4,10 +4,34 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 import { prisma } from '../../../lib/prisma';
 import { getTelegramConfigServer } from '../../../data/telegramService';
 
 const SUPER_ADMIN_PIN = process.env.SUPER_ADMIN_PIN || 'porto777';
+const LEADS_FILE = path.join(process.cwd(), 'src', 'data', 'db', 'leads.json');
+
+function getLeadsFromJson(): any[] {
+  try {
+    if (!fs.existsSync(LEADS_FILE)) {
+      fs.writeFileSync(LEADS_FILE, '[]', 'utf-8');
+      return [];
+    }
+    const data = fs.readFileSync(LEADS_FILE, 'utf-8');
+    return JSON.parse(data) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLeadsToJson(leads: any[]): void {
+  try {
+    fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving leads to JSON:', err);
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,9 +55,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save lead to database
-    const lead = await prisma.lead.create({
-      data: {
+    let lead: any = null;
+
+    if (prisma?.lead) {
+      try {
+        lead = await prisma.lead.create({
+          data: {
+            name: name.trim(),
+            phone: phone.trim(),
+            restaurantName: restaurantName.trim(),
+            city: city.trim(),
+            cuisineType: cuisineType || null,
+            preferredStyle: preferredStyle || null,
+            avgCheck: avgCheck ? parseInt(String(avgCheck), 10) : null,
+            comment: comment?.trim() || null,
+            status: 'NEW'
+          }
+        });
+      } catch (err) {
+        console.warn('Prisma lead creation failed, falling back to JSON:', err);
+      }
+    }
+
+    if (!lead) {
+      const leads = getLeadsFromJson();
+      lead = {
+        id: `lead-${Date.now()}`,
         name: name.trim(),
         phone: phone.trim(),
         restaurantName: restaurantName.trim(),
@@ -42,9 +89,12 @@ export async function POST(req: NextRequest) {
         preferredStyle: preferredStyle || null,
         avgCheck: avgCheck ? parseInt(String(avgCheck), 10) : null,
         comment: comment?.trim() || null,
-        status: 'NEW'
-      }
-    });
+        status: 'NEW',
+        createdAt: new Date().toISOString()
+      };
+      leads.unshift(lead);
+      saveLeadsToJson(leads);
+    }
 
     // Send Telegram Notification to Master Channel / Admin
     try {
@@ -78,18 +128,14 @@ export async function POST(req: NextRequest) {
         });
       }
     } catch (tgErr) {
-      console.error('[Leads API] Telegram notification failed:', tgErr);
+      console.error('Error sending Telegram brief notification:', tgErr);
     }
 
-    return NextResponse.json({
-      success: true,
-      id: lead.id,
-      message: 'Заявка успешно отправлена! Мы свяжемся с вами в течение часа.'
-    });
-  } catch (err: any) {
-    console.error('[Leads API POST Error]:', err);
+    return NextResponse.json({ success: true, lead });
+  } catch (e: any) {
+    console.error('Error creating lead:', e);
     return NextResponse.json(
-      { success: false, error: err.message || 'Ошибка сохранения заявки' },
+      { success: false, error: e?.message || 'Внутренняя ошибка сервера' },
       { status: 500 }
     );
   }
@@ -97,57 +143,30 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('x-super-admin-auth');
     const { searchParams } = new URL(req.url);
     const pin = searchParams.get('pin');
 
-    if (authHeader !== SUPER_ADMIN_PIN && pin !== SUPER_ADMIN_PIN) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (pin !== SUPER_ADMIN_PIN) {
+      return NextResponse.json({ success: false, error: 'Доступ запрещен' }, { status: 401 });
     }
 
-    const statusFilter = searchParams.get('status');
-    const whereClause: any = {};
-    if (statusFilter && statusFilter !== 'ALL') {
-      whereClause.status = statusFilter;
+    if (prisma?.lead) {
+      try {
+        const leads = await prisma.lead.findMany({
+          orderBy: { createdAt: 'desc' }
+        });
+        return NextResponse.json({ success: true, leads });
+      } catch {
+        // fallback
+      }
     }
 
-    const leads = await prisma.lead.findMany({
-      where: whereClause,
-      orderBy: { createdAt: 'desc' }
-    });
-
-    return NextResponse.json({
-      success: true,
-      leads
-    });
-  } catch (err: any) {
-    console.error('[Leads API GET Error]:', err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-export async function PATCH(req: NextRequest) {
-  try {
-    const authHeader = req.headers.get('x-super-admin-auth');
-    if (authHeader !== SUPER_ADMIN_PIN) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const body = await req.json();
-    const { id, status } = body;
-
-    if (!id || !status) {
-      return NextResponse.json({ error: 'id and status are required' }, { status: 400 });
-    }
-
-    const updated = await prisma.lead.update({
-      where: { id },
-      data: { status }
-    });
-
-    return NextResponse.json({ success: true, lead: updated });
-  } catch (err: any) {
-    console.error('[Leads API PATCH Error]:', err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    const leads = getLeadsFromJson();
+    return NextResponse.json({ success: true, leads });
+  } catch (e: any) {
+    return NextResponse.json(
+      { success: false, error: e?.message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

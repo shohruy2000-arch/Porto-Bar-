@@ -88,7 +88,7 @@ export class PrismaMenuRepository implements IMenuRepository {
         orderBy: { sortOrder: 'asc' }
       });
       if (categories && categories.length > 0) {
-        return categories.map(c => this.mapToCategory(c));
+        return categories.map((c: any) => this.mapToCategory(c));
       }
     } catch (err) {
       console.warn('[PrismaMenuRepository] getCategories falling back to JSON:', err);
@@ -168,7 +168,7 @@ export class PrismaMenuRepository implements IMenuRepository {
         }
       });
       if (dishes && dishes.length > 0) {
-        return dishes.map(d => this.mapToDish(d));
+        return dishes.map((d: any) => this.mapToDish(d));
       }
     } catch (err) {
       console.warn('[PrismaMenuRepository] getDishes falling back to JSON:', err);
