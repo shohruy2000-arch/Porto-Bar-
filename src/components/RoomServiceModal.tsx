@@ -232,7 +232,7 @@ export const RoomServiceModal: React.FC<RoomServiceModalProps> = ({ isOpen, onCl
     // Inject Margarita Pizza as a free gift if eligible (Room Service & Total >= 3000)
     if (orderType === 'room' && totalAmount >= 3000) {
       orderItems.push({
-        dishId: 'dish-10', // Pizza Margherita
+        dishId: 'dish-piz-1', // Пицца Маргарита
         quantity: 1,
         priceAtOrder: 0
       });

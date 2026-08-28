@@ -246,6 +246,193 @@ export const CARDS: WaveCard[] = [
     emblem: '🥂',
     image: '/images/veranda-1.jpg',
   },
+  /* ─── DEMO RESTAURANTS ─────────────────────────────────────────── */
+  {
+    id: 'demo-kuro',
+    badge: '🍣 DARK OMAKASE',
+    categoryName: 'Void Black & Indigo',
+    name: 'KURO Omakase',
+    tagline: 'Омакасе · Японский уголь бинчотан · Сашими',
+    cuisine: 'Dark Luxury Japanese Omakase',
+    designerName: 'Ren Takahashi',
+    designerLocation: 'Токио, Япония',
+    countryName: 'Япония',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '6 800 ₽', repeat: '+38%', launch: '72 часа', rating: '5.00' },
+    dishes: [
+      { name: 'Black Cod Miso Binchotan', price: '2 100 ₽', desc: 'Чёрная треска в мисо-маринаде 72ч, уголь бинчотан' },
+      { name: 'Otoro Nigiri × 2 шт', price: '3 400 ₽', desc: 'Голубой тунец жирной части, васаби хонワサ' },
+      { name: 'Uni Snow Crab Chawanmushi', price: '1 890 ₽', desc: 'Паровой яичный крем, морской ёж, краб' },
+    ],
+    features: ['Омакасе-сет 18 позиций', 'Sake pairing от сомелье', 'Частное бронирование OMO', 'Онлайн-резервация'],
+    colors: {
+      primary: '#a78bfa',
+      secondary: '#7c3aed',
+      bg: '#060408',
+      surface: '#100c18',
+      text: '#f5f3ff',
+      muted: '#c4b5fd',
+      border: 'rgba(167,139,250,0.45)',
+      glow: 'rgba(167,139,250,0.4)',
+    },
+    emblem: '🍣',
+    image: '/images/interior-1.jpg',
+  },
+  {
+    id: 'demo-mare',
+    badge: '🌊 COASTAL MEDITERRANEAN',
+    categoryName: 'Azure Coast & Linen',
+    name: 'MARE Ristorante',
+    tagline: 'Crudo · Riserva · Трюфель',
+    cuisine: 'Морская средиземноморская кухня',
+    designerName: 'Giulia Ferrara',
+    designerLocation: 'Амальфи, Италия',
+    countryName: 'Италия',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '3 250 ₽', repeat: '+52%', launch: '24 часа', rating: '4.97' },
+    dishes: [
+      { name: 'Crudo di Branzino al Limone', price: '1 180 ₽', desc: 'Морской окунь, лимонное масло, флёр де сель' },
+      { name: 'Linguine alle Vongole', price: '890 ₽', desc: 'Мидии и лингвини в белом вине' },
+      { name: 'Burrata con Pomodori Amalfi', price: '680 ₽', desc: 'Буррата, амальфийские томаты, базилик' },
+    ],
+    features: ['Рыба дня от рыбаков', 'Карта Riserva 300+ позиций', 'Стол у воды — онлайн', 'Морской дегустационный сет'],
+    colors: {
+      primary: '#38bdf8',
+      secondary: '#0ea5e9',
+      bg: '#03080f',
+      surface: '#071525',
+      text: '#f0f9ff',
+      muted: '#7dd3fc',
+      border: 'rgba(56,189,248,0.45)',
+      glow: 'rgba(56,189,248,0.4)',
+    },
+    emblem: '🌊',
+    image: '/images/veranda-2.jpg',
+  },
+  {
+    id: 'demo-noir',
+    badge: '🥩 DARK LUXURY STEAK',
+    categoryName: 'Noir & Deep Plum',
+    name: 'Le Noir Steakhouse',
+    tagline: 'Côte de Bœuf · Трюфель · Grand Cru',
+    cuisine: 'Французский Dark Luxury Steakhouse',
+    designerName: 'Antoine Dubois',
+    designerLocation: 'Париж, Франция',
+    countryName: 'Франция',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '5 900 ₽', repeat: '+41%', launch: '48 часов', rating: '4.96' },
+    dishes: [
+      { name: 'Côte de Bœuf 1.2kg Partager', price: '7 400 ₽', desc: 'Мраморная Charolais, соус béarnaise, трюфельный джус' },
+      { name: 'Foie Gras Poêlé Caramelisé', price: '1 650 ₽', desc: 'Жареная утиная печень, инжир конфи, бриошь' },
+      { name: 'Tarte Tatin au Calvados', price: '680 ₽', desc: 'Яблочный тарт татен с кальвадосом' },
+    ],
+    features: ['Caves à vin — 600 позиций', 'Приватный salon noir', 'Выбор прожарки sous-vide', 'Шоколадный сервис'],
+    colors: {
+      primary: '#c084fc',
+      secondary: '#9333ea',
+      bg: '#08040d',
+      surface: '#140b1e',
+      text: '#faf5ff',
+      muted: '#d8b4fe',
+      border: 'rgba(192,132,252,0.45)',
+      glow: 'rgba(192,132,252,0.4)',
+    },
+    emblem: '🥂',
+    image: '/images/interior-2.jpg',
+  },
+  {
+    id: 'demo-zen',
+    badge: '🍵 JADE MINIMAL CAFÉ',
+    categoryName: 'Jade Green & Natural',
+    name: 'Zen Garden Café',
+    tagline: 'Matcha · Wagashi · Specialty',
+    cuisine: 'Японское матча-кафе и specialty кофе',
+    designerName: 'Hana Mori',
+    designerLocation: 'Киото, Япония',
+    countryName: 'Япония',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '640 ₽', repeat: '+71%', launch: '18 часов', rating: '4.99' },
+    dishes: [
+      { name: 'Uji Matcha Koicha Latte', price: '380 ₽', desc: 'Матча Koicha из Удзи, кокосовое молоко' },
+      { name: 'Wagashi Sakura Mochi', price: '240 ₽', desc: 'Рисовый пирог с начинкой из сакуры' },
+      { name: 'Hojicha Basque Cheesecake', price: '390 ₽', desc: 'Баскский чизкейк с поджаренным чаем ходжича' },
+    ],
+    features: ['Онлайн pre-order напитка', 'Подписка на сезонный набор', 'Дегустация single-origin', 'Eco-стаканы и бонусы'],
+    colors: {
+      primary: '#4ade80',
+      secondary: '#16a34a',
+      bg: '#030b05',
+      surface: '#071509',
+      text: '#f0fdf4',
+      muted: '#86efac',
+      border: 'rgba(74,222,128,0.45)',
+      glow: 'rgba(74,222,128,0.4)',
+    },
+    emblem: '🍵',
+    image: '/images/image_2026-07-01_13-49-49.png',
+  },
+  {
+    id: 'demo-aurora',
+    badge: '🌃 NEON COCKTAIL BAR',
+    categoryName: 'Neon Pink & Electric',
+    name: 'AURORA Cocktail Bar',
+    tagline: 'Craft Cocktails · Tapas · Northern Lights',
+    cuisine: 'Скандинавский неоновый коктейль-бар',
+    designerName: 'Viktor Strand',
+    designerLocation: 'Хельсинки, Финляндия',
+    countryName: 'Финляндия',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '1 450 ₽', repeat: '+63%', launch: '24 часа', rating: '4.93' },
+    dishes: [
+      { name: 'Aurora Borealis Sour', price: '780 ₽', desc: 'Джин, иван-чай, белок, ежевика, лёд' },
+      { name: 'Smoked Nordic Old Fashioned', price: '890 ₽', desc: 'Виски торфяной, берёзовый смок, апельсин' },
+      { name: 'Arctic Berry Spritz', price: '620 ₽', desc: 'Просекко, морошка, мята, тоник' },
+    ],
+    features: ['Конструктор коктейля', 'QR-заказ без официанта', 'Playlist от диджея', 'Happy Hour 17–20'],
+    colors: {
+      primary: '#f472b6',
+      secondary: '#ec4899',
+      bg: '#0d040b',
+      surface: '#1e0816',
+      text: '#fdf4ff',
+      muted: '#f9a8d4',
+      border: 'rgba(244,114,182,0.45)',
+      glow: 'rgba(244,114,182,0.4)',
+    },
+    emblem: '🌃',
+    image: '/images/veranda-1.jpg',
+  },
+  {
+    id: 'demo-sol',
+    badge: '☀️ SPANISH TAPAS & WINE',
+    categoryName: 'Sol & Terracotta',
+    name: 'SOL Tapas & Wine',
+    tagline: 'Pintxos · Jamón Ibérico · Rioja',
+    cuisine: 'Испанские тапас и натуральные вина',
+    designerName: 'Carmen Vidal',
+    designerLocation: 'Барселона, Испания',
+    countryName: 'Испания',
+    pwaUrl: '/r/porto-bar',
+    stats: { avgCheck: '2 100 ₽', repeat: '+56%', launch: '36 часов', rating: '4.95' },
+    dishes: [
+      { name: 'Jamón Ibérico de Bellota 50г', price: '1 200 ₽', desc: 'Выдержка 48 месяцев, жёлудевый откорм' },
+      { name: 'Patatas Bravas con Alioli', price: '380 ₽', desc: 'Жареный картофель, острый томатный соус, айоли' },
+      { name: 'Crema Catalana Clásica', price: '420 ₽', desc: 'Каталонский крем-брюле с корицей' },
+    ],
+    features: ['Карта натуральных вин', 'Сет 8 тапас на стол', 'Флуковый карандаш заказа', 'Живая музыка Fri–Sat'],
+    colors: {
+      primary: '#fbbf24',
+      secondary: '#f59e0b',
+      bg: '#100d04',
+      surface: '#1e1808',
+      text: '#fffbeb',
+      muted: '#fde68a',
+      border: 'rgba(251,191,36,0.45)',
+      glow: 'rgba(251,191,36,0.4)',
+    },
+    emblem: '☀️',
+    image: '/images/interior-5.jpg',
+  },
 ];
 
 const TOTAL = CARDS.length;
@@ -471,7 +658,7 @@ export function CharacterCarouselWave() {
 
   // Refs for zero-rerender touch engine & animations
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const cardElementsRef = useRef<Map<number, HTMLDivElement>>(new Map());
+  const cardElementsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const activeIndexRef = useRef(0);
   const modalRef = useRef<WaveCard | null>(null);
   const autoplayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -503,7 +690,8 @@ export function CharacterCarouselWave() {
     const spacing = 250;
     const fractionalShift = dragOffset / spacing;
 
-    cardElementsRef.current.forEach((el, cardIdx) => {
+    CARDS.forEach((card, cardIdx) => {
+      const el = cardElementsRef.current.get(card.id);
       if (!el) return;
 
       let baseOffset = cardIdx - currentActive;
@@ -894,8 +1082,8 @@ export function CharacterCarouselWave() {
                   <div
                     key={card.id}
                     ref={(el) => {
-                      if (el) cardElementsRef.current.set(idx, el);
-                      else cardElementsRef.current.delete(idx);
+                      if (el) cardElementsRef.current.set(card.id, el);
+                      else cardElementsRef.current.delete(card.id);
                     }}
                     className="wave-card-item absolute rounded-3xl"
                     style={{
