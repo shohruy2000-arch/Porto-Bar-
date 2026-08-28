@@ -1,17 +1,13 @@
 /**
  * @file src/components/CharacterCarouselWave.tsx
- * @description Премиальная 3D Wave-карусель ресторанов, инспектор и модальное окно заявки.
- * Архитектура: Senior Full-Stack & UI/UX Production Design.
- * Поддержка:
- * - iPhone 16 Pro симулятор с нативным рендером 375px и scale-трансформацией (0 искажений)
- * - Чистые бейджи стран и дизайнеров без проблем со шрифтами на Windows
- * - Плавные 3D Wave карточки и фильтр-кнопки
- * - Интерактивное модальное окно «Хочу такой же сайт» с автозаполнением стиля
+ * @description Высокопроизводительная 60 FPS 3D Wave-карусель заведений, инспектор и форма заявки.
+ * Оптимизация: Ultra-low latency GPU compositor pipeline, Zero-rerender touch drag engine,
+ * Compositor-friendly transforms, CSS containment, Async image decoding & Non-blocking gesture locking.
  */
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -29,8 +25,6 @@ import {
   Send,
   Loader2,
   Star,
-  Award,
-  Globe,
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────────── */
@@ -256,8 +250,203 @@ export const CARDS: WaveCard[] = [
 
 const TOTAL = CARDS.length;
 
+/* Helper to compute transform values from fractional offset */
+function getCardTransformParams(fractionalOffset: number) {
+  const absOffset = Math.abs(fractionalOffset);
+  const tx = fractionalOffset * 250;
+  const tz = 60 - absOffset * 110;
+  const ry = Math.max(-36, Math.min(36, -fractionalOffset * 18));
+  const scale = Math.max(0.76, 1.04 - absOffset * 0.14);
+  const opacity = Math.max(0.35, 1 - absOffset * 0.35);
+  const zIndex = Math.round(20 - absOffset * 4);
+  return { tx, tz, ry, scale, opacity, zIndex };
+}
+
 /* ─────────────────────────────────────────────────────────────────── */
-/* COMPONENT                                                           */
+/* MEMOIZED CARD ITEM COMPONENT                                        */
+/* ─────────────────────────────────────────────────────────────────── */
+
+interface CardItemProps {
+  card: WaveCard;
+  isCenter: boolean;
+  onOpenInspector: (card: WaveCard) => void;
+  onOpenOrder: (card: WaveCard) => void;
+  onSelect: () => void;
+}
+
+const CardItem = memo(function CardItem({
+  card,
+  isCenter,
+  onOpenInspector,
+  onOpenOrder,
+  onSelect,
+}: CardItemProps) {
+  return (
+    <div
+      onClick={onSelect}
+      className="w-full h-full rounded-3xl p-5 border-2 flex flex-col justify-between relative overflow-hidden select-none cursor-pointer"
+      style={{
+        background: card.colors.bg,
+        borderColor: isCenter ? card.colors.primary : card.colors.border,
+        boxShadow: isCenter
+          ? `0 20px 48px rgba(0,0,0,0.8), 0 0 36px ${card.colors.glow}`
+          : '0 8px 24px rgba(0,0,0,0.5)',
+        contain: 'layout paint',
+      }}
+    >
+      {/* Top Accent Stripe */}
+      <div
+        className="absolute top-0 inset-x-0 h-1.5 z-10 pointer-events-none"
+        style={{
+          background: `linear-gradient(90deg, ${card.colors.primary}, ${card.colors.secondary})`,
+          opacity: isCenter ? 1 : 0.45,
+        }}
+      />
+
+      {/* Header: Designer Meta */}
+      <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center space-x-2">
+          <span className="text-xl leading-none">{card.emblem}</span>
+          <div>
+            <p className="text-[11px] font-black text-white leading-none">
+              {card.designerName}
+            </p>
+            <p className="text-[9px] text-slate-400 font-medium mt-0.5">
+              {card.designerLocation}
+            </p>
+          </div>
+        </div>
+
+        <span
+          className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
+          style={{
+            backgroundColor: `${card.colors.primary}22`,
+            borderColor: card.colors.primary,
+            color: card.colors.primary,
+          }}
+        >
+          {card.countryName}
+        </span>
+      </div>
+
+      {/* Hero Image & Brand Overlay */}
+      <div className="space-y-3 my-1">
+        <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-white/10 shadow-inner group/img bg-slate-950">
+          <img
+            src={card.image}
+            alt={card.name}
+            loading={isCenter ? 'eager' : 'lazy'}
+            decoding="async"
+            className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
+            style={{ contentVisibility: 'auto' }}
+          />
+          <div
+            className="absolute inset-0 flex items-end p-3 pointer-events-none"
+            style={{
+              background: `linear-gradient(to top, ${card.colors.bg}f0 0%, ${card.colors.bg}70 50%, transparent 100%)`,
+            }}
+          >
+            <div>
+              <h3 className="text-lg font-black text-white font-serif leading-tight">
+                {card.name}
+              </h3>
+              <p className="text-[10px] font-medium truncate" style={{ color: card.colors.primary }}>
+                {card.cuisine}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Signature Dishes */}
+        <div className="flex flex-col gap-1">
+          {card.dishes.slice(0, 2).map((dish, di) => (
+            <div
+              key={di}
+              className="text-[10px] text-slate-300 px-2.5 py-1.5 rounded-lg border flex items-center justify-between truncate"
+              style={{
+                background: card.colors.surface,
+                borderColor: card.colors.border,
+              }}
+            >
+              <div className="flex items-center space-x-1.5 truncate">
+                <Check className="w-3 h-3 shrink-0" style={{ color: card.colors.primary }} />
+                <span className="truncate">{dish.name}</span>
+              </div>
+              <span className="font-bold text-white shrink-0 ml-1">{dish.price}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Key Stats Row */}
+        <div className="grid grid-cols-3 gap-1.5 text-center">
+          <div
+            className="p-1.5 rounded-xl border"
+            style={{ background: card.colors.surface, borderColor: card.colors.border }}
+          >
+            <span className="text-[8px] text-slate-400 block">Ср. чек</span>
+            <span className="text-xs font-black text-white">{card.stats.avgCheck}</span>
+          </div>
+          <div
+            className="p-1.5 rounded-xl border"
+            style={{ background: card.colors.surface, borderColor: card.colors.border }}
+          >
+            <span className="text-[8px] text-slate-400 block">Повторные</span>
+            <span className="text-xs font-black text-emerald-400">{card.stats.repeat}</span>
+          </div>
+          <div
+            className="p-1.5 rounded-xl border"
+            style={{ background: card.colors.surface, borderColor: card.colors.border }}
+          >
+            <span className="text-[8px] text-slate-400 block">Запуск</span>
+            <span className="text-xs font-black" style={{ color: card.colors.primary }}>
+              {card.stats.launch}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Card Action Buttons */}
+      <div
+        className="pt-2 border-t flex items-center justify-between gap-2"
+        style={{ borderColor: card.colors.border }}
+      >
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenInspector(card);
+          }}
+          className="flex-1 flex items-center justify-center space-x-1.5 text-white font-bold py-2.5 rounded-xl text-[11px] uppercase tracking-wider transition-all cursor-pointer border hover:opacity-85 active:scale-95"
+          style={{
+            background: card.colors.surface,
+            borderColor: card.colors.border,
+          }}
+        >
+          <Smartphone className="w-3.5 h-3.5" style={{ color: card.colors.primary }} />
+          <span>Инспектор & Демо</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenOrder(card);
+          }}
+          className="flex items-center justify-center p-2.5 rounded-xl text-slate-950 font-bold shadow-md active:scale-95 transition-all cursor-pointer"
+          style={{
+            background: `linear-gradient(to right, ${card.colors.primary}, ${card.colors.secondary})`,
+          }}
+          title="Оставить заявку на такой же дизайн"
+        >
+          <Sparkles className="w-4 h-4 stroke-[2.5] text-slate-950" />
+        </button>
+      </div>
+    </div>
+  );
+});
+
+/* ─────────────────────────────────────────────────────────────────── */
+/* MAIN COMPONENT                                                      */
 /* ─────────────────────────────────────────────────────────────────── */
 
 export function CharacterCarouselWave() {
@@ -280,14 +469,71 @@ export function CharacterCarouselWave() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // Refs for zero-rerender touch engine & animations
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const cardElementsRef = useRef<Map<number, HTMLDivElement>>(new Map());
   const activeIndexRef = useRef(0);
   const modalRef = useRef<WaveCard | null>(null);
-  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
+  const autoplayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const rafIdRef = useRef<number | null>(null);
 
-  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
-  useEffect(() => { modalRef.current = modalCard || orderModalCard; }, [modalCard, orderModalCard]);
+  // Gesture state tracking
+  const touchState = useRef({
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    lastX: 0,
+    isDragging: false,
+    isDetermined: false,
+    isVerticalScroll: false,
+    dragOffsetPx: 0,
+  });
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  useEffect(() => {
+    modalRef.current = modalCard || orderModalCard;
+  }, [modalCard, orderModalCard]);
+
+  // Direct DOM transform update synchronized with GPU compositor
+  const updateCardTransformsDirect = useCallback((dragOffset: number, animated = false) => {
+    const currentActive = activeIndexRef.current;
+    const spacing = 250;
+    const fractionalShift = dragOffset / spacing;
+
+    cardElementsRef.current.forEach((el, cardIdx) => {
+      if (!el) return;
+
+      let baseOffset = cardIdx - currentActive;
+      if (baseOffset < -Math.floor(TOTAL / 2)) baseOffset += TOTAL;
+      if (baseOffset > Math.floor(TOTAL / 2)) baseOffset -= TOTAL;
+
+      const effectiveOffset = baseOffset + fractionalShift;
+      const isVisible = Math.abs(effectiveOffset) <= 2.2;
+
+      if (!isVisible) {
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+        el.style.transform = 'translate3d(0, 0, -500px) scale(0.5)';
+        return;
+      }
+
+      const { tx, tz, ry, scale, opacity, zIndex } = getCardTransformParams(effectiveOffset);
+
+      if (animated) {
+        el.style.transition = 'transform 420ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 320ms ease';
+      } else {
+        el.style.transition = 'none';
+      }
+
+      el.style.transform = `translate3d(${tx}px, 0, ${tz}px) rotateY(${ry}deg) scale(${scale})`;
+      el.style.opacity = String(opacity);
+      el.style.zIndex = String(zIndex);
+      el.style.pointerEvents = Math.abs(effectiveOffset) < 0.6 ? 'auto' : 'auto';
+    });
+  }, []);
 
   const navigate = useCallback((dir: 1 | -1) => {
     setActiveIndex((prev) => {
@@ -298,33 +544,34 @@ export function CharacterCarouselWave() {
   }, []);
 
   const startAutoplay = useCallback(() => {
-    if (autoplayRef.current) clearInterval(autoplayRef.current);
-    autoplayRef.current = setInterval(() => {
-      if (modalRef.current) return;
-      setActiveIndex((prev) => {
-        const next = (prev + 1) % TOTAL;
-        activeIndexRef.current = next;
-        return next;
-      });
+    if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
+    autoplayTimerRef.current = setInterval(() => {
+      if (modalRef.current || touchState.current.isDragging) return;
+      navigate(1);
     }, 6000);
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     startAutoplay();
     return () => {
-      if (autoplayRef.current) clearInterval(autoplayRef.current);
+      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
     };
   }, [startAutoplay]);
 
   const pauseAndResumeAutoplay = useCallback(() => {
-    if (autoplayRef.current) clearInterval(autoplayRef.current);
-    autoplayRef.current = setTimeout(() => startAutoplay(), 9000) as unknown as ReturnType<typeof setInterval>;
+    if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
+    autoplayTimerRef.current = setTimeout(() => startAutoplay(), 9000) as unknown as ReturnType<typeof setInterval>;
   }, [startAutoplay]);
 
   const handleNav = useCallback((dir: 1 | -1) => {
     navigate(dir);
     pauseAndResumeAutoplay();
   }, [navigate, pauseAndResumeAutoplay]);
+
+  // Update card positions when activeIndex changes
+  useEffect(() => {
+    updateCardTransformsDirect(0, true);
+  }, [activeIndex, updateCardTransformsDirect]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -333,26 +580,118 @@ export function CharacterCarouselWave() {
       if (e.key === 'ArrowLeft') handleNav(-1);
       if (e.key === 'ArrowRight') handleNav(1);
     };
-    window.addEventListener('keydown', onKey);
+    window.addEventListener('keydown', onKey, { passive: true });
     return () => window.removeEventListener('keydown', onKey);
   }, [handleNav]);
 
-  // Touch Swipe Handlers (No pointer capture, 100% natural and reliable)
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchEndX.current = e.touches[0].clientX;
-  };
+  // Native non-blocking touch interaction engine
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
-  };
+    const onTouchStartNative = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      touchState.current.startX = touch.clientX;
+      touchState.current.startY = touch.clientY;
+      touchState.current.lastX = touch.clientX;
+      touchState.current.startTime = Date.now();
+      touchState.current.isDragging = true;
+      touchState.current.isDetermined = false;
+      touchState.current.isVerticalScroll = false;
+      touchState.current.dragOffsetPx = 0;
+      pauseAndResumeAutoplay();
+    };
 
-  const onTouchEnd = () => {
-    const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 45) {
-      handleNav(diff > 0 ? 1 : -1);
-    }
-  };
+    const onTouchMoveNative = (e: TouchEvent) => {
+      if (!touchState.current.isDragging || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - touchState.current.startX;
+      const deltaY = touch.clientY - touchState.current.startY;
+
+      // Determine intent on first 8px of movement
+      if (!touchState.current.isDetermined) {
+        if (Math.abs(deltaY) > 8 && Math.abs(deltaY) > Math.abs(deltaX)) {
+          touchState.current.isVerticalScroll = true;
+          touchState.current.isDetermined = true;
+          return;
+        }
+        if (Math.abs(deltaX) > 8 && Math.abs(deltaX) >= Math.abs(deltaY)) {
+          touchState.current.isVerticalScroll = false;
+          touchState.current.isDetermined = true;
+        }
+      }
+
+      if (touchState.current.isVerticalScroll) {
+        return; // Allow native smooth 60fps vertical page scrolling
+      }
+
+      // Horizontal swipe locked -> prevent default vertical page scroll
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+
+      touchState.current.lastX = touch.clientX;
+      touchState.current.dragOffsetPx = deltaX;
+
+      // Schedule GPU transform update on next compositor animation frame
+      if (!rafIdRef.current) {
+        rafIdRef.current = requestAnimationFrame(() => {
+          rafIdRef.current = null;
+          updateCardTransformsDirect(touchState.current.dragOffsetPx, false);
+        });
+      }
+    };
+
+    const onTouchEndNative = () => {
+      if (!touchState.current.isDragging) return;
+      touchState.current.isDragging = false;
+
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+
+      if (touchState.current.isVerticalScroll) {
+        return;
+      }
+
+      const totalDeltaX = touchState.current.dragOffsetPx;
+      const elapsedTime = Math.max(1, Date.now() - touchState.current.startTime);
+      const velocity = totalDeltaX / elapsedTime; // px / ms
+
+      const thresholdDistance = 45;
+      const thresholdVelocity = 0.25;
+
+      let direction = 0;
+      if (totalDeltaX < -thresholdDistance || velocity < -thresholdVelocity) {
+        direction = 1; // swipe left -> next card
+      } else if (totalDeltaX > thresholdDistance || velocity > thresholdVelocity) {
+        direction = -1; // swipe right -> prev card
+      }
+
+      if (direction !== 0) {
+        navigate(direction as 1 | -1);
+      } else {
+        // Snap back to current
+        updateCardTransformsDirect(0, true);
+      }
+
+      pauseAndResumeAutoplay();
+    };
+
+    stage.addEventListener('touchstart', onTouchStartNative, { passive: true });
+    stage.addEventListener('touchmove', onTouchMoveNative, { passive: false });
+    stage.addEventListener('touchend', onTouchEndNative, { passive: true });
+    stage.addEventListener('touchcancel', onTouchEndNative, { passive: true });
+
+    return () => {
+      stage.removeEventListener('touchstart', onTouchStartNative);
+      stage.removeEventListener('touchmove', onTouchMoveNative);
+      stage.removeEventListener('touchend', onTouchEndNative);
+      stage.removeEventListener('touchcancel', onTouchEndNative);
+    };
+  }, [navigate, pauseAndResumeAutoplay, updateCardTransformsDirect]);
 
   const handleCopyColor = (hex: string) => {
     navigator.clipboard.writeText(hex);
@@ -423,13 +762,11 @@ export function CharacterCarouselWave() {
     <>
       <style>{`
         .wave-card-item {
-          transition: transform 420ms cubic-bezier(0.2, 0.9, 0.3, 1),
-                      opacity 320ms ease,
-                      box-shadow 320ms ease;
           will-change: transform, opacity;
           transform-style: preserve-3d;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
+          touch-action: pan-y;
         }
         @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -442,11 +779,12 @@ export function CharacterCarouselWave() {
           background: 'linear-gradient(180deg, #050810 0%, #080c16 50%, #050810 100%)',
         }}
       >
-        {/* Dynamic ambient backdrop glow */}
+        {/* Dynamic ambient backdrop glow with GPU layer */}
         <div
-          className="pointer-events-none absolute inset-0 -z-0 transition-all duration-700 opacity-80"
+          className="pointer-events-none absolute inset-0 -z-0 transition-opacity duration-700 opacity-70"
           style={{
             background: `radial-gradient(ellipse 65% 45% at 50% 36%, ${current.colors.glow} 0%, transparent 75%)`,
+            transform: 'translate3d(0,0,0)',
           }}
         />
 
@@ -474,7 +812,7 @@ export function CharacterCarouselWave() {
           </div>
 
           {/* ── Quick Category Filter Pills (Prominent & Well-Highlighted) ── */}
-          <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none px-2">
+          <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none px-2 touch-pan-x">
             {CARDS.map((card, ci) => {
               const isSelected = ci === activeIndex;
               return (
@@ -494,7 +832,7 @@ export function CharacterCarouselWave() {
                     borderColor: isSelected ? card.colors.primary : 'rgba(255,255,255,0.12)',
                     color: isSelected ? '#ffffff' : '#94a3b8',
                     boxShadow: isSelected
-                      ? `0 0 24px ${card.colors.glow}, 0 0 0 2px ${card.colors.primary}55, 0 6px 20px rgba(0,0,0,0.6)`
+                      ? `0 0 20px ${card.colors.glow}, 0 0 0 1px ${card.colors.primary}55, 0 6px 18px rgba(0,0,0,0.6)`
                       : 'none',
                   }}
                 >
@@ -513,14 +851,13 @@ export function CharacterCarouselWave() {
 
           {/* ── 3D Wave Carousel Stage ───────────────────────────────── */}
           <div
-            className="relative flex items-center justify-center"
+            ref={stageRef}
+            className="relative flex items-center justify-center touch-pan-y"
             style={{
               perspective: '1350px',
               minHeight: 500,
+              touchAction: 'pan-y',
             }}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
           >
             {/* Left Arrow Button */}
             <button
@@ -542,7 +879,7 @@ export function CharacterCarouselWave() {
 
             {/* Cards Track */}
             <div
-              className="relative w-full max-w-4xl flex items-center justify-center"
+              className="relative w-full max-w-4xl flex items-center justify-center pointer-events-auto"
               style={{ height: 480, transformStyle: 'preserve-3d' }}
             >
               {CARDS.map((card, idx) => {
@@ -550,189 +887,36 @@ export function CharacterCarouselWave() {
                 if (offset < -Math.floor(TOTAL / 2)) offset += TOTAL;
                 if (offset > Math.floor(TOTAL / 2)) offset -= TOTAL;
 
-                const visible = Math.abs(offset) <= 2;
-                if (!visible) return null;
-
                 const isCenter = offset === 0;
-                const tx = offset * 250;
-                const tz = isCenter ? 60 : -Math.abs(offset) * 110;
-                const ry = -offset * 18;
-                const scale = isCenter ? 1.04 : Math.max(0.78, 1 - Math.abs(offset) * 0.13);
-                const opacity = isCenter ? 1 : Math.max(0.38, 1 - Math.abs(offset) * 0.35);
-                const zIndex = 20 - Math.abs(offset) * 4;
+                const { tx, tz, ry, scale, opacity, zIndex } = getCardTransformParams(offset);
 
                 return (
                   <div
                     key={card.id}
-                    className="wave-card-item absolute rounded-3xl cursor-pointer"
+                    ref={(el) => {
+                      if (el) cardElementsRef.current.set(idx, el);
+                      else cardElementsRef.current.delete(idx);
+                    }}
+                    className="wave-card-item absolute rounded-3xl"
                     style={{
                       width: 325,
                       height: 475,
                       transform: `translate3d(${tx}px, 0, ${tz}px) rotateY(${ry}deg) scale(${scale})`,
                       opacity,
                       zIndex,
-                    }}
-                    onClick={() => {
-                      if (isCenter) setModalCard(card);
-                      else { setActiveIndex(idx); pauseAndResumeAutoplay(); }
+                      transition: 'transform 420ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 320ms ease',
                     }}
                   >
-                    {/* Card Body */}
-                    <div
-                      className="w-full h-full rounded-3xl p-5 border-2 flex flex-col justify-between shadow-2xl relative overflow-hidden"
-                      style={{
-                        background: card.colors.bg,
-                        borderColor: isCenter ? card.colors.primary : card.colors.border,
-                        boxShadow: isCenter
-                          ? `0 24px 56px rgba(0,0,0,0.85), 0 0 45px ${card.colors.glow}`
-                          : '0 8px 30px rgba(0,0,0,0.6)',
+                    <CardItem
+                      card={card}
+                      isCenter={isCenter}
+                      onOpenInspector={setModalCard}
+                      onOpenOrder={openOrderModal}
+                      onSelect={() => {
+                        if (isCenter) setModalCard(card);
+                        else { setActiveIndex(idx); pauseAndResumeAutoplay(); }
                       }}
-                    >
-                      {/* Top Accent Stripe */}
-                      <div
-                        className="absolute top-0 inset-x-0 h-1.5 z-10"
-                        style={{
-                          background: `linear-gradient(90deg, ${card.colors.primary}, ${card.colors.secondary})`,
-                          opacity: isCenter ? 1 : 0.45,
-                        }}
-                      />
-
-                      {/* Header: Designer Meta */}
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xl leading-none">{card.emblem}</span>
-                          <div>
-                            <p className="text-[11px] font-black text-white leading-none">
-                              {card.designerName}
-                            </p>
-                            <p className="text-[9px] text-slate-400 font-medium mt-0.5">
-                              {card.designerLocation}
-                            </p>
-                          </div>
-                        </div>
-
-                        <span
-                          className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
-                          style={{
-                            backgroundColor: `${card.colors.primary}22`,
-                            borderColor: card.colors.primary,
-                            color: card.colors.primary,
-                          }}
-                        >
-                          {card.countryName}
-                        </span>
-                      </div>
-
-                      {/* Hero Image & Brand Overlay */}
-                      <div className="space-y-3 my-1">
-                        <div className="relative h-36 w-full rounded-2xl overflow-hidden border border-white/10 shadow-inner group/img">
-                          <img
-                            src={card.image}
-                            alt={card.name}
-                            className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500"
-                          />
-                          <div
-                            className="absolute inset-0 flex items-end p-3"
-                            style={{
-                              background: `linear-gradient(to top, ${card.colors.bg}f0 0%, ${card.colors.bg}70 50%, transparent 100%)`,
-                            }}
-                          >
-                            <div>
-                              <h3 className="text-lg font-black text-white font-serif leading-tight">
-                                {card.name}
-                              </h3>
-                              <p className="text-[10px] font-medium truncate" style={{ color: card.colors.primary }}>
-                                {card.cuisine}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Signature Dishes */}
-                        <div className="flex flex-col gap-1">
-                          {card.dishes.slice(0, 2).map((dish, di) => (
-                            <div
-                              key={di}
-                              className="text-[10px] text-slate-300 px-2.5 py-1.5 rounded-lg border flex items-center justify-between truncate"
-                              style={{
-                                background: card.colors.surface,
-                                borderColor: card.colors.border,
-                              }}
-                            >
-                              <div className="flex items-center space-x-1.5 truncate">
-                                <Check className="w-3 h-3 shrink-0" style={{ color: card.colors.primary }} />
-                                <span className="truncate">{dish.name}</span>
-                              </div>
-                              <span className="font-bold text-white shrink-0 ml-1">{dish.price}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Key Stats Row */}
-                        <div className="grid grid-cols-3 gap-1.5 text-center">
-                          <div
-                            className="p-1.5 rounded-xl border"
-                            style={{ background: card.colors.surface, borderColor: card.colors.border }}
-                          >
-                            <span className="text-[8px] text-slate-400 block">Ср. чек</span>
-                            <span className="text-xs font-black text-white">{card.stats.avgCheck}</span>
-                          </div>
-                          <div
-                            className="p-1.5 rounded-xl border"
-                            style={{ background: card.colors.surface, borderColor: card.colors.border }}
-                          >
-                            <span className="text-[8px] text-slate-400 block">Повторные</span>
-                            <span className="text-xs font-black text-emerald-400">{card.stats.repeat}</span>
-                          </div>
-                          <div
-                            className="p-1.5 rounded-xl border"
-                            style={{ background: card.colors.surface, borderColor: card.colors.border }}
-                          >
-                            <span className="text-[8px] text-slate-400 block">Запуск</span>
-                            <span className="text-xs font-black" style={{ color: card.colors.primary }}>
-                              {card.stats.launch}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Card Action Buttons */}
-                      <div
-                        className="pt-2 border-t flex items-center justify-between gap-2"
-                        style={{ borderColor: card.colors.border }}
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setModalCard(card);
-                          }}
-                          className="flex-1 flex items-center justify-center space-x-1.5 text-white font-bold py-2.5 rounded-xl text-[11px] uppercase tracking-wider transition-all cursor-pointer border hover:opacity-85"
-                          style={{
-                            background: card.colors.surface,
-                            borderColor: card.colors.border,
-                          }}
-                        >
-                          <Smartphone className="w-3.5 h-3.5" style={{ color: card.colors.primary }} />
-                          <span>Инспектор & Демо</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openOrderModal(card);
-                          }}
-                          className="flex items-center justify-center p-2.5 rounded-xl text-slate-950 font-bold shadow-md active:scale-95 transition-all cursor-pointer"
-                          style={{
-                            background: `linear-gradient(to right, ${card.colors.primary}, ${card.colors.secondary})`,
-                          }}
-                          title="Оставить заявку на такой же дизайн"
-                        >
-                          <Sparkles className="w-4 h-4 stroke-[2.5] text-slate-950" />
-                        </button>
-                      </div>
-                    </div>
+                    />
                   </div>
                 );
               })}
@@ -757,7 +941,7 @@ export function CharacterCarouselWave() {
               ))}
             </div>
             <p className="text-slate-500 text-[11px] font-mono">
-              💡 Нажмите на карточку по центру или выберите заведение вверху
+              💡 Проведите пальцем или нажмите на карточку для просмотра
             </p>
           </div>
 
@@ -790,7 +974,7 @@ export function CharacterCarouselWave() {
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
               <button
                 onClick={() => setModalCard(current)}
-                className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold px-5 py-3 rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
+                className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold px-5 py-3 rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md active:scale-95"
               >
                 <Smartphone className="w-4 h-4 text-amber-400" />
                 <span>Дизайн-инспектор</span>
@@ -1099,7 +1283,7 @@ export function CharacterCarouselWave() {
                   <Link
                     href={modalCard.pwaUrl}
                     target="_blank"
-                    className="flex-1 flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all border border-white/10"
+                    className="flex-1 flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all border border-white/10 active:scale-95"
                   >
                     <ExternalLink className="w-4 h-4" style={{ color: modalCard.colors.primary }} />
                     <span>Открыть живой сайт</span>
