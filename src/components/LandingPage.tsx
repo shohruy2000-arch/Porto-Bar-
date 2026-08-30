@@ -32,7 +32,7 @@ import {
   Sparkles, 
   ExternalLink
 } from 'lucide-react';
-import { CharacterCarouselWave } from './CharacterCarouselWave';
+import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -507,8 +507,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* 6. SHOWCASE SECTION — ThreeUI CharacterCarousel Wave */}
-      <CharacterCarouselWave />
+      {/* 6. SHOWCASE SECTION — Multi-Restaurant Interactive Design Gallery */}
+      <DesignShowcaseGallery />
 
       {/* 7. PRICING SECTION */}
       <section id="pricing" className="py-24 bg-slate-900 text-white">
