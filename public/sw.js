@@ -1,6 +1,5 @@
-const CACHE_NAME = 'porto-bar-cache-v3'; // Bump cache version for new icons
+const CACHE_NAME = 'porto-bar-cache-v4';
 const ASSETS_TO_CACHE = [
-  '/',
   '/manifest.json',
   '/images/porto-app-icon-192.png',
   '/images/porto-app-icon-512.png',
@@ -11,7 +10,6 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Catch errors in case some assets are missing from public
       return cache.addAll(ASSETS_TO_CACHE).catch(err => console.log('Pre-caching warning:', err));
     }).then(() => self.skipWaiting())
   );
@@ -23,6 +21,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
+            console.log('[SW] Deleting old cache:', cache);
             return caches.delete(cache);
           }
         })
@@ -40,14 +39,13 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Cache static framework files and local assets dynamically on successful load
+        // Cache static images and fonts dynamically
         const url = event.request.url;
-        const isStaticAsset = url.includes('/_next/') || 
-                              url.includes('/fonts/') || 
-                              url.includes('/images/') || 
-                              url.endsWith('.css') || 
-                              url.endsWith('.js') || 
-                              url.endsWith('.json');
+        const isStaticAsset = url.includes('/fonts/') || 
+                              url.includes('/images/') ||
+                              url.endsWith('.png') ||
+                              url.endsWith('.jpg') ||
+                              url.endsWith('.svg');
 
         if (response && response.status === 200 && isStaticAsset) {
           const responseToCache = response.clone();
@@ -93,7 +91,6 @@ function getQueuedRequests(syncTag) {
         };
         cursorRequest.onerror = () => reject(cursorRequest.error);
       } catch (err) {
-        // Fallback if index query fails
         const getAllReq = store.getAll();
         getAllReq.onsuccess = () => {
           const filtered = getAllReq.result.filter(r => r.syncTag === syncTag);
@@ -121,14 +118,10 @@ function removeFromQueue(id) {
 }
 
 async function processOfflineQueue(tag) {
-  console.log(`[SW Sync] Processing offline queue for tag: ${tag}`);
   try {
     const pending = await getQueuedRequests(tag);
-    console.log(`[SW Sync] Found ${pending.length} pending requests`);
-
     for (const req of pending) {
       if (req.id === undefined) continue;
-      
       try {
         const headers = req.headers || { 'Content-Type': 'application/json' };
         const res = await fetch(req.url, {
@@ -136,12 +129,8 @@ async function processOfflineQueue(tag) {
           headers: headers,
           body: typeof req.body === 'string' ? req.body : JSON.stringify(req.body)
         });
-
         if (res.ok) {
-          console.log(`[SW Sync] Request replayed successfully, removing ID: ${req.id}`);
           await removeFromQueue(req.id);
-        } else {
-          console.warn(`[SW Sync] Replay failed with status: ${res.status}`);
         }
       } catch (err) {
         console.error(`[SW Sync] Failed to replay request ID ${req.id}:`, err);
@@ -153,7 +142,6 @@ async function processOfflineQueue(tag) {
 }
 
 self.addEventListener('sync', (event) => {
-  console.log(`[SW] Sync event fired for tag: ${event.tag}`);
   if (event.tag === 'sync-orders' || event.tag === 'sync-waiter-calls' || event.tag === 'sync-reservations') {
     event.waitUntil(processOfflineQueue(event.tag));
   }
@@ -169,9 +157,7 @@ self.addEventListener('push', (event) => {
     }
   }
 
-  // Ensure title has a premium brand fallback
   const title = data.title || 'Porto-Bar';
-
   const options = {
     body: data.body,
     icon: data.icon || '/images/porto-logo.jpg?v=2',
@@ -194,19 +180,15 @@ self.addEventListener('notificationclick', (event) => {
       const targetUrl = event.notification.data.url || '/';
       const absoluteTargetUrl = new URL(targetUrl, self.location.origin).href;
 
-      // 1. Try to find an open window and focus it
       for (const client of clientList) {
         if ('focus' in client) {
           client.focus();
-          // If different URL, navigate to it
           if ('navigate' in client && client.url !== absoluteTargetUrl) {
             client.navigate(absoluteTargetUrl);
           }
           return;
         }
       }
-      
-      // 2. If no window open, open a new one
       if (clients.openWindow) {
         return clients.openWindow(absoluteTargetUrl);
       }
