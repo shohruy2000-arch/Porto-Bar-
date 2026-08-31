@@ -1,16 +1,15 @@
-const CACHE_NAME = 'porto-bar-cache-v4';
+const CACHE_NAME = 'porto-bar-cache-v5';
 const ASSETS_TO_CACHE = [
   '/manifest.json',
   '/images/porto-app-icon-192.png',
   '/images/porto-app-icon-512.png',
-  '/images/porto-app-icon-maskable.png',
-  '/images/ichthys.jpg'
+  '/images/porto-app-icon-maskable.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE).catch(err => console.log('Pre-caching warning:', err));
+      return cache.addAll(ASSETS_TO_CACHE).catch(err => console.log('[SW] Pre-caching warning:', err));
     }).then(() => self.skipWaiting())
   );
 });
@@ -21,7 +20,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('[SW] Deleting old cache:', cache);
+            console.log('[SW] Purging old cache:', cache);
             return caches.delete(cache);
           }
         })
@@ -31,23 +30,33 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Only intercept HTTP/GET requests (ignore api POSTs etc.)
+  // 1. NEVER intercept navigation / HTML requests - let browser handle natively
+  if (event.request.mode === 'navigate') {
+    return;
+  }
+
+  // 2. Ignore non-GET, API routes, or Next.js build chunks
   if (event.request.method !== 'GET' || event.request.url.includes('/api/')) {
     return;
   }
-  
+
+  // 3. For images and fonts only, use network-first with cache fallback
+  const url = event.request.url;
+  const isImageOrFont = url.includes('/fonts/') || 
+                        url.includes('/images/') ||
+                        url.endsWith('.png') ||
+                        url.endsWith('.jpg') ||
+                        url.endsWith('.svg') ||
+                        url.endsWith('.woff2');
+
+  if (!isImageOrFont) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Cache static images and fonts dynamically
-        const url = event.request.url;
-        const isStaticAsset = url.includes('/fonts/') || 
-                              url.includes('/images/') ||
-                              url.endsWith('.png') ||
-                              url.endsWith('.jpg') ||
-                              url.endsWith('.svg');
-
-        if (response && response.status === 200 && isStaticAsset) {
+        if (response && response.status === 200) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
@@ -55,8 +64,12 @@ self.addEventListener('fetch', (event) => {
         }
         return response;
       })
-      .catch(() => {
-        return caches.match(event.request);
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) {
+          return cached;
+        }
+        return new Response('', { status: 408, statusText: 'Offline' });
       })
   );
 });
