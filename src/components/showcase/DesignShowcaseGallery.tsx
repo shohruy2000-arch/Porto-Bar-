@@ -1,582 +1,568 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Sparkles,
-  Smartphone,
   Maximize2,
-  ExternalLink,
   Star,
   Check,
-  Zap,
-  ShieldCheck,
   Send,
   Loader2,
   X,
   ChevronRight,
-  Flame,
-  Coffee,
-  Wine,
+  ExternalLink,
+  Monitor,
+  Smartphone,
+  Award,
+  Clock,
+  TrendingUp,
+  ShieldCheck,
+  Palette,
+  Zap,
 } from 'lucide-react';
 
-import { ShowcaseRestaurantData } from './types';
-import { portoBarShowcase } from './data/portoBarShowcase';
-import { brunchBistroShowcase } from './data/brunchBistroShowcase';
-import { noirSteakhouseShowcase } from './data/noirSteakhouseShowcase';
-import { sakuraOmakaseShowcase } from './data/sakuraOmakaseShowcase';
-import { bellaMediterraneoShowcase } from './data/bellaMediterraneoShowcase';
-import { tbilisiWineShowcase } from './data/tbilisiWineShowcase';
-
-import { PortoBarMenuView } from './menus/PortoBarMenuView';
-import { BrunchBistroMenuView } from './menus/BrunchBistroMenuView';
-import { NoirSteakhouseMenuView } from './menus/NoirSteakhouseMenuView';
-import { SakuraOmakaseMenuView } from './menus/SakuraOmakaseMenuView';
-import { BellaMediterraneoMenuView } from './menus/BellaMediterraneoMenuView';
-import { TbilisiWineMenuView } from './menus/TbilisiWineMenuView';
-
-const SHOWCASE_LIST: {
-  data: ShowcaseRestaurantData;
-  emblem: string;
-  badge: string;
-  viewComponent: React.ComponentType<{ data: ShowcaseRestaurantData; isCompact?: boolean }>;
-}[] = [
+/* ─────────────────────────────────────────────────────────────
+   RESTAURANT CONCEPTS DATA
+───────────────────────────────────────────────────────────────*/
+const RESTAURANTS = [
   {
-    data: portoBarShowcase,
-    emblem: '👑',
-    badge: 'LUXURY FINE DINING',
-    viewComponent: PortoBarMenuView,
+    id: 'porto',
+    name: 'Porto Bar',
+    subtitle: 'Luxury Dark Fine-Dining',
+    emblem: '🦪',
+    url: 'https://porto-bar.ru/',
+    accentColor: '#F59E0B',
+    accentGlow: 'rgba(245,158,11,0.18)',
+    bgGradient: 'linear-gradient(135deg, #0a0c12 0%, #111827 100%)',
+    borderColor: 'rgba(245,158,11,0.35)',
+    tagline: 'Тёмная роскошь, устрицы и коктейли. Дизайн в стиле Michelin-звёздных ресторанов Европы — глубокий антрацит, золото, анимированные карточки блюд.',
+    cuisine: 'Fine Dining · Bar · Oysters',
+    designerFlag: '🇫🇷',
+    designerName: 'Jean-Luc Moreau',
+    designerLocation: 'Paris, France',
+    stats: [
+      { label: 'Средний чек', value: '4 200 ₽', icon: '💳' },
+      { label: 'Повторные заказы', value: '+67%', icon: '🔄' },
+      { label: 'Время доставки', value: '28 мин', icon: '⚡' },
+    ],
+    features: [
+      'Анимированная PWA-карусель блюд',
+      'Тёмная тема с золотыми акцентами',
+      'Система лояльности с баллами',
+      'Живой трекер заказа',
+      'Push-уведомления о статусе',
+      'Telegram-бот интеграция',
+    ],
+    badge: 'LIVE PRODUCTION',
+    badgeColor: 'bg-amber-500',
   },
   {
-    data: brunchBistroShowcase,
+    id: 'brunch',
+    name: "Brunch's Bistro",
+    subtitle: 'Light Nordic Botanical',
     emblem: '🥞',
-    badge: 'NORDIC BOTANICAL',
-    viewComponent: BrunchBistroMenuView,
-  },
-  {
-    data: noirSteakhouseShowcase,
-    emblem: '🥩',
-    badge: 'SMOKEHOUSE & GRILL',
-    viewComponent: NoirSteakhouseMenuView,
-  },
-  {
-    data: sakuraOmakaseShowcase,
-    emblem: '🌸',
-    badge: 'TOKYO OMAKASE',
-    viewComponent: SakuraOmakaseMenuView,
-  },
-  {
-    data: bellaMediterraneoShowcase,
-    emblem: '🍕',
-    badge: 'ITALIAN TRATTORIA',
-    viewComponent: BellaMediterraneoMenuView,
-  },
-  {
-    data: tbilisiWineShowcase,
-    emblem: '🍷',
-    badge: 'GEORGIAN FEAST',
-    viewComponent: TbilisiWineMenuView,
+    url: 'http://194.87.55.134:3005/',
+    accentColor: '#C05830',
+    accentGlow: 'rgba(192,88,48,0.18)',
+    bgGradient: 'linear-gradient(135deg, #1a0e08 0%, #2d1810 100%)',
+    borderColor: 'rgba(192,88,48,0.40)',
+    tagline: 'Скандинавский бранч-стиль, суфле-панкейки и specialty кофе. Светлая кремовая палитра, терракотовые акценты, воздушная типографика — максимальный аппетитный эффект.',
+    cuisine: 'Brunch · Pancakes · Specialty Coffee',
+    designerFlag: '🇸🇪',
+    designerName: 'Erik Lindström',
+    designerLocation: 'Stockholm, Sweden',
+    stats: [
+      { label: 'Средний чек', value: '1 800 ₽', icon: '💳' },
+      { label: 'Повторные заказы', value: '+81%', icon: '🔄' },
+      { label: 'Время доставки', value: '22 мин', icon: '⚡' },
+    ],
+    features: [
+      'Светлая Nordic тема (терракот + крем)',
+      'Программа лояльности Eco Club',
+      'Карточки блюд с аппетитными фото',
+      'Категорийная навигация',
+      'Система рекомендаций',
+      'Telegram-бот интеграция',
+    ],
+    badge: 'LIVE PRODUCTION',
+    badgeColor: 'bg-orange-600',
   },
 ];
 
-export function DesignShowcaseGallery() {
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [viewMode, setViewMode] = useState<'mobile' | 'fullscreen'>('mobile');
-  const [fullscreenModalOpen, setFullscreenModalOpen] = useState(false);
+/* ─────────────────────────────────────────────────────────────
+   LEAD FORM MODAL
+───────────────────────────────────────────────────────────────*/
+function LeadModal({
+  restaurant,
+  onClose,
+}: {
+  restaurant: (typeof RESTAURANTS)[0];
+  onClose: () => void;
+}) {
+  const [form, setForm] = useState({ name: '', phone: '', restaurantName: '', comment: '', agree: true });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
-  // Lead modal state
-  const [isOrderOpen, setIsOrderOpen] = useState(false);
-  const [leadForm, setLeadForm] = useState({
-    name: '',
-    phone: '',
-    restaurantName: '',
-    city: '',
-    comment: '',
-    agree: true,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-
-  const currentShowcase = SHOWCASE_LIST[selectedIdx];
-  const CurrentMenuComponent = currentShowcase.viewComponent;
-  const currentData = currentShowcase.data;
-
-  const handleLeadSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!leadForm.agree) {
-      setSubmitError('Необходимо дать согласие на обработку данных');
-      return;
-    }
-    setIsSubmitting(true);
-    setSubmitError('');
-
+    setLoading(true);
+    setError('');
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: leadForm.name,
-          phone: leadForm.phone,
-          restaurantName: leadForm.restaurantName,
-          city: leadForm.city || 'Москва',
-          cuisineType: currentData.cuisine,
-          preferredStyle: `${currentData.name} (${currentData.conceptTitle})`,
-          comment: leadForm.comment,
-          agree: leadForm.agree,
+          name: form.name,
+          phone: form.phone,
+          restaurantName: form.restaurantName,
+          comment: form.comment || `Заинтересован стилем: ${restaurant.name} (${restaurant.subtitle})`,
+          preferredStyle: `${restaurant.name} — ${restaurant.subtitle}`,
+          cuisineType: restaurant.cuisine,
+          agree: form.agree,
         }),
       });
-
-      const resData = await res.json();
-      if (!res.ok || !resData.success) {
-        throw new Error(resData.error || 'Ошибка при отправке заявки');
-      }
-
-      setSubmitSuccess(true);
-      setLeadForm({
-        name: '',
-        phone: '',
-        restaurantName: '',
-        city: '',
-        comment: '',
-        agree: true,
-      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Ошибка');
+      setSuccess(true);
     } catch (err: any) {
-      setSubmitError(err?.message || 'Не удалось отправить заявку. Попробуйте еще раз.');
+      setError(err?.message || 'Не удалось отправить. Попробуйте ещё раз.');
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <section
-      id="demo"
-      className="relative py-16 lg:py-24 overflow-hidden select-none"
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        className="relative w-full max-w-lg rounded-3xl p-7 border-2 shadow-2xl max-h-[90vh] overflow-y-auto"
+        style={{
+          background: 'linear-gradient(135deg, #0d1117 0%, #161b22 100%)',
+          borderColor: restaurant.accentColor + '55',
+          boxShadow: `0 0 60px ${restaurant.accentGlow}`,
+        }}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {success ? (
+          <div className="text-center py-10 space-y-4">
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto border-2"
+              style={{ borderColor: restaurant.accentColor, background: restaurant.accentColor + '20' }}
+            >
+              <Check className="w-10 h-10" style={{ color: restaurant.accentColor }} />
+            </div>
+            <h3 className="text-2xl font-black text-white">Заявка принята!</h3>
+            <p className="text-slate-300 text-sm max-w-xs mx-auto leading-relaxed">
+              Наш арт-директор свяжется с вами в Telegram в течение 15 минут для старта разработки.
+            </p>
+            <button
+              onClick={onClose}
+              className="mt-2 px-8 py-3 rounded-2xl font-black text-sm text-white"
+              style={{ background: restaurant.accentColor }}
+            >
+              Закрыть
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="mb-2">
+              <span
+                className="inline-block text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full mb-3 text-white"
+                style={{ background: restaurant.accentColor }}
+              >
+                {restaurant.emblem} Стиль: {restaurant.name}
+              </span>
+              <h3 className="text-xl font-black text-white leading-snug">
+                Заказать дизайн меню как у{' '}
+                <span style={{ color: restaurant.accentColor }}>{restaurant.name}</span>
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">Срок разработки — 24–48 часов под ключ</p>
+            </div>
+
+            {error && (
+              <div className="p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-300 text-xs">
+                {error}
+              </div>
+            )}
+
+            {[
+              { key: 'name', label: 'Ваше имя *', placeholder: 'Алексей', required: true },
+              {
+                key: 'phone',
+                label: 'Телефон или Telegram *',
+                placeholder: '+7 (999) 000-00-00 или @username',
+                required: true,
+              },
+              {
+                key: 'restaurantName',
+                label: 'Название заведения',
+                placeholder: 'Моё Кафе, Москва',
+                required: false,
+              },
+            ].map(({ key, label, placeholder, required }) => (
+              <div key={key}>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">{label}</label>
+                <input
+                  type="text"
+                  required={required}
+                  value={(form as any)[key]}
+                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                  placeholder={placeholder}
+                  className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-3 rounded-xl focus:outline-none focus:border-amber-500/60 placeholder-slate-500 transition-colors"
+                  style={{ '--tw-ring-color': restaurant.accentColor } as any}
+                />
+              </div>
+            ))}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Пожелания к концепции
+              </label>
+              <textarea
+                rows={2}
+                value={form.comment}
+                onChange={(e) => setForm({ ...form, comment: e.target.value })}
+                placeholder={`Хочу дизайн в стиле ${restaurant.name}...`}
+                className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-3 rounded-xl focus:outline-none focus:border-amber-500/60 placeholder-slate-500 resize-none"
+              />
+            </div>
+
+            <label className="flex items-center space-x-2.5 text-xs text-slate-400 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.agree}
+                onChange={(e) => setForm({ ...form, agree: e.target.checked })}
+                className="rounded"
+                style={{ accentColor: restaurant.accentColor }}
+              />
+              <span>Согласен на обработку персональных данных</span>
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center space-x-2 text-white shadow-xl disabled:opacity-50 transition-all active:scale-[0.98]"
+              style={{ background: `linear-gradient(90deg, ${restaurant.accentColor}, ${restaurant.accentColor}cc)` }}
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>Оставить заявку</span>
+                </>
+              )}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PHONE FRAME with IFRAME
+───────────────────────────────────────────────────────────────*/
+function PhoneFrame({ url, accentColor, accentGlow }: { url: string; accentColor: string; accentGlow: string }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div
+      className="relative mx-auto flex-shrink-0"
       style={{
-        background: 'linear-gradient(180deg, #050810 0%, #080c16 50%, #050810 100%)',
+        width: 300,
+        height: 620,
+        background: '#08090e',
+        borderRadius: 46,
+        border: `3px solid #242b3d`,
+        boxShadow: `0 40px 80px rgba(0,0,0,0.95), 0 0 50px ${accentGlow}, inset 0 1px 0 rgba(255,255,255,0.06)`,
       }}
     >
-      {/* Ambient background glow matching current restaurant theme */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-0 transition-all duration-700 opacity-60"
-        style={{
-          background: `radial-gradient(ellipse 60% 40% at 50% 30%, ${currentData.colors.primaryGlow} 0%, transparent 75%)`,
-        }}
-      />
+      {/* Side buttons */}
+      <div className="absolute -left-[4px] top-20 w-1 h-8 rounded-l-full bg-[#1a1f2e]" />
+      <div className="absolute -left-[4px] top-32 w-1 h-14 rounded-l-full bg-[#1a1f2e]" />
+      <div className="absolute -left-[4px] top-48 w-1 h-14 rounded-l-full bg-[#1a1f2e]" />
+      <div className="absolute -right-[4px] top-28 w-1 h-20 rounded-r-full bg-[#1a1f2e]" />
+
+      {/* Screen bezel */}
+      <div className="absolute inset-2 rounded-[38px] overflow-hidden bg-black">
+        {/* Dynamic Island */}
+        <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-28 h-5 rounded-full bg-black z-30 flex items-center justify-between px-3 pointer-events-none">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse opacity-80" />
+          <div className="w-3 h-3 rounded-full bg-[#181d29]" />
+        </div>
+
+        {/* Loading skeleton */}
+        {!loaded && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d0d0d] z-20 space-y-3">
+            <div
+              className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin"
+              style={{ borderColor: `${accentColor}40`, borderTopColor: accentColor }}
+            />
+            <p className="text-xs text-slate-400 font-medium">Загружаем меню...</p>
+          </div>
+        )}
+
+        {/* Live iframe */}
+        <iframe
+          src={url}
+          className="w-full h-full border-0"
+          style={{ borderRadius: 36 }}
+          onLoad={() => setLoaded(true)}
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          loading="lazy"
+          title="Restaurant App Preview"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MAIN GALLERY COMPONENT
+───────────────────────────────────────────────────────────────*/
+export function DesignShowcaseGallery() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [fullscreenUrl, setFullscreenUrl] = useState<string | null>(null);
+
+  const activeRestaurant = RESTAURANTS.find((r) => r.id === activeId) || null;
+
+  return (
+    <section
+      id="demo"
+      className="relative py-20 lg:py-28 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #050810 0%, #070b14 60%, #050810 100%)' }}
+    >
+      {/* Ambient background */}
+      <div className="pointer-events-none absolute inset-0 -z-0">
+        <div
+          className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: 'radial-gradient(circle, #F59E0B 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-15"
+          style={{ background: 'radial-gradient(circle, #C05830 0%, transparent 70%)' }}
+        />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ── SECTION HEADER ────────────────────────────────────── */}
-        <div className="text-center max-w-3xl mx-auto mb-8 space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-inner">
+
+        {/* ── SECTION HEADER ──────────────────────────────────── */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-5">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 text-amber-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Международный Дизайн-Продакшн</span>
+            <span>Живые примеры наших работ</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-serif tracking-tight text-white leading-tight">
-            Примеры готовых работ <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">
-              наших UI/UX дизайнеров
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black font-serif tracking-tight text-white leading-tight">
+            Выберите стиль{' '}
+            <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+              вашего меню
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
-            Посмотрите интерактивные примеры готовых меню. У нас работают ведущие дизайнеры из
-            Италии, Швеции, Франции, Японии и Грузии — каждый стиль создаётся индивидуально под ДНК
-            вашего ресторанного бренда.
+          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            Два полностью разных дизайна — два разных ресторана с разными концепциями. Оба работают
+            в реальных заведениях прямо сейчас. Выберите стиль — мы адаптируем его под вашу кухню,
+            меню и бренд за 24–48 часов.
           </p>
         </div>
 
-        {/* ── RESTAURANT TABS (6 Concepts) ──────────────────────── */}
-        <div className="flex items-center justify-start lg:justify-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none px-2">
-          {SHOWCASE_LIST.map((item, idx) => {
-            const isSelected = idx === selectedIdx;
-            return (
-              <button
-                key={item.data.id}
-                onClick={() => setSelectedIdx(idx)}
-                className={`px-4 py-3 rounded-2xl text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 flex items-center space-x-2.5 border-2 ${
-                  isSelected
-                    ? 'scale-105 shadow-xl text-white'
-                    : 'opacity-70 hover:opacity-100 hover:scale-102 hover:border-slate-500 text-slate-300'
-                }`}
-                style={{
-                  backgroundColor: isSelected ? item.data.colors.surface : 'rgba(15,23,42,0.75)',
-                  borderColor: isSelected ? item.data.colors.primary : 'rgba(255,255,255,0.12)',
-                  boxShadow: isSelected
-                    ? `0 0 24px ${item.data.colors.primaryGlow}, 0 6px 20px rgba(0,0,0,0.6)`
-                    : 'none',
-                }}
-              >
-                <span className="text-lg leading-none">{item.emblem}</span>
-                <div className="text-left">
-                  <div className="text-xs font-black tracking-tight whitespace-nowrap">
-                    {item.data.name}
-                  </div>
-                  <div
-                    className="text-[9px] font-medium tracking-wider uppercase opacity-80"
-                    style={{ color: isSelected ? item.data.colors.primary : '#94a3b8' }}
-                  >
-                    {item.data.designer.location}
-                  </div>
-                </div>
-                {isSelected && (
-                  <span
-                    className="w-2 h-2 rounded-full animate-pulse ml-1"
-                    style={{ backgroundColor: item.data.colors.primary }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ── SHOWCASE MAIN STAGE: TWO-COLUMN / DEVICE SIMULATOR ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
-          {/* Left Column: Interactive Phone Device Frame (iPhone 16 Pro) */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center">
-            {/* Device Container */}
+        {/* ── TWO RESTAURANT CARDS ────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 mb-16">
+          {RESTAURANTS.map((r) => (
             <div
-              className="relative rounded-[48px] p-3 shadow-2xl border-4 flex flex-col items-center transition-all duration-500"
+              key={r.id}
+              className="relative rounded-3xl overflow-hidden border-2 flex flex-col transition-all duration-500 group"
               style={{
-                width: '100%',
-                maxWidth: 345,
-                height: 660,
-                backgroundColor: '#05070c',
-                borderColor: '#242b3d',
-                boxShadow: `0 30px 80px rgba(0,0,0,0.95), 0 0 45px ${currentData.colors.primaryGlow}`,
+                background: r.bgGradient,
+                borderColor: r.borderColor,
+                boxShadow: `0 20px 60px rgba(0,0,0,0.7), 0 0 40px ${r.accentGlow}`,
               }}
             >
-              {/* Internal Screen Bezel with Scrollable App */}
-              <div className="relative w-full h-full rounded-[38px] overflow-hidden bg-black shadow-inner flex flex-col">
-                {/* Dynamic Island Header Notch */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-full bg-black z-40 flex items-center justify-between px-2.5 shadow-md pointer-events-none">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#181d29]" />
-                </div>
-
-                {/* Live Interactive React Component for this concept */}
-                <div className="w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pt-1">
-                  <CurrentMenuComponent data={currentData} isCompact={true} />
-                </div>
-              </div>
-            </div>
-
-            {/* View Fullscreen button under phone */}
-            <button
-              onClick={() => setFullscreenModalOpen(true)}
-              className="mt-4 flex items-center space-x-2 text-xs font-bold text-slate-300 hover:text-white px-4 py-2 rounded-xl bg-slate-900/80 border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer shadow-md"
-            >
-              <Maximize2 className="w-3.5 h-3.5 text-amber-400" />
-              <span>Развернуть во весь экран</span>
-            </button>
-          </div>
-
-          {/* Right Column: Restaurant Storytelling, Features & Lead CTA */}
-          <div className="lg:col-span-6 space-y-6">
-            {/* Meta Card */}
-            <div
-              className="rounded-3xl p-6 sm:p-7 border-2 shadow-2xl transition-all duration-500 space-y-4"
-              style={{
-                background: currentData.colors.surface,
-                borderColor: currentData.colors.border,
-              }}
-            >
-              {/* Header Badges */}
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center space-x-2">
-                  <span className="text-2xl">{currentShowcase.emblem}</span>
+              {/* Card Header */}
+              <div className="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/5">
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl leading-none">{r.emblem}</span>
                   <div>
-                    <span className="text-xs font-bold text-slate-300">
-                      Дизайн: {currentData.designer.name} ({currentData.designer.location})
-                    </span>
-                    <p className="text-[10px] text-slate-400">
-                      {currentData.designer.country} {currentData.designer.countryFlag}
+                    <h3 className="text-xl font-black text-white font-serif">{r.name}</h3>
+                    <p className="text-xs font-bold mt-0.5" style={{ color: r.accentColor }}>
+                      {r.subtitle}
                     </p>
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-black border border-emerald-500/30">
-                  <Star className="w-3.5 h-3.5 fill-emerald-400" />
-                  <span>{currentData.rating}</span>
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-wider ${r.badgeColor}`}
+                  >
+                    {r.badge}
+                  </span>
                 </div>
               </div>
 
-              {/* Title & Tagline */}
-              <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white font-serif leading-tight">
-                  {currentData.name}
-                </h3>
-                <p className="text-sm font-bold mt-1" style={{ color: currentData.colors.primary }}>
-                  {currentData.conceptTitle}
-                </p>
-                <p className="text-xs text-slate-300 mt-2 leading-relaxed font-light">
-                  {currentData.tagline}
-                </p>
+              {/* Phone Frame + Live App */}
+              <div
+                className="flex items-center justify-center py-8 px-4 relative"
+                style={{
+                  background: `radial-gradient(ellipse 80% 60% at 50% 50%, ${r.accentGlow}, transparent)`,
+                }}
+              >
+                <PhoneFrame url={r.url} accentColor={r.accentColor} accentGlow={r.accentGlow} />
+
+                {/* Fullscreen button overlay */}
+                <button
+                  onClick={() => setFullscreenUrl(r.url)}
+                  className="absolute bottom-10 right-6 flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-black/60 backdrop-blur-sm border border-white/15 text-white text-xs font-bold hover:bg-black/80 transition-all shadow-lg"
+                >
+                  <Maximize2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>На весь экран</span>
+                </button>
               </div>
 
-              {/* Key Features Checkmarks */}
-              <div className="space-y-2 pt-2 border-t border-white/10">
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Включённый функционал:
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {currentData.features.map((feat, fi) => (
+              {/* Restaurant Info */}
+              <div className="px-6 pb-4 flex-1 space-y-4 border-t border-white/5 pt-5">
+                {/* Tagline */}
+                <p className="text-sm text-slate-300 leading-relaxed">{r.tagline}</p>
+
+                {/* Stats Row */}
+                <div className="grid grid-cols-3 gap-2">
+                  {r.stats.map((stat) => (
                     <div
-                      key={fi}
-                      className="text-xs text-slate-200 flex items-start space-x-2 p-2 rounded-xl bg-black/30 border border-white/5"
+                      key={stat.label}
+                      className="p-3 rounded-2xl text-center border border-white/5 bg-black/30"
                     >
-                      <Check
-                        className="w-3.5 h-3.5 shrink-0 mt-0.5"
-                        style={{ color: currentData.colors.primary }}
-                      />
-                      <span>{feat}</span>
+                      <span className="text-base leading-none block mb-1">{stat.icon}</span>
+                      <span className="text-sm font-black text-white block">{stat.value}</span>
+                      <span className="text-[10px] text-slate-400 leading-tight">{stat.label}</span>
                     </div>
                   ))}
                 </div>
-              </div>
 
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-3 gap-2 text-center pt-2">
-                <div className="p-2.5 rounded-2xl bg-black/40 border border-white/5">
-                  <span className="text-[9px] text-slate-400 block">Ср. чек</span>
-                  <span className="text-xs font-black text-white">{currentData.avgCheck}</span>
+                {/* Features */}
+                <div className="space-y-2">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Что включено:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    {r.features.map((feat) => (
+                      <div
+                        key={feat}
+                        className="flex items-center space-x-2 text-xs text-slate-300 p-2 rounded-xl bg-white/4 border border-white/5"
+                      >
+                        <Check className="w-3.5 h-3.5 shrink-0" style={{ color: r.accentColor }} />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="p-2.5 rounded-2xl bg-black/40 border border-white/5">
-                  <span className="text-[9px] text-slate-400 block">Повторные заказы</span>
-                  <span className="text-xs font-black text-emerald-400">{currentData.repeatRate}</span>
-                </div>
-                <div className="p-2.5 rounded-2xl bg-black/40 border border-white/5">
-                  <span className="text-[9px] text-slate-400 block">Доставка/сервис</span>
-                  <span
-                    className="text-xs font-black"
-                    style={{ color: currentData.colors.primary }}
-                  >
-                    {currentData.deliveryTime}
+
+                {/* Designer */}
+                <div className="flex items-center space-x-2.5 text-xs text-slate-400 border-t border-white/5 pt-3">
+                  <span className="text-base">{r.designerFlag}</span>
+                  <span>
+                    Дизайнер:{' '}
+                    <span className="text-slate-200 font-semibold">
+                      {r.designerName}
+                    </span>{' '}
+                    · {r.designerLocation}
                   </span>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-3">
-                <button
-                  onClick={() => setIsOrderOpen(true)}
-                  className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center space-x-2 text-slate-950 shadow-xl active:scale-95 transition-all cursor-pointer"
-                  style={{
-                    background: `linear-gradient(90deg, ${currentData.colors.primary}, ${currentData.colors.secondary})`,
-                  }}
-                >
-                  <Sparkles className="w-4 h-4 text-slate-950" />
-                  <span>Хочу такой же дизайн</span>
-                </button>
-
-                <button
-                  onClick={() => setFullscreenModalOpen(true)}
-                  className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider border border-white/10 transition-all cursor-pointer flex items-center justify-center space-x-2 shadow-md"
-                >
-                  <Smartphone className="w-4 h-4 text-amber-400" />
-                  <span>Инспектор</span>
-                </button>
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                  <button
+                    onClick={() => setActiveId(r.id)}
+                    className="flex-1 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-white flex items-center justify-center space-x-2 shadow-xl transition-all active:scale-[0.98] hover:opacity-90"
+                    style={{
+                      background: `linear-gradient(90deg, ${r.accentColor}, ${r.accentColor}bb)`,
+                      boxShadow: `0 8px 30px ${r.accentGlow}`,
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Хочу такой дизайн</span>
+                  </button>
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center space-x-1.5 px-5 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-xs uppercase tracking-wider transition-all"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-300" />
+                    <span>Открыть</span>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* ── BOTTOM VALUE STRIP ──────────────────────────────── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          {[
+            { icon: <Clock className="w-5 h-5" />, title: '24–48 часов', sub: 'срок разработки' },
+            { icon: <Palette className="w-5 h-5" />, title: 'Ваш брендинг', sub: 'цвета, логотип, шрифты' },
+            { icon: <Zap className="w-5 h-5" />, title: 'Под ключ', sub: 'без технических навыков' },
+            { icon: <ShieldCheck className="w-5 h-5" />, title: 'Поддержка 24/7', sub: 'после запуска' },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="p-4 rounded-2xl bg-white/4 border border-white/8 text-center space-y-1.5"
+            >
+              <div className="flex justify-center text-amber-400">{item.icon}</div>
+              <p className="text-sm font-black text-white">{item.title}</p>
+              <p className="text-[11px] text-slate-400">{item.sub}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* ── FULLSCREEN INSPECTOR MODAL ──────────────────────────── */}
-      {fullscreenModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-2xl animate-fadeIn"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setFullscreenModalOpen(false);
-          }}
-        >
-          <div
-            className="relative w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl border-2 flex flex-col h-[92vh]"
-            style={{
-              background: currentData.colors.surface,
-              borderColor: currentData.colors.border,
-            }}
-          >
-            {/* Modal Header */}
-            <div className="px-5 py-3.5 border-b shrink-0 flex items-center justify-between bg-black/60 border-white/10">
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl leading-none">{currentShowcase.emblem}</span>
-                <div>
-                  <h3 className="text-base font-black text-white">{currentData.name}</h3>
-                  <p className="text-[11px] text-slate-400">
-                    {currentData.cuisine} • {currentData.designer.name} ({currentData.designer.location})
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => {
-                    setFullscreenModalOpen(false);
-                    setIsOrderOpen(true);
-                  }}
-                  className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-slate-950 shadow-md cursor-pointer"
-                  style={{
-                    background: `linear-gradient(90deg, ${currentData.colors.primary}, ${currentData.colors.secondary})`,
-                  }}
-                >
-                  Оставить заявку
-                </button>
-                <button
-                  onClick={() => setFullscreenModalOpen(false)}
-                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+      {/* ── FULLSCREEN IFRAME MODAL ─────────────────────────── */}
+      {fullscreenUrl && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
+            <div className="flex items-center space-x-2 text-white text-sm font-bold">
+              <Monitor className="w-4 h-4 text-amber-400" />
+              <span>Просмотр в полном размере</span>
             </div>
-
-            {/* Modal Scrollable Body */}
-            <div className="flex-1 overflow-y-auto">
-              <CurrentMenuComponent data={currentData} isCompact={false} />
+            <div className="flex items-center space-x-3">
+              <a
+                href={fullscreenUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white/10 text-white text-xs font-bold hover:bg-white/20 transition-all"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Открыть в браузере</span>
+              </a>
+              <button
+                onClick={() => setFullscreenUrl(null)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
+          <iframe
+            src={fullscreenUrl}
+            className="w-full flex-1 border-0"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            title="Full Restaurant App"
+          />
         </div>
       )}
 
-      {/* ── ORDER BRIEF MODAL ───────────────────────────────────── */}
-      {isOrderOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl animate-fadeIn"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setIsOrderOpen(false);
-          }}
-        >
-          <div className="relative w-full max-w-lg rounded-3xl p-6 sm:p-7 border-2 shadow-2xl bg-[#090d16] border-amber-500/40 text-white max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setIsOrderOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {submitSuccess ? (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border-2 border-emerald-500/40">
-                  <Check className="w-8 h-8 stroke-[3]" />
-                </div>
-                <h3 className="text-2xl font-black font-serif">Заявка принята!</h3>
-                <p className="text-sm text-slate-300 max-w-sm mx-auto">
-                  Наш арт-директор свяжется с вами в Telegram или по телефону в течение 15 минут для
-                  обсуждения концепции и запуска дизайна.
-                </p>
-                <button
-                  onClick={() => setIsOrderOpen(false)}
-                  className="mt-4 px-6 py-3 rounded-2xl bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider"
-                >
-                  Закрыть
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleLeadSubmit} className="space-y-4">
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    {currentData.name}
-                  </span>
-                  <h3 className="text-xl font-black font-serif mt-2">
-                    Заявка на индивидуальный дизайн меню
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Срок создания меню — от 24 до 48 часов под ключ
-                  </p>
-                </div>
-
-                {submitError && (
-                  <div className="p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs">
-                    {submitError}
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-xs font-bold text-slate-300 block mb-1">
-                      Ваше имя *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={leadForm.name}
-                      onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                      placeholder="Алексей"
-                      className="w-full bg-[#141a29] text-white text-xs p-3 rounded-xl border border-white/10 focus:border-amber-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-bold text-slate-300 block mb-1">
-                      Телефон или Telegram *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={leadForm.phone}
-                      onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
-                      placeholder="+7 (999) 000-00-00 или @username"
-                      className="w-full bg-[#141a29] text-white text-xs p-3 rounded-xl border border-white/10 focus:border-amber-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-bold text-slate-300 block mb-1">
-                      Название заведения / Город
-                    </label>
-                    <input
-                      type="text"
-                      value={leadForm.restaurantName}
-                      onChange={(e) =>
-                        setLeadForm({ ...leadForm, restaurantName: e.target.value })
-                      }
-                      placeholder="Porto Bar, Москва"
-                      className="w-full bg-[#141a29] text-white text-xs p-3 rounded-xl border border-white/10 focus:border-amber-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-bold text-slate-300 block mb-1">
-                      Пожелания к стилю
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={leadForm.comment}
-                      onChange={(e) => setLeadForm({ ...leadForm, comment: e.target.value })}
-                      placeholder={`Хочу дизайн в стиле ${currentData.name}...`}
-                      className="w-full bg-[#141a29] text-white text-xs p-3 rounded-xl border border-white/10 focus:border-amber-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <label className="flex items-center space-x-2 text-[11px] text-slate-400 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={leadForm.agree}
-                      onChange={(e) => setLeadForm({ ...leadForm, agree: e.target.checked })}
-                      className="rounded accent-amber-500"
-                    />
-                    <span>Согласен на обработку персональных данных</span>
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-xl active:scale-95 transition-all cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 text-slate-950" />
-                      <span>Отправить заявку</span>
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
+      {/* ── LEAD FORM MODAL ─────────────────────────────────── */}
+      {activeRestaurant && (
+        <LeadModal restaurant={activeRestaurant} onClose={() => setActiveId(null)} />
       )}
     </section>
   );
