@@ -6,21 +6,22 @@ import {
   ExternalLink, ChevronLeft, ChevronRight, ShoppingBag,
   Bell, Heart, SlidersHorizontal, ArrowRight, Flame,
   Coffee, Utensils, Gift, Percent, Maximize2, Minimize2,
-  Smartphone, Monitor, ShoppingCart, Trash2, CheckCircle2
+  Smartphone, Monitor, ShoppingCart, Trash2, CheckCircle2,
+  Globe, Info, RefreshCw
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────
    TYPES & HELPERS
 ───────────────────────────────────────────────────────────────*/
 interface DemoDish {
-  id?: string;
+  id: string;
   name: any;
   price: number;
   desc?: string;
-  emoji?: string;
-  image?: string;
+  image: string;
   badge?: string;
   category?: string;
+  options?: { name: string; price: number }[];
 }
 
 interface CartItem {
@@ -28,8 +29,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  emoji?: string;
-  image?: string;
+  image: string;
   options?: string[];
 }
 
@@ -41,7 +41,7 @@ const getDishName = (val: any): string => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   DISH DETAIL MODAL (Interactive for all concepts)
+   DISH DETAIL MODAL
 ═══════════════════════════════════════════════════════════ */
 function InteractiveDishModal({
   dish,
@@ -58,10 +58,10 @@ function InteractiveDishModal({
   const [selectedOpts, setSelectedOpts] = useState<string[]>([]);
   const [added, setAdded] = useState(false);
 
-  const OPTIONS = [
-    { name: 'Двойной сыр', price: 90 },
-    { name: 'Фирменный соус', price: 70 },
-    { name: 'Экстра порция', price: 150 },
+  const OPTIONS = dish.options || [
+    { name: 'Двойная порция', price: 150 },
+    { name: 'Фирменный соус', price: 80 },
+    { name: 'Экстра топпинг', price: 90 },
   ];
 
   const toggleOpt = (optName: string) => {
@@ -70,7 +70,12 @@ function InteractiveDishModal({
     );
   };
 
-  const totalPrice = (dish.price + selectedOpts.length * 80) * qty;
+  const extraTotal = selectedOpts.reduce((acc, optName) => {
+    const opt = OPTIONS.find(o => o.name === optName);
+    return acc + (opt?.price || 0);
+  }, 0);
+
+  const totalPrice = (dish.price + extraTotal) * qty;
   const nameStr = getDishName(dish.name);
 
   const handleConfirm = () => {
@@ -78,16 +83,16 @@ function InteractiveDishModal({
     onAdd(dish, qty, selectedOpts);
     setTimeout(() => {
       onClose();
-    }, 600);
+    }, 500);
   };
 
   return (
     <div
-      className="fixed inset-0 z-[1050] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="fixed inset-0 z-[1150] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="relative w-full max-w-md rounded-3xl overflow-hidden border-2 shadow-2xl bg-[#10141e] text-white"
+        className="relative w-full max-w-md rounded-3xl overflow-hidden border-2 shadow-2xl bg-[#0f131d] text-white"
         style={{ borderColor: accentColor + '60', boxShadow: `0 0 50px ${accentColor}30` }}
       >
         <button
@@ -97,17 +102,13 @@ function InteractiveDishModal({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Media */}
-        <div className="relative h-48 bg-black/40 flex items-center justify-center overflow-hidden">
-          {dish.image ? (
-            <img src={dish.image} alt={nameStr} className="w-full h-full object-cover" />
-          ) : (
-            <div className="text-6xl">{dish.emoji || '🍽'}</div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#10141e] via-transparent to-transparent" />
+        {/* Food Image */}
+        <div className="relative h-52 bg-black/40 overflow-hidden">
+          <img src={dish.image} alt={nameStr} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f131d] via-transparent to-transparent" />
           {dish.badge && (
             <span
-              className="absolute top-4 left-4 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase text-white shadow-lg"
+              className="absolute top-4 left-4 px-3 py-1 rounded-lg text-[10px] font-black uppercase text-white shadow-lg"
               style={{ background: accentColor }}
             >
               {dish.badge}
@@ -119,15 +120,15 @@ function InteractiveDishModal({
           <div>
             <h3 className="text-xl font-black">{nameStr}</h3>
             {dish.desc && <p className="text-xs text-slate-300 mt-1 leading-relaxed">{dish.desc}</p>}
-            <p className="text-xl font-black mt-2" style={{ color: accentColor }}>
+            <p className="text-2xl font-black mt-2" style={{ color: accentColor }}>
               {dish.price} ₽
             </p>
           </div>
 
-          {/* Modifiers */}
+          {/* Options */}
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-              Дополнительные опции:
+              Дополнительно к блюду:
             </p>
             <div className="space-y-1.5">
               {OPTIONS.map(opt => {
@@ -160,7 +161,7 @@ function InteractiveDishModal({
             </div>
           </div>
 
-          {/* Quantity & CTA */}
+          {/* Quantity & Add button */}
           <div className="pt-2 flex items-center gap-3">
             <div className="flex items-center gap-2 bg-white/6 border border-white/10 rounded-2xl p-1.5">
               <button
@@ -183,7 +184,7 @@ function InteractiveDishModal({
             <button
               type="button"
               onClick={handleConfirm}
-              className="flex-1 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-black flex items-center justify-center gap-2 shadow-xl transition-all active:scale-[0.98]"
+              className="flex-1 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-black flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] transition-all"
               style={{ background: accentColor }}
             >
               {added ? (
@@ -206,797 +207,434 @@ function InteractiveDishModal({
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CART & ORDER DRAWER
+   IN-PHONE NOTIFICATIONS OVERLAY
 ═══════════════════════════════════════════════════════════ */
-function CartModal({
+function InPhoneNotifications({
+  accentColor,
+  onClose
+}: {
+  accentColor: string;
+  onClose: () => void;
+}) {
+  const NOTICES = [
+    { title: 'Столик №12 подтверждён', time: '5 мин назад', text: 'Ждём вас сегодня к 19:30. Шеф подготовил комплимент.' },
+    { title: 'Скидка 15% на первый заказ', time: '1 час назад', text: 'При заказе через QR-меню начисляется 350 бонусных баллов.' },
+    { title: 'Шеф рекомендует', time: 'Сегодня', text: 'Попробуйте сезонные новинки от шеф-повара со скидкой 10%.' }
+  ];
+
+  return (
+    <div className="absolute inset-0 z-40 bg-black/85 backdrop-blur-md p-4 flex flex-col animate-fadeIn text-white">
+      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="flex items-center gap-2">
+          <Bell className="w-4 h-4" style={{ color: accentColor }} />
+          <span className="text-xs font-black">Уведомления заведения</span>
+        </div>
+        <button onClick={onClose} className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20">
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-3 space-y-2.5">
+        {NOTICES.map((n, i) => (
+          <div key={i} className="p-3 rounded-2xl bg-white/5 border border-white/8 space-y-1">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] font-black text-white">{n.title}</p>
+              <span className="text-[9px] text-slate-400">{n.time}</span>
+            </div>
+            <p className="text-[10px] text-slate-300 leading-relaxed">{n.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={onClose}
+        className="w-full py-2.5 rounded-xl font-black text-xs uppercase text-black"
+        style={{ background: accentColor }}
+      >
+        Понятно
+      </button>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   IN-PHONE CART DRAWER
+═══════════════════════════════════════════════════════════ */
+function InPhoneCartDrawer({
   items,
   accentColor,
   onClose,
-  onRemove,
+  onUpdateQty,
   onClear
 }: {
   items: CartItem[];
   accentColor: string;
   onClose: () => void;
-  onRemove: (id: string) => void;
+  onUpdateQty: (id: string, delta: number) => void;
   onClear: () => void;
 }) {
-  const [ordered, setOrdered] = useState(false);
+  const [success, setSuccess] = useState(false);
   const total = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
 
   return (
-    <div
-      className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn"
-      onClick={e => e.target === e.currentTarget && onClose()}
-    >
-      <div
-        className="relative w-full max-w-md rounded-3xl p-6 border-2 shadow-2xl bg-[#0f131d] text-white"
-        style={{ borderColor: accentColor + '60' }}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white"
-        >
-          <X className="w-4 h-4" />
+    <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-md p-4 flex flex-col animate-fadeIn text-white">
+      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="flex items-center gap-2">
+          <ShoppingCart className="w-4 h-4" style={{ color: accentColor }} />
+          <span className="text-xs font-black">Ваш заказ ({items.length})</span>
+        </div>
+        <button onClick={onClose} className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20">
+          <X className="w-3.5 h-3.5" />
         </button>
+      </div>
 
-        {ordered ? (
-          <div className="text-center py-8 space-y-4">
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto border-2"
-              style={{ borderColor: accentColor, background: accentColor + '20' }}
-            >
-              <Check className="w-8 h-8" style={{ color: accentColor }} />
-            </div>
-            <h3 className="text-xl font-black">Заказ отправлен на кухню!</h3>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
-              Чек передан на терминал кассы (iiko / r_keeper). Время готовности: ~18–25 минут.
-            </p>
-            <button
-              onClick={() => {
-                onClear();
-                onClose();
-              }}
-              className="px-6 py-3 rounded-2xl font-black text-xs uppercase text-black"
-              style={{ background: accentColor }}
-            >
-              Отлично
-            </button>
+      {success ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center p-4 space-y-3">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center border-2"
+            style={{ borderColor: accentColor, background: accentColor + '20' }}>
+            <Check className="w-7 h-7" style={{ color: accentColor }} />
           </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pr-8">
-              <h3 className="text-lg font-black flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5" style={{ color: accentColor }} />
-                <span>Корзина заказа</span>
-              </h3>
-              <span className="text-xs text-slate-400">{items.length} поз.</span>
-            </div>
-
-            {items.length === 0 ? (
-              <div className="text-center py-10 text-slate-400 space-y-2">
-                <p className="text-4xl">🛒</p>
-                <p className="text-xs">Корзина пуста. Добавьте блюда из меню!</p>
-              </div>
-            ) : (
-              <>
-                <div className="max-h-60 overflow-y-auto space-y-2 pr-1 scrollbar-none">
-                  {items.map(it => (
-                    <div
-                      key={it.id}
-                      className="flex items-center justify-between p-3 rounded-2xl bg-white/4 border border-white/8"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-2xl">{it.emoji || '🍽'}</span>
-                        <div>
-                          <p className="text-xs font-bold line-clamp-1">{it.name}</p>
-                          <p className="text-[10px] text-slate-400">
-                            {it.quantity} x {it.price} ₽
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-white">
-                          {it.price * it.quantity} ₽
-                        </span>
-                        <button
-                          onClick={() => onRemove(it.id)}
-                          className="text-slate-500 hover:text-red-400 p-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+          <h4 className="text-sm font-black">Заказ №PB-312 принят!</h4>
+          <p className="text-[10px] text-slate-300 max-w-xs leading-relaxed">
+            Чек отправлен на кухню (iiko). Официант принесёт заказ к столику / в номер через ~18 мин.
+          </p>
+          <button
+            onClick={() => {
+              onClear();
+              onClose();
+            }}
+            className="mt-2 px-5 py-2 rounded-xl font-black text-xs uppercase text-black"
+            style={{ background: accentColor }}
+          >
+            Закрыть
+          </button>
+        </div>
+      ) : items.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-slate-400 space-y-2">
+          <ShoppingCart className="w-10 h-10 opacity-30" />
+          <p className="text-xs font-medium">Корзина пуста</p>
+          <p className="text-[10px] text-slate-500">Добавьте блюда из меню</p>
+        </div>
+      ) : (
+        <>
+          <div className="flex-1 overflow-y-auto py-3 space-y-2 scrollbar-none pr-1">
+            {items.map(it => (
+              <div key={it.id} className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-white/5 border border-white/8">
+                <img src={it.image} alt={it.name} className="w-11 h-11 rounded-xl object-cover" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] font-bold text-white truncate">{it.name}</p>
+                  <p className="text-[10px] font-black" style={{ color: accentColor }}>
+                    {it.price * it.quantity} ₽
+                  </p>
                 </div>
-
-                <div className="pt-3 border-t border-white/10 space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-400">Итого:</span>
-                    <span className="text-lg font-black" style={{ color: accentColor }}>
-                      {total} ₽
-                    </span>
-                  </div>
-
+                <div className="flex items-center gap-1.5 bg-white/10 rounded-xl p-1">
                   <button
-                    onClick={() => setOrdered(true)}
-                    className="w-full py-4 rounded-2xl font-black text-xs uppercase tracking-wider text-black flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] transition-all"
-                    style={{ background: accentColor }}
+                    onClick={() => onUpdateQty(it.id, -1)}
+                    className="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-[10px] font-black"
                   >
-                    <span>Оформить демо-заказ</span>
-                    <ArrowRight className="w-4 h-4" />
+                    -
+                  </button>
+                  <span className="text-[10px] font-black px-1">{it.quantity}</span>
+                  <button
+                    onClick={() => onUpdateQty(it.id, 1)}
+                    className="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-[10px] font-black"
+                  >
+                    +
                   </button>
                 </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   1. PORTO BAR PHONE
-═══════════════════════════════════════════════════════════ */
-function PortoBarPhone({
-  onSelectDish,
-  onAddToCart
-}: {
-  onSelectDish: (d: DemoDish) => void;
-  onAddToCart: (d: DemoDish) => void;
-}) {
-  const [dishes, setDishes] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState('Устрицы');
-  const TABS = ['Устрицы', 'Пицца', 'Паста', 'Напитки'];
-  const FALLBACK = [
-    { id: 'pb-1', name: 'Устрица Фин де Клер', price: 680, emoji: '🦪', desc: 'Свежая устрица №2 с лимоном и луковым шалот-соусом' },
-    { id: 'pb-2', name: 'Тартар из тунца', price: 890, emoji: '🐟', desc: 'Спелое авокадо, манго-понзу, хрустящий чипс' },
-    { id: 'pb-3', name: 'Фуа-гра с бриошью', price: 1890, emoji: '🍞', desc: 'Карамелизированный инжир, трюфельный демигляс' },
-    { id: 'pb-4', name: 'Паста Карбонара', price: 1190, emoji: '🍝', desc: 'Гуанчиале, желтки фермерских яиц, пекорино романо' },
-    { id: 'pb-5', name: 'Шампанское Моэт', price: 1600, emoji: '🥂', desc: 'Игристое брют, классический французский пейринг' },
-    { id: 'pb-6', name: 'Тартар из говядины', price: 990, emoji: '🥩', desc: 'Мраморная вырезка Prime, каперсы, крутоны' },
-  ];
-
-  useEffect(() => {
-    fetch('/api/menu')
-      .then(r => r.json())
-      .then(data => {
-        const list = Array.isArray(data) ? data : data.dishes || data.items || [];
-        if (list.length > 0) setDishes(list.slice(0, 8));
-      })
-      .catch(() => {});
-  }, []);
-
-  const display = dishes.length > 0 ? dishes : FALLBACK;
-
-  return (
-    <div className="w-full h-full bg-[#0d0f14] text-white overflow-y-auto scrollbar-none flex flex-col">
-      <div className="sticky top-0 z-10 bg-[#0d0f14]/95 backdrop-blur px-4 pt-8 pb-3 border-b border-white/5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center">
-              <span className="text-[10px] font-black text-black">PB</span>
-            </div>
-            <div>
-              <p className="text-[11px] font-black">Porto Bar</p>
-              <p className="text-[9px] text-slate-400">Room 214 · Отель</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 bg-amber-500/15 px-2.5 py-1 rounded-full border border-amber-500/30">
-            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span className="text-[10px] font-bold text-amber-300">4.9</span>
-          </div>
-        </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
-          <div className="w-full bg-white/5 border border-white/8 text-slate-500 text-[10px] pl-9 pr-4 py-2.5 rounded-2xl">
-            Поиск устриц, тартаров, вин...
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="relative mx-3 mt-3 rounded-2xl overflow-hidden h-24 flex items-end p-3"
-        style={{ background: 'linear-gradient(135deg,#1a1200,#2d1f00)' }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400&q=70"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-35"
-        />
-        <div className="relative z-10">
-          <p className="text-[8px] font-bold text-amber-400 uppercase tracking-wider">🦪 Шеф рекомендует</p>
-          <p className="text-[13px] font-black text-white leading-tight">Морские деликатесы<br />и премиальный сервис</p>
-        </div>
-      </div>
-
-      <div className="px-3 mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {TABS.map(t => (
-          <button
-            key={t}
-            onClick={() => setActiveTab(t)}
-            className={`px-3 py-1.5 rounded-xl text-[10px] font-bold whitespace-nowrap border transition-all ${
-              activeTab === t
-                ? 'bg-amber-500 text-black border-amber-400'
-                : 'bg-white/5 text-slate-300 border-white/8'
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      <p className="px-3 mt-3 text-[11px] font-black uppercase tracking-wider">🏆 Шедевры кухни</p>
-
-      <div className="px-3 mt-2 grid grid-cols-2 gap-2 pb-6">
-        {display.map((d: any, i) => (
-          <div
-            key={d.id || i}
-            onClick={() => onSelectDish(d)}
-            className="bg-[#161920] rounded-2xl overflow-hidden border border-white/6 hover:border-amber-400/40 transition-all cursor-pointer group"
-          >
-            <div className="h-[72px] bg-white/5 flex items-center justify-center text-2xl relative overflow-hidden">
-              {d.image ? (
-                <img
-                  src={d.image}
-                  alt={getDishName(d.name)}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                />
-              ) : (
-                <span>{d.emoji || '🍽'}</span>
-              )}
-            </div>
-            <div className="p-2">
-              <p className="text-[10px] font-bold line-clamp-1 group-hover:text-amber-300 transition-colors">
-                {getDishName(d.name)}
-              </p>
-              <div className="flex items-center justify-between mt-1.5">
-                <span className="text-[11px] font-black text-amber-400">{d.price} ₽</span>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(d);
-                  }}
-                  className="w-6 h-6 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center shadow-md active:scale-90 transition-all"
-                >
-                  <Plus className="w-3.5 h-3.5 text-black stroke-[3]" />
-                </button>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-/* ═══════════════════════════════════════════════════════════
-   2. BRUNCH BISTRO PHONE
-═══════════════════════════════════════════════════════════ */
-function BrunchBistroPhone({
-  onSelectDish,
-  onAddToCart
-}: {
-  onSelectDish: (d: DemoDish) => void;
-  onAddToCart: (d: DemoDish) => void;
-}) {
-  const [activeTab, setActiveTab] = useState('Панкейки');
-  const TABS = ['Панкейки', 'Завтраки', 'Кофе', 'Боулы'];
-  const MENU: Record<string, any[]> = {
-    Панкейки: [
-      { id: 'bb-1', name: 'Суфле-Панкейки', price: 780, desc: '3 японских пухлых панкейка с кленовым сиропом и взбитыми сливками', emoji: '🥞', badge: 'ХИТ' },
-      { id: 'bb-2', name: 'Панкейки Матча', price: 820, desc: 'Зеленый чай матча, белый шоколад и малина', emoji: '🍵', badge: 'NEW' },
-      { id: 'bb-3', name: 'Блины Рикотта', price: 690, desc: 'С лесными ягодами и цветочным медом', emoji: '🫐' },
-      { id: 'bb-4', name: 'Американские', price: 560, desc: 'С кленовым сиропом и карамелизированным бананом', emoji: '🧇' },
-    ],
-    Завтраки: [
-      { id: 'bb-5', name: 'Яйца Бенедикт', price: 690, desc: 'Слабосоленый лосось, бриошь, голландский соус', emoji: '🍳' },
-      { id: 'bb-6', name: 'Авокадо Тост', price: 520, desc: 'Тартин на закваске, крем из рикотты, вяленые томаты', emoji: '🥑' },
-      { id: 'bb-7', name: 'Боул Асаи', price: 650, desc: 'Органический асаи, кокосовые чипсы, свежая черника', emoji: '🫐' },
-      { id: 'bb-8', name: 'Гранола с йогуртом', price: 420, desc: 'Запеченные овсяные хлопья, греческий йогурт, семена чиа', emoji: '🥣' },
-    ],
-    Кофе: [
-      { id: 'bb-9', name: 'Флэт Уайт', price: 290, desc: 'Двойной шот specialty эспрессо и шелковистая микропенка', emoji: '☕', badge: 'ТОП' },
-      { id: 'bb-10', name: 'Матча Латте', price: 350, desc: 'Церемониальный матча из Киото на овсяном молоке', emoji: '🍵' },
-      { id: 'bb-11', name: 'Колд Брю', price: 380, desc: 'Холодное капельное заваривание 18 часов', emoji: '🧊' },
-      { id: 'bb-12', name: 'Капучино', price: 280, desc: 'Эфиопия Иргачефф натуральной обработки', emoji: '☕' },
-    ],
-    Боулы: [
-      { id: 'bb-13', name: 'Боул Будды', price: 720, desc: 'Киноа, хрустящий нут, авокадо, соус тахини', emoji: '🥗' },
-      { id: 'bb-14', name: 'Poke Salmon', price: 890, desc: 'Свежий лосось, бобы эдамаме, чука, рис японика', emoji: '🍣' },
-      { id: 'bb-15', name: 'Боул Манго', price: 650, desc: 'Манговое пюре, спирулина, семена тыквы', emoji: '🥭' },
-      { id: 'bb-16', name: 'Греческий боул', price: 680, desc: 'Сыр фета, маслины каламата, огурцы, оливковое масло', emoji: '🫒' },
-    ],
-  };
-  const items = MENU[activeTab] || MENU['Панкейки'];
-
-  return (
-    <div className="w-full h-full overflow-y-auto scrollbar-none" style={{ background: '#FFF8F0', color: '#2D1810' }}>
-      <div className="sticky top-0 z-10 px-4 pt-8 pb-3 border-b" style={{ background: '#FFF8F0', borderColor: '#F0E0D0' }}>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#C05830' }}>
-              <span className="text-[10px] font-black text-white">BB</span>
-            </div>
-            <div>
-              <p className="text-[11px] font-black" style={{ color: '#2D1810' }}>Brunch's Bistro</p>
-              <p className="text-[9px]" style={{ color: '#9B7B6A' }}>Eco Loyalty Club 🌿</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ background: '#C0583018', border: '1px solid #C0583040' }}>
-            <Star className="w-3 h-3 fill-orange-600 text-orange-600" />
-            <span className="text-[10px] font-bold" style={{ color: '#C05830' }}>4.8</span>
-          </div>
-        </div>
-        <div className="w-full text-[10px] pl-9 pr-4 py-2.5 rounded-2xl relative" style={{ background: '#F5E8DC', border: '1px solid #E8D0BC', color: '#9B7B6A' }}>
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#9B7B6A' }} />
-          Поиск панкейков, кофе...
-        </div>
-      </div>
-
-      <div className="relative mx-3 mt-3 rounded-2xl overflow-hidden h-24 flex items-end p-3" style={{ background: 'linear-gradient(135deg,#C05830,#A04020)' }}>
-        <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?w=400&q=70" alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
-        <div className="relative z-10">
-          <p className="text-[8px] font-bold text-orange-200 uppercase tracking-wider">🥞 Signature</p>
-          <p className="text-[13px] font-black text-white leading-tight">Суфле-панкейки от шеф-повара</p>
-        </div>
-        <div className="absolute top-2.5 right-2.5 z-10 px-2 py-0.5 rounded-full text-[8px] font-black text-white" style={{ background: '#2D1810' }}>🌿 ECO</div>
-      </div>
-
-      <div className="px-3 mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {TABS.map(t => (
-          <button
-            key={t}
-            onClick={() => setActiveTab(t)}
-            className="px-3 py-1.5 rounded-xl text-[10px] font-bold whitespace-nowrap border transition-all"
-            style={activeTab === t ? { background: '#C05830', color: 'white', borderColor: '#A04020' } : { background: '#F5E8DC', color: '#9B7B6A', borderColor: '#E8D0BC' }}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      <p className="px-3 mt-3 text-[11px] font-black uppercase tracking-wider" style={{ color: '#2D1810' }}>✨ {activeTab}</p>
-
-      <div className="px-3 mt-2 grid grid-cols-2 gap-2 pb-6">
-        {items.map((d, i) => (
-          <div
-            key={d.id || i}
-            onClick={() => onSelectDish(d)}
-            className="rounded-2xl overflow-hidden border cursor-pointer hover:shadow-md transition-all group"
-            style={{ background: 'white', borderColor: '#F0E0D0' }}
-          >
-            <div className="h-[72px] flex items-center justify-center text-2xl relative group-hover:scale-105 transition-transform" style={{ background: '#FDF0E6' }}>
-              {d.emoji}
-              {d.badge && (
-                <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[8px] font-black text-white" style={{ background: '#C05830' }}>
-                  {d.badge}
-                </span>
-              )}
-            </div>
-            <div className="p-2">
-              <p className="text-[10px] font-bold line-clamp-1" style={{ color: '#2D1810' }}>{d.name}</p>
-              <div className="flex items-center justify-between mt-1.5">
-                <span className="text-[11px] font-black" style={{ color: '#C05830' }}>{d.price} ₽</span>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(d);
-                  }}
-                  className="w-6 h-6 rounded-full flex items-center justify-center active:scale-90 transition-all shadow-sm"
-                  style={{ background: '#C05830' }}
-                >
-                  <Plus className="w-3.5 h-3.5 text-white stroke-[3]" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   3. BURGER DARK PHONE
-═══════════════════════════════════════════════════════════ */
-function BurgerDarkPhone({
-  onSelectDish,
-  onAddToCart
-}: {
-  onSelectDish: (d: DemoDish) => void;
-  onAddToCart: (d: DemoDish) => void;
-}) {
-  const [activeTab, setActiveTab] = useState('Бургер');
-  const CATS = [
-    { label: 'Бургер', emoji: '🍔' },
-    { label: 'Пицца', emoji: '🍕' },
-    { label: 'Курица', emoji: '🍗' },
-    { label: 'Картофель', emoji: '🍟' },
-    { label: 'Напитки', emoji: '🥤' },
-  ];
-  const ITEMS = [
-    { id: 'bg-1', name: 'Cheese Burger', price: 329, emoji: '🍔', desc: 'Котлета из сочной говядины, двойной чеддер, маринованные огурчики', badge: '' },
-    { id: 'bg-2', name: 'Spicy Chicken', price: 389, emoji: '🍗', desc: 'Хрустящее острое филе, айсберг, авторский халапеньо соус', badge: 'SPICY' },
-    { id: 'bg-3', name: 'Double Beef', price: 449, emoji: '🍔', desc: 'Две котлеты Black Angus, бекон, карамелизированный лук', badge: 'NEW' },
-    { id: 'bg-4', name: 'BBQ Burger', price: 419, emoji: '🍔', desc: 'Дымный соус барбекю, луковые кольца фри, сыр гауда', badge: '' },
-    { id: 'bg-5', name: 'Crispy Fries', price: 149, emoji: '🍟', desc: 'Золотистый хрустящий картофель с морской солью и паприкой', badge: '' },
-    { id: 'bg-6', name: 'Cola 0.5L', price: 119, emoji: '🥤', desc: 'Ледяной газированный напиток', badge: '' },
-  ];
-
-  return (
-    <div className="w-full h-full overflow-y-auto scrollbar-none" style={{ background: '#141008' }}>
-      <div className="px-4 pt-8 pb-3">
-        <div className="flex items-center justify-between mb-1">
-          <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-[10px]">☰</div>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-[11px] font-black text-white">A</div>
-        </div>
-        <p className="text-[10px] text-slate-400 mt-2">Hi, Alex 👋</p>
-        <p className="text-[18px] font-black text-white leading-tight">Good Food</p>
-        <p className="text-[18px] font-black leading-tight" style={{ color: '#E85C00' }}>Good Mood!</p>
-      </div>
-
-      <div className="px-4 mb-3">
-        <div className="relative flex items-center">
-          <Search className="absolute left-3 w-3.5 h-3.5 text-slate-500" />
-          <div className="w-full bg-white/6 border border-white/8 text-[10px] text-slate-500 pl-9 pr-10 py-2.5 rounded-2xl">Search your favorite food</div>
-          <div className="absolute right-3 w-5 h-5 rounded-md bg-white/10 flex items-center justify-center">
-            <SlidersHorizontal className="w-3 h-3 text-slate-400" />
-          </div>
-        </div>
-      </div>
-
-      <div className="px-4 flex gap-2 overflow-x-auto scrollbar-none pb-1">
-        {CATS.map(c => (
-          <button
-            key={c.label}
-            onClick={() => setActiveTab(c.label)}
-            className="flex flex-col items-center gap-1 px-3 py-2 rounded-2xl shrink-0 border transition-all text-[9px] font-bold"
-            style={activeTab === c.label ? { background: '#E85C00', color: 'white', borderColor: '#E85C00' } : { background: '#1E1710', color: '#9B8B7A', borderColor: '#2A2018' }}
-          >
-            <span className="text-base leading-none">{c.emoji}</span>
-            <span>{c.label}</span>
-          </button>
-        ))}
-      </div>
-
-      <div className="mx-4 mt-3 rounded-2xl p-4 relative overflow-hidden flex items-center justify-between" style={{ background: 'linear-gradient(135deg,#1E1008,#2E1A08)' }}>
-        <div className="z-10">
-          <p className="text-[9px] text-orange-400 font-bold">🔥 Limited Time Offer</p>
-          <p className="text-[13px] font-black text-white leading-tight">Spicy Burger</p>
-          <p className="text-[13px] font-black leading-tight" style={{ color: '#E85C00' }}>Combo</p>
-          <button className="mt-2 px-3 py-1.5 rounded-xl text-[10px] font-black text-white" style={{ background: '#E85C00' }}>Order Now</button>
-        </div>
-        <div className="text-right z-10">
-          <p className="text-[22px] font-black text-white leading-none">20%</p>
-          <p className="text-[12px] font-bold text-slate-300">OFF</p>
-          <p className="text-2xl mt-1">🍟🥤</p>
-        </div>
-      </div>
-
-      <div className="px-4 mt-3 flex items-center justify-between">
-        <p className="text-[12px] font-black text-white">Popular Now</p>
-        <span className="text-[10px] font-bold" style={{ color: '#E85C00' }}>View All</span>
-      </div>
-
-      <div className="px-4 mt-2 grid grid-cols-3 gap-2 pb-6">
-        {ITEMS.map((item, i) => (
-          <div
-            key={item.id || i}
-            onClick={() => onSelectDish(item)}
-            className="rounded-2xl overflow-hidden border cursor-pointer hover:border-orange-500/50 transition-all"
-            style={{ background: '#1E1710', borderColor: '#2A2018' }}
-          >
-            <div className="h-[60px] flex items-center justify-center text-xl relative" style={{ background: 'linear-gradient(135deg,#2E2010,#1E1008)' }}>
-              {item.emoji}
-              {item.badge && (
-                <span className="absolute top-1 left-1 px-1 py-0.5 rounded text-[7px] font-black text-white" style={{ background: '#E85C00' }}>{item.badge}</span>
-              )}
-            </div>
-            <div className="p-1.5">
-              <p className="text-[9px] font-bold text-white line-clamp-1">{item.name}</p>
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-[10px] font-black text-white">{item.price} ₽</span>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(item);
-                  }}
-                  className="w-5 h-5 rounded-full flex items-center justify-center active:scale-90 transition-all"
-                  style={{ background: '#E85C00' }}
-                >
-                  <Plus className="w-3 h-3 text-white stroke-[3]" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════
-   4. CHAIN FAST FOOD PHONE
-═══════════════════════════════════════════════════════════ */
-function ChainFoodPhone({
-  onSelectDish,
-  onAddToCart
-}: {
-  onSelectDish: (d: DemoDish) => void;
-  onAddToCart: (d: DemoDish) => void;
-}) {
-  const [activeTab, setActiveTab] = useState('Все');
-  const CATS = [
-    { label: 'Все', emoji: '🍗' },
-    { label: 'Бургеры', emoji: '🍔' },
-    { label: 'Сеты', emoji: '🪣' },
-    { label: 'Снеки', emoji: '🍟' },
-    { label: 'Напитки', emoji: '🥤' },
-    { label: 'Десерты', emoji: '🍦' },
-  ];
-  const COMBOS = [
-    { id: 'cf-1', name: '8 Pcs Chicken Bucket', desc: '8 сочных кусочков курицы в панировке + 2 картофеля фри + 2 соуса', price: 1290, rating: '4.8', emoji: '🪣', badge: 'BESTSELLER', badgeColor: '#E4002B' },
-    { id: 'cf-2', name: 'Zinger Burger Combo', desc: 'Бургер с хрустящим куриным филе + картофель фри + напиток 0.5L', price: 590, rating: '4.7', emoji: '🍔', badge: 'POPULAR', badgeColor: '#FF6B00' },
-    { id: 'cf-3', name: '5 Pcs Hot & Crispy', desc: '5 острых крылышек в фирменной панировке + чесночный дип', price: 849, rating: '4.6', emoji: '🍗', badge: 'SAVE 15%', badgeColor: '#16A34A' },
-  ];
-
-  return (
-    <div className="w-full h-full overflow-y-auto scrollbar-none" style={{ background: '#FDF7F0' }}>
-      <div className="sticky top-0 z-10 px-4 pt-8 pb-3 border-b bg-white/90 backdrop-blur" style={{ borderColor: '#F0E0D0' }}>
-        <div className="flex items-center justify-between mb-1">
-          <div className="w-7 h-7 rounded-xl bg-gray-100 flex items-center justify-center text-[10px]">☰</div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Bell className="w-5 h-5 text-gray-700" />
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-black text-white" style={{ background: '#E4002B' }}>3</span>
-            </div>
-            <div className="relative">
-              <ShoppingBag className="w-5 h-5 text-gray-700" />
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-black text-white" style={{ background: '#E4002B' }}>2</span>
-            </div>
-          </div>
-        </div>
-        <p className="text-[9px] text-gray-400">Hello, Chicken Lover! 👋</p>
-        <p className="text-[16px] font-black leading-none" style={{ color: '#E4002B' }}>CrispyChain</p>
-        <p className="text-[9px] text-gray-400">It's finger lickin' good.</p>
-      </div>
-
-      <div className="px-4 mt-3">
-        <div className="relative flex items-center">
-          <Search className="absolute left-3 w-3.5 h-3.5 text-gray-400" />
-          <div className="w-full bg-white border border-gray-200 text-[10px] text-gray-400 pl-9 pr-10 py-2.5 rounded-2xl shadow-sm">Search for your favorite chicken...</div>
-          <SlidersHorizontal className="absolute right-3 w-3.5 h-3.5 text-gray-400" />
-        </div>
-      </div>
-
-      <div className="mx-4 mt-3 rounded-2xl overflow-hidden h-28 relative flex items-end p-3" style={{ background: 'linear-gradient(135deg,#8B0000,#E4002B)' }}>
-        <div className="relative z-10">
-          <p className="text-[8px] text-red-200 font-bold uppercase tracking-wider">LIMITED TIME</p>
-          <p className="text-[15px] font-black text-white leading-tight">CRISPY.<br />JUICY.<br />IRRESISTIBLE.</p>
-        </div>
-        <button className="absolute bottom-3 right-3 z-10 flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white text-[10px] font-black" style={{ color: '#E4002B' }}>
-          Order Now <ArrowRight className="w-3 h-3" />
-        </button>
-      </div>
-
-      <div className="px-4 mt-3 flex gap-3 overflow-x-auto scrollbar-none pb-1">
-        {CATS.map(c => (
-          <button key={c.label} onClick={() => setActiveTab(c.label)} className="flex flex-col items-center gap-1 shrink-0">
-            <div
-              className="w-10 h-10 rounded-full border-2 flex items-center justify-center text-base shadow-sm"
-              style={activeTab === c.label ? { borderColor: '#E4002B', background: '#E4002B18' } : { borderColor: '#E8D8C8', background: 'white' }}
-            >
-              {c.emoji}
-            </div>
-            <span className="text-[8px] font-bold" style={{ color: activeTab === c.label ? '#E4002B' : '#888' }}>{c.label}</span>
-          </button>
-        ))}
-      </div>
-
-      <div className="px-4 mt-3 flex items-center justify-between">
-        <p className="text-[12px] font-black text-gray-900">Popular Combos</p>
-        <span className="text-[10px] font-bold flex items-center gap-1" style={{ color: '#E4002B' }}>View All <ArrowRight className="w-3 h-3" /></span>
-      </div>
-
-      <div className="px-4 mt-2 grid grid-cols-3 gap-2 pb-6">
-        {COMBOS.map((c, i) => (
-          <div
-            key={c.id || i}
-            onClick={() => onSelectDish(c)}
-            className="rounded-2xl overflow-hidden border bg-white shadow-sm cursor-pointer hover:shadow-md transition-all"
-            style={{ borderColor: '#F0E0D0' }}
-          >
-            <div className="h-[64px] relative flex items-center justify-center text-xl" style={{ background: 'linear-gradient(135deg,#FDF0E0,#F8E0C8)' }}>
-              {c.emoji}
-              <span className="absolute top-1 left-1 px-1 py-0.5 rounded text-[7px] font-black text-white leading-none" style={{ background: c.badgeColor }}>
-                {c.badge}
+          <div className="pt-3 border-t border-white/10 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-400">Итого к оплате:</span>
+              <span className="text-base font-black" style={{ color: accentColor }}>
+                {total} ₽
               </span>
             </div>
-            <div className="p-1.5">
-              <p className="text-[9px] font-bold text-gray-900 line-clamp-2 leading-tight">{c.name}</p>
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-[11px] font-black text-gray-900">{c.price} ₽</span>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(c);
-                  }}
-                  className="w-5 h-5 rounded-full flex items-center justify-center active:scale-90 transition-all shadow-sm"
-                  style={{ background: '#E4002B' }}
-                >
-                  <Plus className="w-3 h-3 text-white stroke-[3]" />
-                </button>
-              </div>
-            </div>
+            <button
+              onClick={() => setSuccess(true)}
+              className="w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-black flex items-center justify-center gap-1.5 shadow-lg active:scale-98 transition-all"
+              style={{ background: accentColor }}
+            >
+              <span>Оформить заказ</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════
-   5. COFFEE SHOP PHONE
+   GENERIC APP VIEW (Phone + Wide screen)
 ═══════════════════════════════════════════════════════════ */
-function CoffeeShopPhone({
+function RestaurantAppView({
+  restaurant,
+  dishes,
+  categories,
+  cartItems,
   onSelectDish,
-  onAddToCart
+  onAddToCart,
+  onUpdateCartQty,
+  onClearCart,
+  liveIframeUrl
 }: {
+  restaurant: any;
+  dishes: DemoDish[];
+  categories: { id: string; name: string; image: string }[];
+  cartItems: CartItem[];
   onSelectDish: (d: DemoDish) => void;
   onAddToCart: (d: DemoDish) => void;
+  onUpdateCartQty: (id: string, delta: number) => void;
+  onClearCart: () => void;
+  liveIframeUrl?: string;
 }) {
-  const DESSERTS = [
-    { id: 'cs-1', name: 'Фисташковый торт', subtitle: 'Pistachio Bliss', price: 420, desc: 'Шелковистый фисташковый мусс, бисквит с матча, дробленые орехи', emoji: '🍰', bg: '#E8F0E0' },
-    { id: 'cs-2', name: 'Шоколадный трюфель', subtitle: 'Chocolate Dream', price: 460, desc: 'Бельгийский горький шоколад 70%, пралине из фундука', emoji: '🍫', bg: '#F0E4D0' },
-    { id: 'cs-3', name: 'Ягодный чизкейк', subtitle: 'Berry Delight', price: 440, desc: 'Сливочный чизкейк Нью-Йорк с ягодным конфитюром из черники', emoji: '🫐', bg: '#F0E0EC' },
-  ];
+  const [activeCat, setActiveCat] = useState(categories[0]?.id || 'all');
+  const [showNotices, setShowNotices] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [liveMode, setLiveMode] = useState(false);
 
-  return (
-    <div className="w-full h-full overflow-y-auto scrollbar-none" style={{ background: '#F5F0E8' }}>
-      <div className="sticky top-0 z-10 px-4 pt-8 pb-3 flex items-center justify-between" style={{ background: '#F5F0E8' }}>
-        <div className="flex items-center gap-1">
-          <Coffee className="w-4 h-4" style={{ color: '#2D5A3D' }} />
-          <span className="text-[14px] font-black" style={{ color: '#1A3A2A' }}>Coffee<span style={{ color: '#C8A14B' }}>✦</span></span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Search className="w-4 h-4 text-slate-500" />
-          <ShoppingBag className="w-4 h-4 text-slate-500" />
-        </div>
-      </div>
+  const filteredDishes = activeCat === 'all'
+    ? dishes
+    : dishes.filter(d => d.category === activeCat);
 
-      <div className="px-4 pt-2 grid grid-cols-2 gap-3 items-center">
-        <div>
-          <p className="text-[9px] font-bold italic" style={{ color: '#C8A14B' }}>Life Happens, Coffee Helps</p>
-          <p className="text-[17px] font-black leading-tight mt-1 font-serif" style={{ color: '#1A2A1A' }}>
-            Sweet Moments Start <span style={{ color: '#C8A14B' }}>Here.</span>
-          </p>
-          <button className="mt-3 flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black text-white" style={{ background: '#2D5A3D' }}>
-            EXPLORE MORE <ArrowRight className="w-3 h-3" />
+  const cartTotalCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
+  const cartTotalPrice = cartItems.reduce((acc, it) => acc + it.price * it.quantity, 0);
+
+  if (liveMode && liveIframeUrl) {
+    return (
+      <div className="w-full h-full flex flex-col bg-black text-white relative">
+        <div className="bg-[#12151e] px-3 py-2 border-b border-white/10 flex items-center justify-between z-20">
+          <span className="text-[10px] font-bold text-amber-400">🌐 Живой сайт: {liveIframeUrl}</span>
+          <button
+            onClick={() => setLiveMode(false)}
+            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[9px] font-bold"
+          >
+            📱 Вернуться в PWA
           </button>
         </div>
-        <div className="relative h-28 rounded-2xl overflow-hidden bg-amber-950/20">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&q=70" alt="" className="w-full h-full object-cover" />
+        <iframe
+          src={liveIframeUrl}
+          className="w-full flex-1 border-0"
+          title="Live Restaurant Website"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="w-full h-full flex flex-col relative overflow-hidden select-none"
+      style={{ background: restaurant.bgTheme || '#0d0f14', color: restaurant.textTheme || '#ffffff' }}
+    >
+      {/* Notifications overlay inside phone */}
+      {showNotices && (
+        <InPhoneNotifications
+          accentColor={restaurant.accentColor}
+          onClose={() => setShowNotices(false)}
+        />
+      )}
+
+      {/* Cart drawer inside phone */}
+      {showCart && (
+        <InPhoneCartDrawer
+          items={cartItems}
+          accentColor={restaurant.accentColor}
+          onClose={() => setShowCart(false)}
+          onUpdateQty={onUpdateCartQty}
+          onClear={onClearCart}
+        />
+      )}
+
+      {/* Top Header */}
+      <div className="sticky top-0 z-20 px-4 pt-7 pb-2.5 border-b backdrop-blur-md"
+        style={{ background: (restaurant.bgTheme || '#0d0f14') + 'ee', borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">{restaurant.emblem}</span>
+            <div>
+              <p className="text-[12px] font-black leading-none">{restaurant.name}</p>
+              <p className="text-[9px] text-slate-400 mt-0.5">{restaurant.taglineShort || 'QR Меню & Доставка'}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Live website button for Chinanews */}
+            {liveIframeUrl && (
+              <button
+                onClick={() => setLiveMode(true)}
+                className="px-2 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] font-black flex items-center gap-1"
+                title="Открыть оригинальный сайт chinanews.moscow"
+              >
+                <Globe className="w-3 h-3" />
+                <span>Live сайт</span>
+              </button>
+            )}
+
+            {/* Notifications Bell */}
+            <button
+              onClick={() => setShowNotices(true)}
+              className="relative p-1.5 rounded-full bg-white/8 hover:bg-white/15 text-slate-300 transition-all"
+            >
+              <Bell className="w-3.5 h-3.5" />
+              <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-amber-400" />
+            </button>
+
+            {/* Cart Trigger */}
+            <button
+              onClick={() => setShowCart(true)}
+              className="relative p-1.5 rounded-full bg-white/8 hover:bg-white/15 text-slate-300 transition-all"
+            >
+              <ShoppingCart className="w-3.5 h-3.5" />
+              {cartTotalCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-black text-[8px] font-black flex items-center justify-center">
+                  {cartTotalCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+          <div className="w-full bg-white/6 border border-white/10 text-slate-400 text-[10px] pl-9 pr-4 py-2 rounded-2xl">
+            Поиск блюд, напитков, десертов...
+          </div>
         </div>
       </div>
 
-      <div className="px-4 mt-4">
-        <p className="text-[10px] font-black uppercase tracking-wider mb-3" style={{ color: '#1A3A2A' }}>Our Signature ✦</p>
-        <div className="space-y-2.5 pb-6">
-          {DESSERTS.map(d => (
+      {/* Scrollable Body */}
+      <div className="flex-1 overflow-y-auto scrollbar-none pb-16">
+        {/* Banner */}
+        <div className="mx-3 mt-3 rounded-2xl overflow-hidden relative h-28 flex items-end p-3 shadow-lg">
+          <img
+            src={restaurant.heroImage}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+          <div className="relative z-10">
+            <span
+              className="px-2 py-0.5 rounded-md text-[8px] font-black uppercase text-white shadow"
+              style={{ background: restaurant.accentColor }}
+            >
+              {restaurant.heroTag || 'Шеф рекомендует'}
+            </span>
+            <p className="text-[13px] font-black text-white leading-tight mt-1">
+              {restaurant.heroTitle || restaurant.name}
+            </p>
+          </div>
+        </div>
+
+        {/* Categories with real photos */}
+        <div className="px-3 mt-3">
+          <div className="flex gap-2.5 overflow-x-auto scrollbar-none pb-1">
+            {categories.map(cat => {
+              const active = activeCat === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCat(cat.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border transition-all shrink-0 ${
+                    active
+                      ? 'bg-white/15 border-amber-400/80 text-white shadow-md'
+                      : 'bg-white/4 border-white/8 text-slate-300 hover:border-white/20'
+                  }`}
+                >
+                  <img src={cat.image} alt={cat.name} className="w-5 h-5 rounded-full object-cover" />
+                  <span className="text-[10px] font-bold whitespace-nowrap">{cat.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Dish Grid */}
+        <div className="px-3 mt-3 grid grid-cols-2 gap-2.5">
+          {filteredDishes.map(d => (
             <div
               key={d.id}
               onClick={() => onSelectDish(d)}
-              className="flex items-center gap-3 p-3 rounded-2xl cursor-pointer hover:shadow-md transition-all group"
-              style={{ background: d.bg }}
+              className="rounded-2xl overflow-hidden border bg-white/5 border-white/8 hover:border-amber-400/40 transition-all cursor-pointer group flex flex-col"
             >
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-white/60 group-hover:scale-105 transition-transform">{d.emoji}</div>
-              <div className="flex-1">
-                <p className="text-[11px] font-black" style={{ color: '#1A3A2A' }}>{d.name}</p>
-                <p className="text-[9px] italic" style={{ color: '#C8A14B' }}>{d.subtitle}</p>
-                <p className="text-[11px] font-black mt-0.5" style={{ color: '#2D5A3D' }}>{d.price} ₽</p>
+              <div className="h-24 bg-black/40 relative overflow-hidden">
+                <img
+                  src={d.image}
+                  alt={getDishName(d.name)}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {d.badge && (
+                  <span
+                    className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md text-[7px] font-black text-white uppercase shadow"
+                    style={{ background: restaurant.accentColor }}
+                  >
+                    {d.badge}
+                  </span>
+                )}
               </div>
-              <button
-                type="button"
-                onClick={e => {
-                  e.stopPropagation();
-                  onAddToCart(d);
-                }}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-white active:scale-90 transition-all"
-                style={{ background: '#C8A14B' }}
-              >
-                <Plus className="w-4 h-4 stroke-[3]" />
-              </button>
+
+              <div className="p-2 flex-1 flex flex-col justify-between">
+                <div>
+                  <p className="text-[10px] font-bold text-white line-clamp-1 group-hover:text-amber-300 transition-colors">
+                    {getDishName(d.name)}
+                  </p>
+                  {d.desc && (
+                    <p className="text-[8px] text-slate-400 line-clamp-1 mt-0.5">{d.desc}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-[11px] font-black text-white" style={{ color: restaurant.accentColor }}>
+                    {d.price} ₽
+                  </span>
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.stopPropagation();
+                      onAddToCart(d);
+                    }}
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-black active:scale-90 transition-all shadow-md"
+                    style={{ background: restaurant.accentColor }}
+                  >
+                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
-  );
-}
 
-/* ═══════════════════════════════════════════════════════════
-   6. CAFÉ WARM PHONE
-═══════════════════════════════════════════════════════════ */
-function CafeWarmPhone({
-  onSelectDish,
-  onAddToCart
-}: {
-  onSelectDish: (d: DemoDish) => void;
-  onAddToCart: (d: DemoDish) => void;
-}) {
-  const MENU_ITEMS = [
-    { id: 'cw-1', name: 'Cappuccino', price: 290, emoji: '☕', desc: 'Плотная сливочная пенка, арабика средней обжарки' },
-    { id: 'cw-2', name: 'Chocolate Cake', price: 380, emoji: '🍰', desc: 'Влажный бисквит с шоколадным кремом и ягодами' },
-    { id: 'cw-3', name: 'Chicken Sandwich', price: 490, emoji: '🥪', desc: 'Хрустящая чиабатта, куриная грудка су-вид, соус песто' },
-    { id: 'cw-4', name: 'Iced Latte', price: 320, emoji: '🧊', desc: 'Освежающий эспрессо с молоком и колотым льдом' },
-  ];
-
-  return (
-    <div className="w-full h-full overflow-y-auto scrollbar-none" style={{ background: '#F8F2E8' }}>
-      <div className="sticky top-0 z-10 px-4 pt-8 pb-2 flex items-center justify-between border-b" style={{ background: '#F8F2E8', borderColor: '#E8D8C0' }}>
-        <div>
-          <p className="text-[8px] text-gray-400 uppercase tracking-widest">CAFÉ</p>
-          <p className="text-[10px] text-gray-400" style={{ color: '#8B6B4A' }}>COFFEE & MORE</p>
-        </div>
-        <button className="px-3 py-1.5 rounded-lg text-[9px] font-black text-white" style={{ background: '#5C3D2E' }}>ORDER ONLINE</button>
-      </div>
-
-      <div className="mx-3 mt-3 rounded-2xl overflow-hidden relative h-32">
-        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&q=70" alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2" style={{ background: 'rgba(92,61,46,0.6)' }}>
-          <p className="text-[8px] text-amber-200 italic">Welcome to Our Café</p>
-          <p className="text-[14px] font-black text-white leading-tight font-serif">Good Coffee,<br />Great Moments</p>
-        </div>
-      </div>
-
-      <div className="px-4 mt-3 text-center">
-        <p className="text-[8px] text-amber-700">☕</p>
-        <p className="text-[13px] font-black font-serif" style={{ color: '#3A2010' }}>Menu Highlights</p>
-      </div>
-
-      <div className="px-4 mt-2 grid grid-cols-2 gap-2.5 pb-6">
-        {MENU_ITEMS.map((item, i) => (
-          <div
-            key={item.id || i}
-            onClick={() => onSelectDish(item)}
-            className="rounded-2xl overflow-hidden border bg-white cursor-pointer hover:shadow-md transition-all group"
-            style={{ borderColor: '#E8D8C0' }}
+      {/* Floating Bottom Cart Bar inside phone */}
+      {cartTotalCount > 0 && (
+        <div className="absolute bottom-2 left-3 right-3 z-30 animate-fadeIn">
+          <button
+            onClick={() => setShowCart(true)}
+            className="w-full py-2.5 px-4 rounded-2xl text-black font-black text-xs flex items-center justify-between shadow-2xl active:scale-98 transition-all"
+            style={{ background: restaurant.accentColor }}
           >
-            <div className="h-16 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform" style={{ background: '#F5EAD8' }}>
-              {item.emoji}
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="w-4 h-4" />
+              <span>{cartTotalCount} блюда</span>
             </div>
-            <div className="p-2 text-center">
-              <p className="text-[10px] font-bold" style={{ color: '#3A2010' }}>{item.name}</p>
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-[11px] font-black" style={{ color: '#5C3D2E' }}>{item.price} ₽</span>
-                <button
-                  type="button"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(item);
-                  }}
-                  className="w-5 h-5 rounded-full flex items-center justify-center text-white active:scale-90 transition-all shadow-sm"
-                  style={{ background: '#5C3D2E' }}
-                >
-                  <Plus className="w-3 h-3 stroke-[3]" />
-                </button>
-              </div>
+            <div className="flex items-center gap-1">
+              <span>{cartTotalPrice} ₽</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </div>
-          </div>
-        ))}
-      </div>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════
-   IPHONE FRAME WRAPPER
+   IPHONE FRAME
 ═══════════════════════════════════════════════════════════ */
 function IPhoneFrame({
   children,
@@ -1007,8 +645,8 @@ function IPhoneFrame({
   accentGlow: string;
   isLarge?: boolean;
 }) {
-  const width = isLarge ? 320 : 270;
-  const height = isLarge ? 640 : 560;
+  const width = isLarge ? 340 : 280;
+  const height = isLarge ? 680 : 570;
 
   return (
     <div
@@ -1018,85 +656,209 @@ function IPhoneFrame({
         height,
         borderRadius: 48,
         background: 'linear-gradient(145deg,#1c2030,#0d1018)',
-        border: '3px solid #242b3d',
+        border: '3px solid #283144',
         boxShadow: `0 50px 100px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 60px ${accentGlow}`,
       }}
     >
+      {/* Side buttons */}
       <div className="absolute -left-[3px] top-16 w-[3px] h-6 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -left-[3px] top-24 w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -left-[3px] top-[152px] w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -right-[3px] top-20 w-[3px] h-16 rounded-r-full bg-[#1a1f2e]" />
-      <div className="absolute inset-0 rounded-[44px] pointer-events-none" style={{ background: 'linear-gradient(145deg,rgba(255,255,255,0.06) 0%,transparent 40%)' }} />
-      
-      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black">
+
+      {/* Screen */}
+      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col">
+        {/* Dynamic island & Status bar */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-4.5 rounded-full bg-black flex items-center justify-between px-3 pointer-events-none shadow-md">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#181d29]" />
         </div>
-        <div className="w-full h-full overflow-hidden">{children}</div>
+        <div className="w-full h-full overflow-hidden relative">{children}</div>
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RESTAURANTS CONFIG
+   ALL 6 RESTAURANTS DATA WITH REAL FOOD PHOTOS
 ═══════════════════════════════════════════════════════════ */
-const RESTAURANTS = [
+const RESTAURANTS_DATA = [
   {
-    id: 'porto', name: 'Porto Bar', subtitle: 'Luxury Fine Dining', emblem: '🦪',
-    accentColor: '#F59E0B', accentGlow: 'rgba(245,158,11,0.25)',
-    designer: 'Marco Rossi 🇮🇹', location: 'Милан, Италия',
-    rating: '4.99', cuisine: 'Устрицы · Шампанское · Room Service',
-    tagline: 'Тёмная роскошь в стиле Michelin. Реальные блюда загружаются с вашего сервера. Золотые акценты, анимированные карточки.',
-    avgCheck: '2 850 ₽', repeatRate: '+42%', delivery: '25–35 мин',
-    features: ['Загрузка блюд из вашей базы данных', 'Система лояльности с баллами', 'Живой трекер заказа', 'Бесконтактная оплата СБП'],
+    id: 'porto',
+    name: 'Porto Bar',
+    subtitle: 'Luxury Fine Dining & Seafood',
+    emblem: '🦪',
+    accentColor: '#F59E0B',
+    accentGlow: 'rgba(245,158,11,0.25)',
+    designer: 'Marco Rossi 🇮🇹',
+    location: 'Милан, Италия',
+    rating: '4.99',
+    cuisine: 'Устрицы · Шампанское · Room Service',
+    tagline: 'Тёмная роскошь Michelin-уровня. Живая устричная витрина, тартары из тунца и винный пейринг.',
+    taglineShort: 'Room Service & Oysters',
+    heroImage: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800&q=80',
+    heroTitle: 'Морские деликатесы и премиальный сервис',
+    heroTag: 'Шеф рекомендует',
+    categories: [
+      { id: 'oysters', name: 'Устрицы', image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=200&q=80' },
+      { id: 'tartar', name: 'Тартары', image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=200&q=80' },
+      { id: 'pasta', name: 'Паста', image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=200&q=80' },
+      { id: 'wine', name: 'Вина', image: 'https://images.unsplash.com/photo-1569919659476-f0852f6834b7?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'pb-1', category: 'oysters', name: 'Устрица Фин де Клер №2', price: 680, desc: 'Подаётся со свежим лимоном, соусом миньонет и хрустящим тостом', image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=500&q=80', badge: 'ШЕФ' },
+      { id: 'pb-2', category: 'tartar', name: 'Тартар из тунца Bluefin', price: 890, desc: 'Спелое авокадо, цитрусовый понзу, чипсы из тапиоки', image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=500&q=80', badge: 'ХИТ' },
+      { id: 'pb-3', category: 'tartar', name: 'Фуа-гра с бриошью', price: 1890, desc: 'Карамелизированный инжир, трюфельный демигляс и морская соль', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80' },
+      { id: 'pb-4', category: 'pasta', name: 'Паста Карбонара с гуанчиале', price: 1190, desc: 'Свежая паста фреска, желтки фермерских яиц, сыр пекорино романо', image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=500&q=80' },
+      { id: 'pb-5', category: 'wine', name: 'Шампанское Moët & Chandon', price: 1600, desc: 'Брют Империал, 150 мл. Классический французский пейринг к устрицам', image: 'https://images.unsplash.com/photo-1569919659476-f0852f6834b7?w=500&q=80', badge: 'ПРЕМИУМ' },
+      { id: 'pb-6', category: 'tartar', name: 'Тартар из мраморной говядины', price: 990, desc: 'Вырезка Prime, каперсы, зернистая горчица, перепелиный желток', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80' },
+    ]
   },
   {
-    id: 'brunch', name: "Brunch's Bistro", subtitle: 'Nordic Botanical', emblem: '🥞',
-    accentColor: '#C05830', accentGlow: 'rgba(192,88,48,0.25)',
-    designer: 'Erik Lindström 🇸🇪', location: 'Стокгольм, Швеция',
-    rating: '4.84', cuisine: 'Бранч · Панкейки · Specialty Coffee',
-    tagline: 'Скандинавская лёгкость: кремовые тона, терракот, аппетитные фото. Eco Loyalty Club повышает возврат гостей.',
-    avgCheck: '1 780 ₽', repeatRate: '+81%', delivery: '20–30 мин',
-    features: ['Eco Loyalty Club с бонусами', 'Суфле-панкейки на заказ', 'Specialty кофе с картой', 'Бесконтактная оплата СБП'],
+    id: 'chinanews',
+    name: 'Китайские Новости',
+    subtitle: 'Asian Bistro & Dim Sum Bar',
+    emblem: '🥢',
+    accentColor: '#E63946',
+    accentGlow: 'rgba(230,57,70,0.25)',
+    designer: 'Wei Zhang 🇨🇳',
+    location: 'Шанхай / Москва',
+    rating: '4.95',
+    cuisine: 'Утка по-пекински · Димсамы · Лапша Вок',
+    tagline: 'Аутентичный азиатский концепт ресторана chinanews.moscow. Ручная тянутая лапша, димсамы на пару и утка.',
+    taglineShort: 'chinanews.moscow · Азия',
+    liveIframeUrl: 'https://chinanews.moscow/',
+    heroImage: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&q=80',
+    heroTitle: 'Утка по-пекински и ручные димсамы',
+    heroTag: 'Легенда кухни',
+    categories: [
+      { id: 'dimsum', name: 'Димсамы', image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=200&q=80' },
+      { id: 'duck', name: 'Утка & Мясо', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=200&q=80' },
+      { id: 'noodles', name: 'Лапша Вок', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&q=80' },
+      { id: 'tea', name: 'Чай & Напитки', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'cn-1', category: 'duck', name: 'Утка по-пекински (половина)', price: 1980, desc: 'Хрустящая корочка, тонкие блинчики, огурец, лук-порей и сладкий бобовый соус', image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&q=80', badge: 'ТОП 1' },
+      { id: 'cn-2', category: 'dimsum', name: 'Сяолунбао со свининой и бульоном', price: 620, desc: '4 шт. Паровые шанхайские пельмени с горячим насыщенным бульоном внутри', image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=500&q=80', badge: 'ХИТ' },
+      { id: 'cn-3', category: 'dimsum', name: 'Хрустящие димсамы с креветкой', price: 740, desc: 'Тигровые креветки, побеги бамбука, соус сладкий чили', image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=500&q=80' },
+      { id: 'cn-4', category: 'noodles', name: 'Лапша Дань-Дань с говядиной', price: 680, desc: 'Лапша ручной тяги, пряный сычуаньский фарш, кунжутный соус, арахис', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500&q=80', badge: 'ОСТРОЕ' },
+      { id: 'cn-5', category: 'duck', name: 'Хрустящие баклажаны в соусе', price: 540, desc: 'Карамелизированные баклажаны с томатами черри и кинзой в кисло-сладком соусе', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&q=80' },
+      { id: 'cn-6', category: 'tea', name: 'Коллекционный чай Да Хун Пао', price: 490, desc: 'Утёсный улун сильной ферментации с медово-пряными нотами, 600 мл', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80' },
+    ]
   },
   {
-    id: 'burger', name: 'Burger Dark', subtitle: 'Fast Food Dark App', emblem: '🍔',
-    accentColor: '#E85C00', accentGlow: 'rgba(232,92,0,0.25)',
-    designer: 'Jordan Lee 🇺🇸', location: 'Нью-Йорк, США',
-    rating: '4.91', cuisine: 'Бургеры · Комбо · Доставка',
-    tagline: 'Агрессивный тёмный дизайн в стиле лучших food-delivery приложений. Максимальная конверсия через промо-баннеры и яркие CTA.',
-    avgCheck: '890 ₽', repeatRate: '+73%', delivery: '15–25 мин',
-    features: ['Тёмная тема с оранжевыми акцентами', 'Промо-баннер 20% OFF', 'Категории с emoji-иконками', 'Быстрый заказ в 2 клика'],
+    id: 'brunch',
+    name: "Brunch's Bistro",
+    subtitle: 'Nordic Botanical & Pancakes',
+    emblem: '🥞',
+    accentColor: '#C05830',
+    accentGlow: 'rgba(192,88,48,0.25)',
+    designer: 'Erik Lindström 🇸🇪',
+    location: 'Стокгольм, Швеция',
+    rating: '4.84',
+    cuisine: 'Бранч · Суфле-панкейки · Specialty Кофе',
+    tagline: 'Скандинавская эстетика: кремовые цвета, терракотовые акценты, пышные суфле-панкейки и боулы.',
+    taglineShort: 'Nordic Coffee & Brunch',
+    heroImage: 'https://images.unsplash.com/photo-1565299543923-37dd37887442?w=800&q=80',
+    heroTitle: 'Воздушные японские суфле-панкейки',
+    heroTag: 'Signature',
+    categories: [
+      { id: 'pancakes', name: 'Панкейки', image: 'https://images.unsplash.com/photo-1565299543923-37dd37887442?w=200&q=80' },
+      { id: 'breakfast', name: 'Завтраки', image: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=200&q=80' },
+      { id: 'coffee', name: 'Specialty Кофе', image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=200&q=80' },
+      { id: 'bowls', name: 'Боулы', image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'bb-1', category: 'pancakes', name: 'Суфле-панкейки с кленовым сиропом', price: 780, desc: '3 нежнейших японских панкейка, взбитые сливки, ягоды малины', image: 'https://images.unsplash.com/photo-1565299543923-37dd37887442?w=500&q=80', badge: 'ХИТ' },
+      { id: 'bb-2', category: 'pancakes', name: 'Панкейки Матча с белым шоколадом', price: 820, desc: 'Японский чай матча, ванильный крем, свежая голубика', image: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=500&q=80', badge: 'NEW' },
+      { id: 'bb-3', category: 'breakfast', name: 'Яйца Бенедикт с лососем', price: 690, desc: 'Бриошь, норвежский лосось су-вид, яйцо пашот, голландский соус', image: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=500&q=80' },
+      { id: 'bb-4', category: 'breakfast', name: 'Авокадо-тост с рикоттой', price: 520, desc: 'Тартин на закваске, крем из рикотты, вяленые томаты, семена льна', image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&q=80' },
+      { id: 'bb-5', category: 'coffee', name: 'Флэт Уайт Specialty Эфиопия', price: 290, desc: 'Двойной шот арабики светлой обжарки, шелковистая микропенка', image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80', badge: 'ТОП' },
+      { id: 'bb-6', category: 'bowls', name: 'Боул Асаи с гранолой', price: 650, desc: 'Органический асаи, кокосовые чипсы, банан, семена чиа', image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=500&q=80' },
+    ]
   },
   {
-    id: 'chain', name: 'Chain Fast Food', subtitle: 'Light Red Style', emblem: '🍗',
-    accentColor: '#E4002B', accentGlow: 'rgba(228,0,43,0.25)',
-    designer: 'Anna Kim 🇰🇷', location: 'Сеул, Корея',
-    rating: '4.88', cuisine: 'Курица · Комбо · Сеты',
-    tagline: 'Светлый профессиональный дизайн в стиле мировых сетей. Чёткая иерархия, круглые категории, badges BESTSELLER/POPULAR.',
-    avgCheck: '650 ₽', repeatRate: '+68%', delivery: '18–28 мин',
-    features: ['Светлая тема, красные акценты', 'Круглые категории с emoji', 'Badges: BESTSELLER / POPULAR', 'Exclusive Offer баннер'],
+    id: 'burger',
+    name: 'Burger Dark',
+    subtitle: 'Craft Burgers & Combos',
+    emblem: '🍔',
+    accentColor: '#E85C00',
+    accentGlow: 'rgba(232,92,0,0.25)',
+    designer: 'Jordan Lee 🇺🇸',
+    location: 'Нью-Йорк, США',
+    rating: '4.91',
+    cuisine: 'Бургеры Black Angus · Комбо · Стриты',
+    tagline: 'Тёмный стильный интерфейс в духе лучших мировых доставок еды. Промо-баннеры, комбо-наборы и аппетитные фото.',
+    taglineShort: 'Craft Burger Delivery',
+    heroImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80',
+    heroTitle: 'Spicy Burger Combo со скидкой 20%',
+    heroTag: 'Limited Offer',
+    categories: [
+      { id: 'burgers', name: 'Бургеры', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80' },
+      { id: 'chicken', name: 'Курица', image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=200&q=80' },
+      { id: 'fries', name: 'Фри & Снеки', image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'bg-1', category: 'burgers', name: 'Classic Cheese Burger', price: 329, desc: 'Котлета Black Angus, двойной чеддер, маринованные огурцы, бургер-соус', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80', badge: 'ХИТ' },
+      { id: 'bg-2', category: 'chicken', name: 'Spicy Crispy Chicken', price: 389, desc: 'Острое филе цыпленка в хрустящей панировке, халапеньо, салат айсберг', image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=500&q=80', badge: 'ОСТРОЕ' },
+      { id: 'bg-3', category: 'burgers', name: 'Double Bacon Beef Burger', price: 449, desc: 'Две котлеты из мраморной говядины, хрустящий бекон, копченый соус BBQ', image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80', badge: 'MAX' },
+      { id: 'bg-4', category: 'fries', name: 'Картофель Фри с пармезаном', price: 189, desc: 'Золотистый картофель, натертый выдержанный пармезан, трюфельное масло', image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=500&q=80' },
+    ]
   },
   {
-    id: 'coffee', name: 'Coffee Shop', subtitle: 'Elegant Web Style', emblem: '☕',
-    accentColor: '#2D5A3D', accentGlow: 'rgba(45,90,61,0.25)',
-    designer: 'Sophie Martin 🇫🇷', location: 'Лион, Франция',
-    rating: '4.93', cuisine: 'Кофе · Десерты · Выпечка',
-    tagline: 'Элегантный кремовый стиль в духе европейских кофеен. Serif-типографика, золотые акценты, карточки десертов с поэтичными названиями.',
-    avgCheck: '720 ₽', repeatRate: '+85%', delivery: '12–20 мин',
-    features: ['Кремовый фон + зелёный + золото', 'Serif-типографика Müil-стиля', 'Карточки с поэтичными описаниями', 'Special Coffee секция'],
+    id: 'chain',
+    name: 'Crispy Chain',
+    subtitle: 'Fast Food & Chicken Buckets',
+    emblem: '🍗',
+    accentColor: '#E4002B',
+    accentGlow: 'rgba(228,0,43,0.25)',
+    designer: 'Anna Kim 🇰🇷',
+    location: 'Сеул / Токио',
+    rating: '4.88',
+    cuisine: 'Баскеты с курицей · Бургеры · Сеты',
+    tagline: 'Светлый сетевой дизайн в стиле гигантов индустрии (KFC). Высокая скорость выбора, яркие бейджи акций и комбо.',
+    taglineShort: 'Chicken & Buckets',
+    heroImage: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=800&q=80',
+    heroTitle: 'CRISPY. JUICY. IRRESISTIBLE.',
+    heroTag: '30% Скидка',
+    categories: [
+      { id: 'buckets', name: 'Баскеты', image: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&q=80' },
+      { id: 'burgers', name: 'Бургеры', image: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80' },
+      { id: 'wings', name: 'Крылышки', image: 'https://images.unsplash.com/photo-1527477378372-132766324d26?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'cf-1', category: 'buckets', name: '8 Pcs Chicken Bucket Combo', price: 1290, desc: '8 кусочков сочной курицы в панировке, 2 больших фри, 2 напитка и соусы', image: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=500&q=80', badge: 'BESTSELLER' },
+      { id: 'cf-2', category: 'burgers', name: 'Zinger Burger с курицей', price: 590, desc: 'Филе цыпленка в острой панировке, томаты, салат латук, майонезный соус', image: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&q=80', badge: 'POPULAR' },
+      { id: 'cf-3', category: 'wings', name: 'Hot Wings (9 шт)', price: 649, desc: 'Острые хрустящие крылышки по секретному рецепту панировки', image: 'https://images.unsplash.com/photo-1527477378372-132766324d26?w=500&q=80', badge: 'SAVE 15%' },
+    ]
   },
   {
-    id: 'cafe', name: 'Café Warm', subtitle: 'Cozy Warm Brown', emblem: '🥐',
-    accentColor: '#5C3D2E', accentGlow: 'rgba(92,61,46,0.25)',
-    designer: 'Luca Ferrari 🇮🇹', location: 'Флоренция, Италия',
-    rating: '4.87', cuisine: 'Кафе · Выпечка · Обеды',
-    tagline: 'Уютный тёплый коричневый стиль для кофеен и кафе. Тёплая атмосфера, "Why Choose Us", сетка меню с ценами.',
-    avgCheck: '480 ₽', repeatRate: '+79%', delivery: '10–20 мин',
-    features: ['Тёплые коричневые тона', '"Why Choose Us" секция', 'Классическая сетка меню', '"Visit Us Today" CTA блок'],
-  },
+    id: 'coffee',
+    name: 'Coffee & Pastry',
+    subtitle: 'European Coffee House & Cakes',
+    emblem: '☕',
+    accentColor: '#2D5A3D',
+    accentGlow: 'rgba(45,90,61,0.25)',
+    designer: 'Sophie Martin 🇫🇷',
+    location: 'Лион, Франция',
+    rating: '4.93',
+    cuisine: 'Авторский кофе · Десерты · Выпечка',
+    tagline: 'Изысканный европейский стиль кофейни. Тёплые пастельные тона, авторские десерты и премиальная кофейная карта.',
+    taglineShort: 'Specialty Coffee & Cakes',
+    heroImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80',
+    heroTitle: 'Sweet Moments Start Here',
+    heroTag: 'Müil Coffee',
+    categories: [
+      { id: 'cakes', name: 'Десерты', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&q=80' },
+      { id: 'coffee', name: 'Кофе', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&q=80' },
+    ],
+    dishes: [
+      { id: 'cp-1', category: 'cakes', name: 'Фисташковый торт с матча', price: 420, desc: 'Нежнейший фисташковый мусс, бисквит с чаем матча, цельные фисташки', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&q=80', badge: 'ШЕДЕВР' },
+      { id: 'cp-2', category: 'cakes', name: 'Шоколадный трюфельный торт', price: 460, desc: 'Бельгийский горький шоколад 72%, пралине из фундука, шоколадный гляссаж', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80', badge: 'ХИТ' },
+      { id: 'cp-3', category: 'cakes', name: 'Черничный чизкейк Нью-Йорк', price: 440, desc: 'Запечённый сливочный чизкейк с конфитюром из лесных ягод', image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500&q=80' },
+      { id: 'cp-4', category: 'coffee', name: 'Капучино с латте-артом', price: 290, desc: 'Арабика Колумбия Супремо, плотная сливочная текстура молока', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80' },
+    ]
+  }
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -1109,7 +871,7 @@ function LeadModal({
   style: { name: string; accentColor: string; accentGlow: string };
   onClose: () => void;
 }) {
-  const [form, setForm] = useState({ name: '', phone: '', restaurantName: '', comment: '', agree: true });
+  const [form, setForm] = useState({ name: '', phone: '', restaurantName: '', agree: true });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -1136,7 +898,7 @@ function LeadModal({
 
   return (
     <div
-      className="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl"
+      className="fixed inset-0 z-[1250] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div
@@ -1171,7 +933,7 @@ function LeadModal({
               <h3 className="text-xl font-black">
                 Заказать дизайн как <span style={{ color: style.accentColor }}>{style.name}</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">Адаптируем под ваш ресторан за 24–48 часов</p>
+              <p className="text-xs text-slate-400 mt-1">Адаптируем под ваше меню за 24–48 часов</p>
             </div>
             {error && (
               <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs">
@@ -1220,7 +982,7 @@ function LeadModal({
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MAIN GALLERY COMPONENT
+   MAIN SHOWCASE GALLERY
 ═══════════════════════════════════════════════════════════ */
 export function DesignShowcaseGallery() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -1228,18 +990,17 @@ export function DesignShowcaseGallery() {
   const [fullscreenMode, setFullscreenMode] = useState<'mobile' | 'desktop'>('mobile');
   const [selectedDish, setSelectedDish] = useState<DemoDish | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [cartOpen, setCartOpen] = useState(false);
   const [leadStyle, setLeadStyle] = useState<null | { name: string; accentColor: string; accentGlow: string }>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
 
-  const active = RESTAURANTS[activeIdx];
+  const active = RESTAURANTS_DATA[activeIdx];
 
-  const prev = () => setActiveIdx(i => (i - 1 + RESTAURANTS.length) % RESTAURANTS.length);
-  const next = () => setActiveIdx(i => (i + 1) % RESTAURANTS.length);
+  const prev = () => setActiveIdx(i => (i - 1 + RESTAURANTS_DATA.length) % RESTAURANTS_DATA.length);
+  const next = () => setActiveIdx(i => (i + 1) % RESTAURANTS_DATA.length);
 
   const handleAddToCart = (dish: DemoDish, qty: number = 1, options: string[] = []) => {
     const nameStr = getDishName(dish.name);
-    const itemKey = `${dish.id || nameStr}-${options.sort().join('-')}`;
+    const itemKey = `${dish.id}-${options.sort().join('-')}`;
     setCartItems(prev => {
       const existing = prev.find(i => i.id === itemKey);
       if (existing) {
@@ -1252,7 +1013,6 @@ export function DesignShowcaseGallery() {
           name: nameStr,
           price: dish.price,
           quantity: qty,
-          emoji: dish.emoji,
           image: dish.image,
           options
         }
@@ -1260,49 +1020,23 @@ export function DesignShowcaseGallery() {
     });
   };
 
-  const handleRemoveFromCart = (id: string) => {
-    setCartItems(prev => prev.filter(it => it.id !== id));
+  const handleUpdateCartQty = (id: string, delta: number) => {
+    setCartItems(prev =>
+      prev
+        .map(it => (it.id === id ? { ...it, quantity: it.quantity + delta } : it))
+        .filter(it => it.quantity > 0)
+    );
   };
 
-  const totalCartCount = cartItems.reduce((s, it) => s + it.quantity, 0);
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
 
   // Sync tab scroll
   useEffect(() => {
     const el = tabsRef.current?.children[activeIdx] as HTMLElement;
     el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }, [activeIdx]);
-
-  // Handle ESC key for fullscreen
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (selectedDish) setSelectedDish(null);
-        else if (cartOpen) setCartOpen(false);
-        else if (isFullscreen) setIsFullscreen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedDish, cartOpen, isFullscreen]);
-
-  const renderActivePhone = (isLarge = false) => {
-    switch (active.id) {
-      case 'porto':
-        return <PortoBarPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      case 'brunch':
-        return <BrunchBistroPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      case 'burger':
-        return <BurgerDarkPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      case 'chain':
-        return <ChainFoodPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      case 'coffee':
-        return <CoffeeShopPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      case 'cafe':
-        return <CafeWarmPhone onSelectDish={setSelectedDish} onAddToCart={d => handleAddToCart(d, 1)} />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <section
@@ -1323,7 +1057,7 @@ export function DesignShowcaseGallery() {
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 text-amber-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Интерактивные примеры работ от наших дизайнеров</span>
+            <span>Интерактивные примеры готовых работ от наших дизайнеров</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-black font-serif text-white leading-tight">
             Выберите стиль{' '}
@@ -1332,18 +1066,18 @@ export function DesignShowcaseGallery() {
             </span>
           </h2>
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            Каждый дизайн — полностью интерактивное приложение. Откройте на полный экран, потыкайте блюда,
-            проверьте корзину и выберите концепцию для своего заведения.
+            Каждый дизайн — это полностью рабочее PWA-приложение с реальными фото блюд, работающими уведомлениями 🔔,
+            карточками модификаторов и живой корзиной 🛒.
           </p>
         </div>
 
-        {/* Tab Carousel */}
+        {/* Tab Selector */}
         <div className="relative mb-10">
           <div
             ref={tabsRef}
             className="flex gap-2 overflow-x-auto scrollbar-none pb-2 px-1 justify-start lg:justify-center"
           >
-            {RESTAURANTS.map((r, i) => (
+            {RESTAURANTS_DATA.map((r, i) => (
               <button
                 key={r.id}
                 onClick={() => setActiveIdx(i)}
@@ -1376,7 +1110,7 @@ export function DesignShowcaseGallery() {
           </div>
         </div>
 
-        {/* Main Stage */}
+        {/* Main Stage Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center max-w-5xl mx-auto">
           {/* Phone Column */}
           <div className="flex flex-col items-center">
@@ -1396,13 +1130,23 @@ export function DesignShowcaseGallery() {
               </button>
 
               <IPhoneFrame accentGlow={active.accentGlow}>
-                {renderActivePhone()}
+                <RestaurantAppView
+                  restaurant={active}
+                  dishes={active.dishes}
+                  categories={active.categories}
+                  cartItems={cartItems}
+                  onSelectDish={setSelectedDish}
+                  onAddToCart={d => handleAddToCart(d, 1)}
+                  onUpdateCartQty={handleUpdateCartQty}
+                  onClearCart={handleClearCart}
+                  liveIframeUrl={active.liveIframeUrl}
+                />
               </IPhoneFrame>
             </div>
 
             {/* Dots */}
             <div className="flex items-center gap-1.5 mt-5">
-              {RESTAURANTS.map((_, i) => (
+              {RESTAURANTS_DATA.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveIdx(i)}
@@ -1416,7 +1160,7 @@ export function DesignShowcaseGallery() {
               ))}
             </div>
 
-            {/* Fullscreen Trigger Button under Phone */}
+            {/* Fullscreen Button under Phone */}
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-2">
               <button
                 onClick={() => setIsFullscreen(true)}
@@ -1425,16 +1169,6 @@ export function DesignShowcaseGallery() {
                 <Maximize2 className="w-4 h-4 text-amber-400" />
                 <span>Открыть на весь экран и потыкать</span>
               </button>
-
-              {totalCartCount > 0 && (
-                <button
-                  onClick={() => setCartOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-black text-xs font-black shadow-lg"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>Корзина ({totalCartCount})</span>
-                </button>
-              )}
             </div>
           </div>
 
@@ -1448,8 +1182,15 @@ export function DesignShowcaseGallery() {
             }}
           >
             {/* Designer */}
-            <div className="text-xs text-slate-400">
-              Дизайн: <span className="text-slate-200 font-semibold">{active.designer}</span> · {active.location}
+            <div className="text-xs text-slate-400 flex items-center justify-between">
+              <span>
+                Дизайн: <span className="text-slate-200 font-semibold">{active.designer}</span> · {active.location}
+              </span>
+              {active.liveIframeUrl && (
+                <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                  РЕАЛЬНЫЙ РЕСТОРАН
+                </span>
+              )}
             </div>
 
             {/* Title */}
@@ -1476,13 +1217,37 @@ export function DesignShowcaseGallery() {
 
             <p className="text-sm text-slate-300 leading-relaxed">{active.tagline}</p>
 
+            {/* Live website link if available */}
+            {active.liveIframeUrl && (
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs flex items-center justify-between">
+                <div className="flex items-center gap-2 text-amber-300">
+                  <Globe className="w-4 h-4" />
+                  <span>Оригинальный сайт заведения:</span>
+                </div>
+                <a
+                  href={active.liveIframeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-white font-bold underline hover:text-amber-400 transition-colors"
+                >
+                  <span>chinanews.moscow</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            )}
+
             {/* Features */}
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                Включённый функционал:
+                Включённый функционал дизайна:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {active.features.map((f, i) => (
+                {[
+                  'Реальные аппетитные фото блюд в высоком разрешении',
+                  'Интерактивная корзина с расчётом заказа',
+                  'Всплывающие уведомления и спецпредложения 🔔',
+                  'Модальное окно модификаторов блюд и порций',
+                ].map((f, i) => (
                   <div
                     key={i}
                     className="flex items-start gap-2 text-xs text-slate-200 p-2 rounded-xl bg-black/30 border border-white/5"
@@ -1494,22 +1259,8 @@ export function DesignShowcaseGallery() {
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { label: 'Ср. чек', value: active.avgCheck },
-                { label: 'Повторные заказы', value: active.repeatRate },
-                { label: 'Доставка', value: active.delivery },
-              ].map(s => (
-                <div key={s.label} className="p-3 rounded-2xl text-center border border-white/5 bg-black/30">
-                  <p className="text-sm font-black text-white">{s.value}</p>
-                  <p className="text-[9px] text-slate-400 mt-0.5 leading-tight">{s.label}</p>
-                </div>
-              ))}
-            </div>
-
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 onClick={() =>
                   setLeadStyle({
@@ -1541,15 +1292,15 @@ export function DesignShowcaseGallery() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
-         FULLSCREEN INTERACTIVE SIMULATOR STAGE
+         FULLSCREEN SIMULATOR
       ═══════════════════════════════════════════════════════════ */}
       {isFullscreen && (
-        <div className="fixed inset-0 z-[1000] bg-[#06080e] flex flex-col animate-fadeIn select-none overflow-hidden">
+        <div className="fixed inset-0 z-[1100] bg-[#06080e] flex flex-col animate-fadeIn select-none overflow-hidden">
           {/* Top Bar */}
           <header className="px-4 py-3 bg-[#0a0d16] border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0 z-30">
-            {/* Restaurant Selector Tabs in Fullscreen */}
+            {/* Restaurant Selector Tabs */}
             <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
-              {RESTAURANTS.map((r, i) => (
+              {RESTAURANTS_DATA.map((r, i) => (
                 <button
                   key={r.id}
                   onClick={() => setActiveIdx(i)}
@@ -1567,7 +1318,7 @@ export function DesignShowcaseGallery() {
 
             {/* Controls Right */}
             <div className="flex items-center gap-2.5">
-              {/* Device Mode Switcher */}
+              {/* Mode Switcher */}
               <div className="hidden sm:flex items-center p-1 rounded-xl bg-white/6 border border-white/10">
                 <button
                   onClick={() => setFullscreenMode('mobile')}
@@ -1588,20 +1339,6 @@ export function DesignShowcaseGallery() {
                   <span>Планшет / Десктоп</span>
                 </button>
               </div>
-
-              {/* Cart Button */}
-              <button
-                onClick={() => setCartOpen(true)}
-                className="relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold transition-all"
-              >
-                <ShoppingCart className="w-4 h-4 text-amber-400" />
-                <span>Корзина</span>
-                {totalCartCount > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-amber-500 text-black text-[10px] font-black flex items-center justify-center">
-                    {totalCartCount}
-                  </span>
-                )}
-              </button>
 
               {/* Lead CTA */}
               <button
@@ -1629,16 +1366,26 @@ export function DesignShowcaseGallery() {
             </div>
           </header>
 
-          {/* Interactive Screen Content */}
+          {/* Interactive Stage */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 flex items-center justify-center relative">
             {fullscreenMode === 'mobile' ? (
               <div className="py-2 animate-fadeIn">
                 <IPhoneFrame accentGlow={active.accentGlow} isLarge={true}>
-                  {renderActivePhone(true)}
+                  <RestaurantAppView
+                    restaurant={active}
+                    dishes={active.dishes}
+                    categories={active.categories}
+                    cartItems={cartItems}
+                    onSelectDish={setSelectedDish}
+                    onAddToCart={d => handleAddToCart(d, 1)}
+                    onUpdateCartQty={handleUpdateCartQty}
+                    onClearCart={handleClearCart}
+                    liveIframeUrl={active.liveIframeUrl}
+                  />
                 </IPhoneFrame>
               </div>
             ) : (
-              /* Wide Desktop / Tablet View */
+              /* Wide Screen Desktop / Tablet View */
               <div
                 className="w-full max-w-5xl rounded-3xl overflow-hidden border-2 shadow-2xl animate-fadeIn flex flex-col h-[82vh]"
                 style={{
@@ -1647,7 +1394,6 @@ export function DesignShowcaseGallery() {
                   boxShadow: `0 0 60px ${active.accentGlow}`,
                 }}
               >
-                {/* Wide Header */}
                 <div className="px-6 py-4 border-b border-white/10 bg-black/40 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{active.emblem}</span>
@@ -1661,19 +1407,21 @@ export function DesignShowcaseGallery() {
                       <Star className="w-3.5 h-3.5 fill-current" />
                       <span>{active.rating}</span>
                     </div>
-                    <button
-                      onClick={() => setCartOpen(true)}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 text-white text-xs font-bold"
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      <span>{totalCartCount}</span>
-                    </button>
                   </div>
                 </div>
 
-                {/* Wide Body - Embedded Menu Preview */}
                 <div className="flex-1 overflow-y-auto scrollbar-none p-6">
-                  {renderActivePhone()}
+                  <RestaurantAppView
+                    restaurant={active}
+                    dishes={active.dishes}
+                    categories={active.categories}
+                    cartItems={cartItems}
+                    onSelectDish={setSelectedDish}
+                    onAddToCart={d => handleAddToCart(d, 1)}
+                    onUpdateCartQty={handleUpdateCartQty}
+                    onClearCart={handleClearCart}
+                    liveIframeUrl={active.liveIframeUrl}
+                  />
                 </div>
               </div>
             )}
@@ -1688,17 +1436,6 @@ export function DesignShowcaseGallery() {
           accentColor={active.accentColor}
           onClose={() => setSelectedDish(null)}
           onAdd={handleAddToCart}
-        />
-      )}
-
-      {/* Cart Modal */}
-      {cartOpen && (
-        <CartModal
-          items={cartItems}
-          accentColor={active.accentColor}
-          onClose={() => setCartOpen(false)}
-          onRemove={handleRemoveFromCart}
-          onClear={() => setCartItems([])}
         />
       )}
 
