@@ -55,42 +55,86 @@ function DeliveryTrackingPanel({
   accentGlow: string;
   onClose?: () => void;
 }) {
-  const [progress, setProgress] = useState(38);
-  const [speed, setSpeed] = useState(72);
+  const [viewMode, setViewMode] = useState<'art' | 'radar' | 'video'>('art');
+  const [progress, setProgress] = useState(35);
+  const [speed, setSpeed] = useState(74);
+  const [isTurbo, setIsTurbo] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [videoError, setVideoError] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
+  // Dynamic progress & speed cycle
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress(p => (p >= 95 ? 20 : p + 1));
-      setSpeed(s => Math.floor(65 + Math.random() * 20));
-    }, 1500);
+      setProgress(p => (p >= 96 ? 15 : p + 1));
+      if (!isTurbo) {
+        setSpeed(68 + Math.floor(Math.random() * 14));
+      }
+    }, 1800);
     return () => clearInterval(timer);
-  }, []);
+  }, [isTurbo]);
+
+  // Turbo boost toggle
+  const triggerTurbo = () => {
+    setIsTurbo(true);
+    setSpeed(138);
+    setTimeout(() => {
+      setIsTurbo(false);
+      setSpeed(78);
+    }, 3500);
+  };
+
+  // Mouse tilt parallax effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
+    setTilt({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  const distanceKm = Math.max(0.2, 2.4 * (1 - progress / 100)).toFixed(1);
+  const etaMinutes = Math.max(2, Math.ceil(15 * (1 - progress / 100)));
 
   return (
     <div
-      className="rounded-3xl p-6 border-2 space-y-5 transition-all duration-500 relative overflow-hidden bg-[#090d16] text-white"
+      className="rounded-3xl p-5 sm:p-6 border-2 space-y-4 transition-all duration-500 relative overflow-hidden bg-[#090d16] text-white select-none"
       style={{
         borderColor: accentColor + '60',
         boxShadow: `0 20px 60px rgba(0,0,0,0.6), 0 0 50px ${accentGlow}`,
       }}
     >
       {/* Background ambient radar glow */}
-      <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none"
-        style={{ background: accentColor }} />
+      <div
+        className="absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none"
+        style={{ background: accentColor }}
+      />
 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-black shadow-lg"
-            style={{ background: 'linear-gradient(135deg,#1f2430,#0f141f)', border: `1.5px solid ${accentColor}` }}>
+          <div
+            className="w-10 h-10 rounded-2xl flex items-center justify-center font-black shadow-lg"
+            style={{
+              background: 'linear-gradient(135deg,#1f2430,#0f141f)',
+              border: `1.5px solid ${accentColor}`,
+            }}
+          >
             <Car className="w-5 h-5" style={{ color: accentColor }} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-black uppercase tracking-wider text-white">GetMenu Экспресс 3D</h3>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse">
-                В пути
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase border animate-pulse ${
+                isTurbo
+                  ? 'bg-orange-500/30 text-orange-300 border-orange-500/50'
+                  : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+              }`}>
+                {isTurbo ? '⚡ ТУРБО-ФОРСАЖ' : '● В пути'}
               </span>
             </div>
             <p className="text-xs text-slate-400">Суперкар доставки GetMenu • Заказ из {restaurantName}</p>
@@ -104,34 +148,148 @@ function DeliveryTrackingPanel({
         )}
       </div>
 
-      {/* 3D Map / Video Canvas */}
-      <div className="relative h-64 rounded-2xl overflow-hidden border border-white/10 bg-[#04060a]">
-        {!videoError ? (
-          <video
-            src="/videos/getmenu-delivery-batmobile.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            onError={() => setVideoError(true)}
-            className="w-full h-full object-cover"
-          />
-        ) : null}
+      {/* Mode Selector Tabs (Code 3D Art vs 3D Vector Radar vs AI Video) */}
+      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-white/10 text-xs">
+        <button
+          onClick={() => setViewMode('art')}
+          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
+            viewMode === 'art'
+              ? 'bg-amber-500 text-black shadow-md'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>3D Бэтмобиль</span>
+        </button>
+        <button
+          onClick={() => setViewMode('radar')}
+          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
+            viewMode === 'radar'
+              ? 'bg-amber-500 text-black shadow-md'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Compass className="w-3.5 h-3.5" />
+          <span>3D Кибер-радар</span>
+        </button>
+        <button
+          onClick={() => setViewMode('video')}
+          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
+            viewMode === 'video'
+              ? 'bg-amber-500 text-black shadow-md'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Navigation className="w-3.5 h-3.5" />
+          <span>AI Видео</span>
+        </button>
+      </div>
 
-        {/* Fallback Interactive 3D Holographic Map Animation */}
-        {videoError && (
+      {/* Main 3D Display Stage */}
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-white/10 bg-[#04060a] cursor-crosshair perspective"
+        style={{ perspective: '1000px' }}
+      >
+        {/* MODE 1: INTERACTIVE 3D BATMOBILE WITH PARALLAX & CODE HUD */}
+        {viewMode === 'art' && (
+          <div
+            className="w-full h-full relative transition-transform duration-200 ease-out"
+            style={{
+              transform: `rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) scale(${isTurbo ? 1.05 : 1})`,
+            }}
+          >
+            {/* Photorealistic Render Artwork */}
+            <img
+              src="/images/batmobile-delivery.jpg"
+              alt="GetMenu Batmobile Delivery Supercar"
+              className="w-full h-full object-cover select-none pointer-events-none"
+            />
+
+            {/* Dark vignette gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
+
+            {/* Live Holographic Target Reticle */}
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-300"
+              style={{
+                width: isTurbo ? '240px' : '210px',
+                height: isTurbo ? '120px' : '100px',
+              }}
+            >
+              {/* Corner brackets */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-400" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-400" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-400" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-amber-400" />
+
+              {/* Tag */}
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono font-bold text-amber-400 border border-amber-400/40 whitespace-nowrap">
+                🎯 GETMENU TUMBLER #01 • GPS LOCK
+              </div>
+            </div>
+
+            {/* Animated Laser Scan Line */}
+            <div
+              className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_15px_#f59e0b] pointer-events-none animate-pulse"
+              style={{
+                top: `${(progress * 1.5) % 85 + 5}%`,
+                opacity: 0.7,
+              }}
+            />
+
+            {/* Turbo Boost Nitro Glow Overlay */}
+            {isTurbo && (
+              <div className="absolute inset-0 bg-orange-500/15 pointer-events-none mix-blend-screen animate-pulse" />
+            )}
+
+            {/* Top HUD Badges */}
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-none">
+              <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 text-[9px] text-slate-200">
+                <Compass className="w-3 h-3 text-amber-400 animate-spin" />
+                <span>3D Спутник: 55.7558° N, 37.6173° E</span>
+              </div>
+
+              <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 text-[9px] text-slate-200 font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>PWR: 94% ION</span>
+              </div>
+            </div>
+
+            {/* Turbo Boost Trigger Button */}
+            <div className="absolute top-12 right-3 z-30">
+              <button
+                type="button"
+                onClick={triggerTurbo}
+                className={`px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-xl transition-all active:scale-95 ${
+                  isTurbo
+                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white animate-bounce shadow-orange-500/50'
+                    : 'bg-black/80 hover:bg-black text-amber-400 border border-amber-500/40'
+                }`}
+              >
+                <Flame className="w-3.5 h-3.5" />
+                <span>{isTurbo ? '⚡ ФОРСАЖ!' : 'Турбо-буст'}</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* MODE 2: 3D CYBER RADAR (Animated Vector Map) */}
+        {viewMode === 'radar' && (
           <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
             {/* 3D Grid floor */}
             <div
               className="absolute inset-0 opacity-25"
               style={{
                 backgroundImage: `linear-gradient(to right, ${accentColor}30 1px, transparent 1px), linear-gradient(to bottom, ${accentColor}30 1px, transparent 1px)`,
-                backgroundSize: '36px 36px',
+                backgroundSize: '32px 32px',
                 transform: 'perspective(400px) rotateX(45deg) scale(1.4)',
               }}
             />
 
-            {/* Glowing route line */}
+            {/* Glowing route vector */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 250">
               <defs>
                 <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -150,7 +308,7 @@ function DeliveryTrackingPanel({
 
               {/* Route line */}
               <path
-                d="M 40 180 Q 140 160, 200 120 T 360 60"
+                d="M 40 190 Q 140 160, 200 120 T 360 60"
                 fill="none"
                 stroke="url(#routeGrad)"
                 strokeWidth="4"
@@ -160,24 +318,27 @@ function DeliveryTrackingPanel({
               />
 
               {/* Origin dot */}
-              <circle cx="40" cy="180" r="7" fill="#22c55e" />
-              <text x="40" y="205" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">Ресторан</text>
+              <circle cx="40" cy="190" r="7" fill="#22c55e" />
+              <text x="40" y="215" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">
+                {restaurantName}
+              </text>
 
               {/* Destination dot */}
               <circle cx="360" cy="60" r="7" fill="#3b82f6" />
-              <text x="360" y="85" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">Ваш адрес</text>
+              <text x="360" y="85" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">
+                Адрес доставки
+              </text>
             </svg>
 
             {/* Moving Batmobile Supercar Element */}
             <div
-              className="absolute z-20 transition-all duration-1000 ease-out flex flex-col items-center"
+              className="absolute z-20 transition-all duration-1000 ease-out flex flex-col items-center pointer-events-none"
               style={{
                 left: `${progress}%`,
-                top: `${55 - progress * 0.35}%`,
+                top: `${58 - progress * 0.35}%`,
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              {/* Batmobile Icon/Badge */}
               <div
                 className="p-2.5 rounded-2xl shadow-2xl flex items-center gap-1.5 border-2 animate-bounce"
                 style={{
@@ -188,27 +349,65 @@ function DeliveryTrackingPanel({
               >
                 <span className="text-xl">🦇</span>
                 <span className="text-[10px] font-black text-white uppercase tracking-wider">
-                  Get<span style={{ color: accentColor }}>Menu</span> Car
+                  Get<span style={{ color: accentColor }}>Menu</span> Batmobile
                 </span>
               </div>
               <div className="w-10 h-1 rounded-full blur-sm mt-1" style={{ background: accentColor }} />
             </div>
 
-            {/* Radar Sweep Effect */}
-            <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[10px] text-slate-300">
+            {/* Radar status */}
+            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[10px] text-slate-300 flex items-center gap-2">
               <Compass className="w-3.5 h-3.5 animate-spin text-amber-400" />
-              <span>3D GPS Satellite Lock: 99.4%</span>
+              <span>Holographic GPS Radar v4.2 Active</span>
             </div>
           </div>
         )}
 
-        {/* Telemetry HUD overlay bottom */}
-        <div className="absolute bottom-3 left-3 right-3 z-30 bg-black/75 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+        {/* MODE 3: AI VIDEO PLAYER */}
+        {viewMode === 'video' && (
+          <div className="w-full h-full relative flex items-center justify-center bg-black">
+            {!videoError ? (
+              <video
+                src="/videos/getmenu-delivery-batmobile.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                onError={() => setVideoError(true)}
+                className="w-full h-full object-cover"
+              />
+            ) : null}
+
+            {videoError && (
+              <div className="p-6 text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mx-auto text-xl">
+                  🎬
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Видео в процессе добавления</h4>
+                  <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+                    Закиньте сгенерированный ролик в <code>public/videos/getmenu-delivery-batmobile.mp4</code>.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('art')}
+                  className="px-4 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs"
+                >
+                  Переключить на 3D Бэтмобиль
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Telemetry HUD Overlay Bottom (Common across modes) */}
+        <div className="absolute bottom-3 left-3 right-3 z-30 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-amber-400" />
             <div>
               <p className="text-[9px] text-slate-400 uppercase font-bold">Прибытие через</p>
-              <p className="text-xs font-black text-white">~14 минут</p>
+              <p className="text-xs font-black text-white">~{etaMinutes} минут</p>
             </div>
           </div>
 
@@ -216,14 +415,16 @@ function DeliveryTrackingPanel({
 
           <div>
             <p className="text-[9px] text-slate-400 uppercase font-bold">Скорость курьера</p>
-            <p className="text-xs font-black" style={{ color: accentColor }}>{speed} км/ч</p>
+            <p className={`text-xs font-black transition-all ${isTurbo ? 'text-orange-400 scale-110 font-mono' : ''}`} style={{ color: !isTurbo ? accentColor : undefined }}>
+              {speed} км/ч
+            </p>
           </div>
 
           <div className="h-6 w-px bg-white/10" />
 
           <div>
             <p className="text-[9px] text-slate-400 uppercase font-bold">Дистанция</p>
-            <p className="text-xs font-black text-white">2.4 км</p>
+            <p className="text-xs font-black text-white">{distanceKm} км</p>
           </div>
         </div>
       </div>
@@ -231,7 +432,7 @@ function DeliveryTrackingPanel({
       {/* Driver Card */}
       <div className="p-3.5 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-sm text-black">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-sm text-black shadow-md">
             GM
           </div>
           <div>
@@ -244,19 +445,20 @@ function DeliveryTrackingPanel({
         </div>
 
         <button
+          type="button"
           onClick={() => alert('Звонок курьеру: +7 (968) 000-22-27')}
-          className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-all"
+          className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
         >
           <PhoneCall className="w-3.5 h-3.5 text-amber-400" />
           <span className="hidden sm:inline">Связь</span>
         </button>
       </div>
 
-      {/* Video upload hint for user */}
-      <div className="text-[10px] text-slate-400 leading-relaxed bg-white/4 p-3 rounded-xl border border-white/5 flex items-start gap-2">
+      {/* Interactive Helper Hint */}
+      <div className="text-[10px] text-slate-400 leading-relaxed bg-white/4 p-2.5 rounded-xl border border-white/5 flex items-start gap-2">
         <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
         <span>
-          💡 <strong>Видео-слот активен:</strong> закиньте файл видео <code>public/videos/getmenu-delivery-batmobile.mp4</code>, и реальный видеоряд с машиной Бэтмена и логотипом GetMenu мгновенно заменит анимацию!
+          💡 <strong>Интерактив в коде:</strong> двигайте курсором мыши над Бэтмобилем для 3D-параллакса, нажимайте <strong>«Турбо-буст»</strong> для форсажа или переключайте режимы на 3D Кибер-радар.
         </span>
       </div>
     </div>
