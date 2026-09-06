@@ -37,6 +37,7 @@ import {
   Pause
 } from 'lucide-react';
 import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
+import { ProblemAggregatorScene } from './ProblemAggregatorScene';
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -402,77 +403,8 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* 3. PROBLEM SECTION */}
-      <section className="py-24 bg-white text-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-amber-600">
-              Скрытые потери ресторанного бизнеса
-            </h2>
-            <p className="text-3xl sm:text-5xl font-black font-serif tracking-tight text-slate-950">
-              Почему агрегаторы съедают вашу чистую прибыль?
-            </p>
-            <p className="text-slate-600 text-base sm:text-lg">
-              Работая только через Яндекс Еду и Маркет, вы отдаете львиную долю маржи и отдаете своих постоянных гостей.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 space-y-4 hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-red-100 border border-red-200 flex items-center justify-center">
-                <Percent className="w-6 h-6 text-red-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-950">25–35% комиссия</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                С каждого заказа на 2 000 ₽ агрегатор забирает до 700 ₽. За месяц успешный ресторан теряет от 300 000 ₽ до 1 500 000 ₽ чистой прибыли.
-              </p>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 space-y-4 hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-orange-100 border border-orange-200 flex items-center justify-center">
-                <Users className="w-6 h-6 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-950">Клиенты — не ваши</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Агрегатор в любой момент покажет вашему гостю баннер конкурента с соседней улицы со скидкой 20%. Вы не контролируете удержание гостей.
-              </p>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 space-y-4 hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 border border-purple-200 flex items-center justify-center">
-                <Database className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-950">Нет данных о гостях</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Вы не получаете телефоны, предпочтения, дни рождения и историю заказов. Нельзя настроить триггерные пуши или персонализированный маркетинг.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
-            <div className="absolute right-0 bottom-0 translate-x-10 translate-y-10 w-96 h-96 bg-amber-500/10 blur-3xl rounded-full pointer-events-none" />
-            <div className="max-w-3xl space-y-6">
-              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-                <span>✓ Наше решение</span>
-              </div>
-              <h3 className="text-2xl sm:text-4xl font-bold font-serif text-white">
-                0% комиссии с заказов. Полный контроль над гостями.
-              </h3>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Собственное PWA-приложение позволяет принимать заказы на доставку, самовывоз и в зале напрямую. Все платежи поступают на ваш счёт, а клиентская база и история заказов остаются вашей собственностью навсегда.
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => scrollToSection('brief-form')}
-                  className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition-all cursor-pointer"
-                >
-                  Рассчитать экономию ресторана
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 3. PROBLEM SECTION (Interactive Cinematic Scroll-Driven Scene) */}
+      <ProblemAggregatorScene />
 
       {/* 4. FEATURES SECTION */}
       <section id="features" className="py-24 bg-slate-900 text-slate-100 relative">
