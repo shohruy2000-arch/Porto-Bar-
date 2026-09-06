@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
 import { ProblemAggregatorScene } from './ProblemAggregatorScene';
+import { InteractiveFeaturesBento } from './InteractiveFeaturesBento';
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -406,84 +407,8 @@ export function LandingPage() {
       {/* 3. PROBLEM SECTION (Interactive Cinematic Scroll-Driven Scene) */}
       <ProblemAggregatorScene />
 
-      {/* 4. FEATURES SECTION */}
-      <section id="features" className="py-24 bg-slate-900 text-slate-100 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-amber-400">
-              Функционал платформы
-            </h2>
-            <p className="text-3xl sm:text-5xl font-black font-serif tracking-tight text-white">
-              Что входит в ваше готовое приложение
-            </p>
-            <p className="text-slate-400 text-base sm:text-lg">
-              Все современные инструменты e-commerce для ресторанов уровня Dodo Pizza и Яндекс Лавки.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Smartphone className="w-6 h-6 text-amber-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">PWA без App Store</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Устанавливается с экрана Safari / Chrome в 1 клик. Работает молниеносно, поддерживает офлайн-режим и занимает меньше 2 МБ.
-              </p>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <CreditCard className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Онлайн-оплата и СБП</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Интеграция с ЮKassa, Т-Банком, СБП и банковскими картами. Деньги поступают сразу на ваш расчетный счет без посредников.
-              </p>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Gift className="w-6 h-6 text-purple-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Программа лояльности</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Начисление и списание бонусов, уровни гостей (Bronze, Silver, Gold), подарки за первый заказ и повторные визиты.
-              </p>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Settings className="w-6 h-6 text-blue-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Модификаторы блюд</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Выбор прожарки, размера пиццы, типа молока, добавки топпингов и соусов с динамическим пересчётом стоимости позиции.
-              </p>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Bell className="w-6 h-6 text-pink-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Бесплатные Push-уведомления</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Информируйте гостей об этапах готовности заказа, вечерних скидках и новых акциях прямо на экран телефона без затрат на SMS.
-              </p>
-            </div>
-
-            <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-7 space-y-4 hover:border-amber-500/40 transition-colors group">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BarChart3 className="w-6 h-6 text-orange-400" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Дашборд и аналитика</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Статистика выручки в реальном времени, средний чек, популярные блюда, стоп-лист и управление меню в 2 клика.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 4. FEATURES SECTION (Interactive Luxury Bento Grid) */}
+      <InteractiveFeaturesBento />
 
       {/* 5. HOW IT WORKS */}
       <section id="how-it-works" className="py-24 bg-white text-slate-900">
