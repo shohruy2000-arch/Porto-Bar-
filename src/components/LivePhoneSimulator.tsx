@@ -242,7 +242,7 @@ export function LivePhoneSimulator() {
   return (
     <section
       id="simulator"
-      className="relative py-28 sm:py-36 bg-[#02050e] text-white overflow-hidden isolate selection:bg-amber-500 selection:text-slate-950"
+      className="relative py-28 sm:py-36 scroll-mt-20 bg-[#02050e] text-white overflow-hidden isolate selection:bg-amber-500 selection:text-slate-950"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-amber-500/10 via-rose-500/5 to-blue-500/10 blur-[180px] pointer-events-none -z-10" />

@@ -236,7 +236,7 @@ export function LandingPage() {
               Возможности
             </button>
             <button 
-              onClick={() => scrollToSection('demo')} 
+              onClick={() => scrollToSection('simulator')} 
               className="hover:text-amber-400 transition-colors cursor-pointer"
             >
               Демо

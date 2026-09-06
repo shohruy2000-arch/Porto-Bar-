@@ -116,7 +116,7 @@ export function LaunchTimeline() {
   return (
     <section
       id="how-it-works"
-      className="relative py-28 sm:py-36 bg-[#030712] text-white overflow-hidden isolate selection:bg-amber-500 selection:text-slate-950"
+      className="relative py-28 sm:py-36 scroll-mt-20 bg-[#030712] text-white overflow-hidden isolate selection:bg-amber-500 selection:text-slate-950"
     >
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-amber-500/10 via-orange-600/5 to-transparent blur-[160px] pointer-events-none -z-10" />
       <div className="absolute bottom-0 right-10 w-[400px] h-[400px] bg-blue-600/5 blur-[140px] pointer-events-none -z-10" />
