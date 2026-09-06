@@ -30,7 +30,11 @@ import {
   Mail, 
   MessageSquare, 
   Sparkles, 
-  ExternalLink
+  ExternalLink,
+  Volume2,
+  VolumeX,
+  Play,
+  Pause
 } from 'lucide-react';
 import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
 
@@ -53,6 +57,28 @@ export function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  // Hero AI Video State
+  const [heroVideoMuted, setHeroVideoMuted] = useState(true);
+  const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
+  const heroVideoRef = React.useRef<HTMLVideoElement>(null);
+
+  const toggleHeroVideoPlay = () => {
+    if (!heroVideoRef.current) return;
+    if (heroVideoRef.current.paused) {
+      heroVideoRef.current.play();
+      setHeroVideoPlaying(true);
+    } else {
+      heroVideoRef.current.pause();
+      setHeroVideoPlaying(false);
+    }
+  };
+
+  const toggleHeroVideoMute = () => {
+    if (!heroVideoRef.current) return;
+    heroVideoRef.current.muted = !heroVideoRef.current.muted;
+    setHeroVideoMuted(heroVideoRef.current.muted);
+  };
 
   // Scroll listener for sticky navbar
   useEffect(() => {
@@ -219,12 +245,62 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-amber-500/15 to-orange-600/15 blur-[140px] rounded-full pointer-events-none -z-10" />
+      {/* 2. HERO SECTION WITH RESPONSIVE AI VIDEO BACKGROUND */}
+      <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 pb-14 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Full-width Responsive Background Video */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden -z-20">
+          <video
+            ref={heroVideoRef}
+            autoPlay
+            loop
+            muted={heroVideoMuted}
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000"
+          >
+            <source src="/uploads/Courier_riding_scooter_on_globe_202609061947.mp4" type="video/mp4" />
+            <source src="/videos/hero-courier-globe.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        {/* Video Overlays for Contrast & Readability across Desktop & Mobile */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/75 to-slate-950 -z-10 pointer-events-none" />
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none opacity-85"
+          style={{
+            background: 'radial-gradient(circle at center, transparent 15%, rgba(2,6,23,0.92) 85%)',
+          }}
+        />
+
+        {/* Ambient neon orbs */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-amber-500/20 to-orange-600/20 blur-[140px] rounded-full pointer-events-none -z-10" />
         <div className="absolute -top-10 right-10 w-[350px] h-[350px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className="max-w-5xl mx-auto text-center space-y-8">
+        {/* Floating Video Control Badge (Mobile + Desktop) */}
+        <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex items-center gap-2 bg-black/60 hover:bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white shadow-2xl transition-all">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[10px] font-bold text-slate-300 hidden sm:inline">AI Видео Доставки</span>
+          <button
+            type="button"
+            onClick={toggleHeroVideoPlay}
+            className="p-1 rounded-full hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+            title={heroVideoPlaying ? 'Пауза видео' : 'Воспроизвести видео'}
+            aria-label="Play/Pause Hero Video"
+          >
+            {heroVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={toggleHeroVideoMute}
+            className="p-1 rounded-full hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+            title={heroVideoMuted ? 'Включить звук' : 'Выключить звук'}
+            aria-label="Mute/Unmute Hero Video"
+          >
+            {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-amber-400" />}
+          </button>
+        </div>
+
+        <div className="max-w-5xl mx-auto text-center space-y-8 relative z-10">
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Готовое персональное приложение без App Store за 48 часов</span>
