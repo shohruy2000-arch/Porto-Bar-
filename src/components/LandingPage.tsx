@@ -5,9 +5,9 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Percent, 
   Users, 
@@ -58,10 +58,22 @@ export function LandingPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  // Hero AI Video State
+  // Hero AI Video & Parallax State
   const [heroVideoMuted, setHeroVideoMuted] = useState(true);
   const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
-  const heroVideoRef = React.useRef<HTMLVideoElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+
+  // Smooth 60fps parallax transforms on swipe / scroll down
+  const { scrollYProgress } = useScroll({
+    target: heroSectionRef,
+    offset: ['start start', 'end start']
+  });
+
+  const parallaxVideoY = useTransform(scrollYProgress, [0, 1], ['0%', '35%']);
+  const parallaxVideoScale = useTransform(scrollYProgress, [0, 1], [1.02, 1.22]);
+  const heroContentY = useTransform(scrollYProgress, [0, 1], ['0%', '42%']);
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.75, 1], [1, 0.85, 0]);
 
   const toggleHeroVideoPlay = () => {
     if (!heroVideoRef.current) return;
@@ -257,10 +269,16 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION WITH RESPONSIVE AI VIDEO BACKGROUND */}
-      <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 pb-14 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden isolate">
-        {/* Full-width Responsive Background Video */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+      {/* 2. HERO SECTION WITH RESPONSIVE PARALLAX AI VIDEO BACKGROUND */}
+      <section
+        ref={heroSectionRef}
+        className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 pb-14 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden isolate"
+      >
+        {/* Full-width Responsive Parallax Background Video */}
+        <motion.div
+          style={{ y: parallaxVideoY, scale: parallaxVideoScale }}
+          className="absolute inset-0 w-full h-[125%] -top-[12%] overflow-hidden z-0 pointer-events-none will-change-transform"
+        >
           <video
             ref={heroVideoRef}
             autoPlay
@@ -268,12 +286,12 @@ export function LandingPage() {
             muted={heroVideoMuted}
             playsInline
             preload="auto"
-            className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000"
+            className="w-full h-full object-cover object-center"
           >
             <source src="/uploads/Courier_riding_scooter_on_globe_202609061947.mp4" type="video/mp4" />
             <source src="/videos/hero-courier-globe.mp4" type="video/mp4" />
           </video>
-        </div>
+        </motion.div>
 
         {/* Video Overlays for Contrast & Readability across Desktop & Mobile */}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/35 to-slate-950/85 z-[1] pointer-events-none" />
@@ -312,7 +330,10 @@ export function LandingPage() {
           </button>
         </div>
 
-        <div className="max-w-5xl mx-auto text-center space-y-8 relative z-10">
+        <motion.div
+          style={{ y: heroContentY, opacity: heroContentOpacity }}
+          className="max-w-5xl mx-auto text-center space-y-8 relative z-10 will-change-transform"
+        >
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Готовое персональное приложение без App Store за 48 часов</span>
@@ -378,7 +399,7 @@ export function LandingPage() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* 3. PROBLEM SECTION */}
