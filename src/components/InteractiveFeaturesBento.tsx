@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import {
   Smartphone,
   CreditCard,
@@ -16,8 +16,6 @@ import {
   Zap,
   ArrowRight,
   TrendingUp,
-  Layers,
-  ChevronRight
 } from 'lucide-react';
 
 export function InteractiveFeaturesBento() {
@@ -71,7 +69,6 @@ export function InteractiveFeaturesBento() {
   /* ─────────────────────────────────────────────────────────────
      SCROLL PROGRESS RANGES FOR CARDS (DESKTOP)
   ───────────────────────────────────────────────────────────────*/
-  // Title reveal
   const titleY = useTransform(smoothScroll, [0.02, 0.12], [28, 0]);
   const titleOpacity = useTransform(smoothScroll, [0.02, 0.12], [0, 1]);
 
@@ -129,18 +126,6 @@ export function InteractiveFeaturesBento() {
     { left: '12%', delay: 6, duration: 11, size: 4 },
     { left: '64%', delay: 4.5, duration: 9, size: 5 },
     { left: '86%', delay: 1.8, duration: 12, size: 4 },
-  ];
-
-  /* ─────────────────────────────────────────────────────────────
-     FEATURE CARDS DATA FOR MOBILE SLIDER
-  ───────────────────────────────────────────────────────────────*/
-  const featureList = [
-    { id: 'pwa', label: '1. PWA без App Store' },
-    { id: 'pay', label: '2. Онлайн-оплата' },
-    { id: 'loyalty', label: '3. Лояльность' },
-    { id: 'modifiers', label: '4. Модификаторы' },
-    { id: 'push', label: '5. Push-уведомления' },
-    { id: 'analytics', label: '6. Дашборд' },
   ];
 
   return (
@@ -630,9 +615,9 @@ export function InteractiveFeaturesBento() {
           </div>
 
           {/* ──────────────────────────────────────────────────────────
-              MOBILE VIEW: CINEMATIC CARD-BY-CARD DECK (SWIPE & SCROLL)
+              MOBILE VIEW: HARDWARE-ACCELERATED SLIDING DECK
           ───────────────────────────────────────────────────────────*/}
-          <div className="md:hidden my-auto w-full max-w-sm mx-auto space-y-4">
+          <div className="md:hidden my-auto w-full max-w-sm mx-auto space-y-3">
             
             {/* Step indicators */}
             <div className="flex items-center justify-between px-2 text-xs">
@@ -640,33 +625,30 @@ export function InteractiveFeaturesBento() {
                 Функция {mobileActiveIndex + 1} из 6
               </span>
               <div className="flex items-center gap-1.5">
-                {featureList.map((_, i) => (
+                {[0, 1, 2, 3, 4, 5].map((i) => (
                   <button
                     key={i}
                     onClick={() => setMobileActiveIndex(i)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    className={`h-2 rounded-full transition-all ${
                       mobileActiveIndex === i
-                        ? 'bg-amber-400 w-6 shadow-[0_0_8px_rgba(245,158,11,0.8)]'
-                        : 'bg-white/20'
+                        ? 'bg-amber-400 w-5 shadow-[0_0_8px_rgba(245,158,11,0.8)]'
+                        : 'bg-white/20 w-2'
                     }`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* Mobile Active Card */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={mobileActiveIndex}
-                initial={{ opacity: 0, x: 40, scale: 0.95 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -40, scale: 0.95 }}
-                transition={{ duration: 0.28, ease: 'easeOut' }}
-                className="rounded-2xl bg-[#090d16]/95 backdrop-blur-2xl border border-amber-500/30 p-5 shadow-[0_20px_45px_rgba(0,0,0,0.8)] min-h-[290px] flex flex-col justify-between"
+            {/* Sliding Carousel Viewport */}
+            <div className="overflow-hidden rounded-2xl border border-amber-500/30 bg-[#090d16]/95 backdrop-blur-2xl shadow-[0_20px_45px_rgba(0,0,0,0.8)]">
+              <div
+                className="flex transition-transform duration-300 ease-out will-change-transform"
+                style={{ transform: `translateX(-${mobileActiveIndex * 100}%)` }}
               >
-                {/* 1. PWA */}
-                {mobileActiveIndex === 0 && (
-                  <div className="space-y-4">
+                
+                {/* SLIDE 1: PWA */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
                         <Smartphone className="w-5 h-5" />
@@ -681,29 +663,30 @@ export function InteractiveFeaturesBento() {
                         Устанавливается с экрана Safari / Chrome в 1 клик. Занимает меньше 2 МБ, работает без модерации.
                       </p>
                     </div>
-                    <div className="flex items-center justify-between bg-white/[0.04] p-3 rounded-xl border border-white/10">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center">P</div>
-                        <div>
-                          <p className="text-xs font-bold text-white">Porto Bar</p>
-                          <p className="text-[10px] text-slate-400">Safari PWA</p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => setPwaInstalled(!pwaInstalled)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                          pwaInstalled ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500 text-slate-950'
-                        }`}
-                      >
-                        {pwaInstalled ? '✓ На экране' : 'Установить'}
-                      </button>
-                    </div>
                   </div>
-                )}
 
-                {/* 2. Оплата */}
-                {mobileActiveIndex === 1 && (
-                  <div className="space-y-4">
+                  <div className="flex items-center justify-between bg-white/[0.04] p-3 rounded-xl border border-white/10">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center">P</div>
+                      <div>
+                        <p className="text-xs font-bold text-white">Porto Bar</p>
+                        <p className="text-[10px] text-slate-400">Safari PWA</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setPwaInstalled(!pwaInstalled)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        pwaInstalled ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500 text-slate-950'
+                      }`}
+                    >
+                      {pwaInstalled ? '✓ На экране' : 'Установить'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* SLIDE 2: ОНЛАЙН-ОПЛАТА */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                         <CreditCard className="w-5 h-5" />
@@ -718,6 +701,9 @@ export function InteractiveFeaturesBento() {
                         Интеграция с ЮKassa, Т-Банком, СБП. Деньги поступают сразу на ваш расчетный счет.
                       </p>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
                     <div className="grid grid-cols-3 gap-1.5">
                       <button
                         onClick={() => setActivePayment('sbp')}
@@ -744,12 +730,17 @@ export function InteractiveFeaturesBento() {
                         Карты РФ
                       </button>
                     </div>
-                  </div>
-                )}
 
-                {/* 3. Лояльность */}
-                {mobileActiveIndex === 2 && (
-                  <div className="space-y-4">
+                    <div className="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/25 text-emerald-300 text-[10px] flex items-center gap-1.5">
+                      <Check className="w-3 h-3 shrink-0 text-emerald-400" />
+                      <span className="truncate">Деньги на ваш р/с без комиссии платформы</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* SLIDE 3: ЛОЯЛЬНОСТЬ */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
                         <Gift className="w-5 h-5" />
@@ -764,20 +755,22 @@ export function InteractiveFeaturesBento() {
                         Уровни гостей, автоматический кешбэк баллами и подарки к первому заказу.
                       </p>
                     </div>
-                    <div className={`p-3 rounded-xl border ${
-                      activeTier === 'gold' ? 'bg-gradient-to-r from-amber-600/30 to-amber-900/40 border-amber-400/50 text-amber-100' : 'bg-slate-800/60 border-slate-700'
-                    }`}>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold flex items-center gap-1"><Crown className="w-3.5 h-3.5 text-amber-400" /> GOLD VIP</span>
-                        <span className="font-mono font-bold">4 750 бонусов</span>
-                      </div>
-                    </div>
                   </div>
-                )}
 
-                {/* 4. Модификаторы */}
-                {mobileActiveIndex === 3 && (
-                  <div className="space-y-4">
+                  <div className={`p-3 rounded-xl border ${
+                    activeTier === 'gold' ? 'bg-gradient-to-r from-amber-600/30 to-amber-900/40 border-amber-400/50 text-amber-100' : 'bg-slate-800/60 border-slate-700'
+                  }`}>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold flex items-center gap-1"><Crown className="w-3.5 h-3.5 text-amber-400" /> GOLD VIP</span>
+                      <span className="font-mono font-bold text-sm">4 750 бонусов</span>
+                    </div>
+                    <p className="text-[10px] text-amber-300/80 mt-1">Кешбэк 10% на все заказы в приложении</p>
+                  </div>
+                </div>
+
+                {/* SLIDE 4: МОДИФИКАТОРЫ */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
                         <SlidersHorizontal className="w-5 h-5" />
@@ -792,16 +785,37 @@ export function InteractiveFeaturesBento() {
                         Выбор прожарки, добавление соусов и топпингов с пересчетом цены на лету.
                       </p>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between bg-black/40 p-2.5 rounded-xl border border-white/10">
                       <span className="text-xs font-bold text-white">Стейк Рибай Прайм</span>
                       <span className="text-sm font-black font-serif text-amber-400">{calculatedPrice} ₽</span>
                     </div>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={() => setExtraTruffle(!extraTruffle)}
+                        className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
+                          extraTruffle ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-white/[0.03] border-white/5 text-slate-400'
+                        }`}
+                      >
+                        + Трюфель 180₽
+                      </button>
+                      <button
+                        onClick={() => setExtraPepperSauce(!extraPepperSauce)}
+                        className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold border transition-all ${
+                          extraPepperSauce ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-white/[0.03] border-white/5 text-slate-400'
+                        }`}
+                      >
+                        + Соус 120₽
+                      </button>
+                    </div>
                   </div>
-                )}
+                </div>
 
-                {/* 5. Push */}
-                {mobileActiveIndex === 4 && (
-                  <div className="space-y-4">
+                {/* SLIDE 5: PUSH */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-400">
                         <Bell className="w-5 h-5" />
@@ -816,15 +830,16 @@ export function InteractiveFeaturesBento() {
                         Статус готовности заказа и персональные вечерние акции прямо на экран.
                       </p>
                     </div>
-                    <div className="p-3 rounded-xl bg-slate-900 border border-white/10 text-xs text-white">
-                      👨‍🍳 Шеф начал готовить заказ #148. Доставка через 25 минут!
-                    </div>
                   </div>
-                )}
 
-                {/* 6. Дашборд */}
-                {mobileActiveIndex === 5 && (
-                  <div className="space-y-4">
+                  <div className="p-3 rounded-xl bg-slate-900 border border-white/10 text-xs text-white shadow-md">
+                    👨‍🍳 Шеф начал готовить заказ #148. Доставка через 25 минут!
+                  </div>
+                </div>
+
+                {/* SLIDE 6: ДАШБОРД */}
+                <div className="w-full shrink-0 p-5 min-h-[290px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
                         <BarChart3 className="w-5 h-5" />
@@ -839,43 +854,46 @@ export function InteractiveFeaturesBento() {
                         Выручка онлайн, средний чек и стоп-лист блюд в 1 клик с телефона.
                       </p>
                     </div>
-                    <div className="flex items-center justify-between bg-black/40 p-2.5 rounded-xl border border-white/10">
-                      <div>
-                        <p className="text-xs font-bold text-white">Выручка сегодня</p>
-                        <p className="text-sm font-black text-amber-400">184 600 ₽</p>
-                      </div>
-                      <button
-                        onClick={() => setInStopList(!inStopList)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
-                          inStopList ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
-                        }`}
-                      >
-                        {inStopList ? 'Стоп-лист' : 'В наличии'}
-                      </button>
-                    </div>
                   </div>
-                )}
 
-                {/* Navigation helpers */}
-                <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px] text-slate-400">
-                  <button
-                    disabled={mobileActiveIndex === 0}
-                    onClick={() => setMobileActiveIndex((p) => Math.max(0, p - 1))}
-                    className="disabled:opacity-30 hover:text-white"
-                  >
-                    ← Назад
-                  </button>
-                  <span className="text-slate-500">Свайпайте при скролле</span>
-                  <button
-                    disabled={mobileActiveIndex === 5}
-                    onClick={() => setMobileActiveIndex((p) => Math.min(5, p + 1))}
-                    className="disabled:opacity-30 text-amber-400 font-bold hover:text-amber-300"
-                  >
-                    Далее →
-                  </button>
+                  <div className="flex items-center justify-between bg-black/40 p-2.5 rounded-xl border border-white/10">
+                    <div>
+                      <p className="text-xs font-bold text-white">Выручка сегодня</p>
+                      <p className="text-sm font-black text-amber-400">184 600 ₽ (+24%)</p>
+                    </div>
+                    <button
+                      onClick={() => setInStopList(!inStopList)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${
+                        inStopList ? 'bg-rose-500/20 text-rose-300 border-rose-500/50' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50'
+                      }`}
+                    >
+                      {inStopList ? 'Стоп-лист' : 'В наличии'}
+                    </button>
+                  </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
+
+              </div>
+            </div>
+
+            {/* Navigation buttons */}
+            <div className="flex items-center justify-between px-2 pt-1 text-[11px] text-slate-400">
+              <button
+                disabled={mobileActiveIndex === 0}
+                onClick={() => setMobileActiveIndex((p) => Math.max(0, p - 1))}
+                className="disabled:opacity-30 hover:text-white font-medium"
+              >
+                ← Назад
+              </button>
+              <span className="text-slate-500 text-[10px]">Свайп при прокрутке</span>
+              <button
+                disabled={mobileActiveIndex === 5}
+                onClick={() => setMobileActiveIndex((p) => Math.min(5, p + 1))}
+                className="disabled:opacity-30 text-amber-400 font-bold hover:text-amber-300"
+              >
+                Далее →
+              </button>
+            </div>
+
           </div>
 
           {/* ──────────────────────────────────────────────────────────
