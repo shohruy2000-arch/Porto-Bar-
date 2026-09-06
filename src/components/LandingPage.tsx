@@ -39,6 +39,8 @@ import {
 import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
 import { ProblemAggregatorScene } from './ProblemAggregatorScene';
 import { InteractiveFeaturesBento } from './InteractiveFeaturesBento';
+import { LaunchTimeline } from './LaunchTimeline';
+import { LivePhoneSimulator } from './LivePhoneSimulator';
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -410,70 +412,13 @@ export function LandingPage() {
       {/* 4. FEATURES SECTION (Interactive Luxury Bento Grid) */}
       <InteractiveFeaturesBento />
 
-      {/* 5. HOW IT WORKS */}
-      <section id="how-it-works" className="py-24 bg-white text-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-amber-600">
-              Простой и понятный процесс
-            </h2>
-            <p className="text-3xl sm:text-5xl font-black font-serif tracking-tight text-slate-950">
-              Как мы запускаем ваше приложение
-            </p>
-            <p className="text-slate-600 text-base sm:text-lg">
-              Вам не нужно нанимать программистов и дизайнеров — мы берем 100% технической работы на себя.
-            </p>
-          </div>
+      {/* 5. HOW IT WORKS (Interactive 48-Hour Launch Timeline) */}
+      <LaunchTimeline />
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-            <div className="relative space-y-4 text-center md:text-left">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border-2 border-amber-500 text-amber-600 flex items-center justify-center font-bold text-xl mx-auto md:mx-0 shadow-lg">
-                <FileText className="w-6 h-6" />
-              </div>
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Шаг 1 • 5 минут</span>
-              <h3 className="text-xl font-bold text-slate-950">Заявка и бриф</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Вы заполняете короткую форму на сайте, указываете тип кухни, прикрепляете меню и пожелания по стилю.
-              </p>
-            </div>
+      {/* 6. LIVE PWA PHONE SIMULATOR (Virtual iPhone 16 Pro Test-Drive) */}
+      <LivePhoneSimulator />
 
-            <div className="relative space-y-4 text-center md:text-left">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border-2 border-amber-500 text-amber-600 flex items-center justify-center font-bold text-xl mx-auto md:mx-0 shadow-lg">
-                <Palette className="w-6 h-6" />
-              </div>
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Шаг 2 • 24 часа</span>
-              <h3 className="text-xl font-bold text-slate-950">Дизайн и настройка</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Мы подбираем фирменную палитру, настраиваем логотип, структуру категорий и визуал под концепцию вашего ресторана.
-              </p>
-            </div>
-
-            <div className="relative space-y-4 text-center md:text-left">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border-2 border-amber-500 text-amber-600 flex items-center justify-center font-bold text-xl mx-auto md:mx-0 shadow-lg">
-                <Rocket className="w-6 h-6" />
-              </div>
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Шаг 3 • 48 часов</span>
-              <h3 className="text-xl font-bold text-slate-950">Запуск и оплата</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Подключаем интернет-эквайринг, привязываем домен, выдаем готовые QR-коды для столов и обучаем ваш персонал.
-              </p>
-            </div>
-
-            <div className="relative space-y-4 text-center md:text-left">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center font-bold text-xl mx-auto md:mx-0 shadow-lg">
-                <TrendingUp className="w-6 h-6" />
-              </div>
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Шаг 4 • Всегда</span>
-              <h3 className="text-xl font-bold text-slate-950">Рост прямых продаж</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Гости заказывают напрямую через PWA, возвращаются благодаря бонусам, а вы экономите сотни тысяч рублей на комиссиях.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. SHOWCASE SECTION — Multi-Restaurant Interactive Design Gallery */}
+      {/* 7. SHOWCASE SECTION — Multi-Restaurant Interactive Design Gallery */}
       <DesignShowcaseGallery />
 
       {/* 7. PRICING SECTION */}
