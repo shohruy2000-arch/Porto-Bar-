@@ -69,13 +69,21 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    console.log('ServiceWorker registration successful with scope: ', reg.scope);
-                  }, function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
+                if (window.location.pathname.startsWith('/landing') || window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/super-admin')) {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var r of regs) {
+                      r.unregister();
+                    }
                   });
-                });
+                } else {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                      console.log('ServiceWorker registration successful with scope: ', reg.scope);
+                    }, function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                  });
+                }
               }
             `
           }}

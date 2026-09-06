@@ -33,6 +33,13 @@ function PortoBarPhone() {
 
   const display = dishes.length > 0 ? dishes : FALLBACK;
 
+  const getDishName = (val: any): string => {
+    if (!val) return '';
+    if (typeof val === 'string') return val;
+    if (typeof val === 'object') return val.ru || val.en || val.zh || Object.values(val)[0] || '';
+    return String(val);
+  };
+
   return (
     <div className="w-full h-full bg-[#0d0f14] text-white overflow-y-auto scrollbar-none flex flex-col">
       <div className="sticky top-0 z-10 bg-[#0d0f14]/95 backdrop-blur px-4 pt-8 pb-3 border-b border-white/5">
@@ -84,10 +91,10 @@ function PortoBarPhone() {
         {display.map((d: any, i) => (
           <div key={i} className="bg-[#161920] rounded-2xl overflow-hidden border border-white/6">
             <div className="h-[72px] bg-white/5 flex items-center justify-center text-2xl relative">
-              {d.image ? <img src={d.image} alt={d.name} className="w-full h-full object-cover" /> : <span>{d.emoji || '🍽'}</span>}
+              {d.image ? <img src={d.image} alt={getDishName(d.name)} className="w-full h-full object-cover" /> : <span>{d.emoji || '🍽'}</span>}
             </div>
             <div className="p-2">
-              <p className="text-[10px] font-bold line-clamp-1">{d.name}</p>
+              <p className="text-[10px] font-bold line-clamp-1">{getDishName(d.name)}</p>
               <div className="flex items-center justify-between mt-1.5">
                 <span className="text-[11px] font-black text-amber-400">{d.price} ₽</span>
                 <button className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">

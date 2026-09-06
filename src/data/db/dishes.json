@@ -17,7 +17,6 @@
     "image": "/uploads/img_1787866034160_vzaodc.jpg",
     "visible": true,
     "labels": [
-      "recommended",
       "bestseller"
     ],
     "kbju": {
@@ -26,7 +25,8 @@
       "fats": 18,
       "carbs": 12
     },
-    "prepTime": 12
+    "prepTime": 12,
+    "isRecommended": false
   },
   {
     "id": "dish-sal-2",
@@ -43,7 +43,7 @@
     },
     "price": 720,
     "weight": "330 гр",
-    "image": "/uploads/img_1787845231978_gxgqlj.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -182,7 +182,7 @@
     },
     "price": 760,
     "weight": "230 гр",
-    "image": "/uploads/migrated_dish_1781103144152_8.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -211,7 +211,7 @@
     },
     "price": 390,
     "weight": "220 гр",
-    "image": "/uploads/img_1782043172002_ujqrv0.png",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -277,34 +277,6 @@
       "carbs": 72
     },
     "prepTime": 12
-  },
-  {
-    "id": "dish-str-6",
-    "category": "cat-starters",
-    "name": {
-      "ru": "Сет из брускетт",
-      "en": "Bruschetta Assortment Set",
-      "zh": "意式烤面包拼盘"
-    },
-    "description": {
-      "ru": "Ассорти брускетт: с томатами и базиликом, со страчателлой и вялеными томатами, с малосольным лососем.",
-      "en": "Bruschetta trio: tomato & basil, stracciatella with sun-dried tomatoes, cured salmon.",
-      "zh": "精选烤面包三味：番茄罗勒、丝翠奇亚风干番茄、腌三文鱼。"
-    },
-    "price": 1200,
-    "weight": "300 гр",
-    "image": "/images/interior-2.jpg",
-    "visible": true,
-    "labels": [
-      "recommended"
-    ],
-    "kbju": {
-      "calories": 510,
-      "proteins": 22,
-      "fats": 26,
-      "carbs": 49
-    },
-    "prepTime": 14
   },
   {
     "id": "dish-str-7",
@@ -520,7 +492,7 @@
     },
     "price": 840,
     "weight": "430 гр",
-    "image": "/uploads/img_1787845066430_wbg8jh.png",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -546,7 +518,7 @@
     },
     "price": 720,
     "weight": "380 гр",
-    "image": "/uploads/migrated_dish_1781103144162_9.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -600,7 +572,7 @@
     },
     "price": 840,
     "weight": "350 гр",
-    "image": "/uploads/img_1787845106950_9yuulk.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -658,7 +630,7 @@
     "price": 960,
     "weight": "360/100 гр",
     "image": "/uploads/img_1787860773899_lgz3fb.png",
-    "visible": true,
+    "visible": false,
     "labels": [
       "recommended",
       "bestseller"
@@ -686,8 +658,8 @@
     },
     "price": 690,
     "weight": "300/100 гр",
-    "image": "/uploads/img_1782044219210_gmh2wf.png",
-    "visible": true,
+    "image": "",
+    "visible": false,
     "labels": [
       "bestseller"
     ],
@@ -824,7 +796,7 @@
     },
     "price": 660,
     "weight": "290 гр",
-    "image": "/uploads/img_1787845637261_ecyu7e.png",
+    "image": "",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -852,8 +824,8 @@
     },
     "price": 990,
     "weight": "340 гр",
-    "image": "/uploads/img_1787845691744_i8pzxz.png",
-    "visible": true,
+    "image": "",
+    "visible": false,
     "labels": [
       "recommended"
     ],
@@ -958,7 +930,7 @@
     },
     "price": 650,
     "weight": "250 гр",
-    "image": "/uploads/img_1787845843477_kor0c9.jpg",
+    "image": "/uploads/img_1788683478539_4b99ot.png",
     "visible": true,
     "labels": [
       "vegetarian",
@@ -987,7 +959,7 @@
     },
     "price": 390,
     "weight": "150 гр",
-    "image": "/uploads/img_1782044550632_28s57h.png",
+    "image": "",
     "visible": true,
     "labels": [
       "vegetarian"
@@ -1013,7 +985,7 @@
       "en": "Choux pastry puffs filled with vanilla cream, drenched in warm Belgian dark chocolate sauce.",
       "zh": "香草奶油泡芙淋上温热比利时黑巧克力甘纳许。"
     },
-    "price": 280,
+    "price": 360,
     "weight": "125 гр",
     "image": "/uploads/img_1787866103615_4wkswp.jpg",
     "visible": true,
@@ -1041,9 +1013,9 @@
       "en": "Warm chocolate fondant with molten center, served with vanilla ice cream.",
       "zh": "温热流心熔岩蛋糕配香草冰淇淋球。"
     },
-    "price": 270,
+    "price": 470,
     "weight": "180/50 гр",
-    "image": "/uploads/img_1787846234719_j23ij6.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1056,32 +1028,6 @@
       "carbs": 48
     },
     "prepTime": 10
-  },
-  {
-    "id": "dish-des-3",
-    "category": "cat-desserts",
-    "name": {
-      "ru": "Панакота",
-      "en": "Classic Panna Cotta",
-      "zh": "意式奶冻"
-    },
-    "description": {
-      "ru": "Нежнейший сливочный итальянский десерт с натуральной ванилью и ягодным кули.",
-      "en": "Silky Italian cream pudding with natural vanilla bean and wild berry coulis.",
-      "zh": "丝滑意式香草鲜奶冻配野生浆果果酱。"
-    },
-    "price": 430,
-    "weight": "190 гр",
-    "image": "/uploads/img_1787846505754_mgs1iv.jpg",
-    "visible": true,
-    "labels": [],
-    "kbju": {
-      "calories": 320,
-      "proteins": 5,
-      "fats": 20,
-      "carbs": 29
-    },
-    "prepTime": 5
   },
   {
     "id": "dish-des-4",
@@ -1098,7 +1044,7 @@
     },
     "price": 250,
     "weight": "170 гр",
-    "image": "/uploads/img_1782044749885_80rvp1.png",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1310,7 +1256,7 @@
     },
     "price": 320,
     "weight": "180 мл",
-    "image": "/uploads/migrated_dish_1781103144186_16.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1364,7 +1310,7 @@
     },
     "price": 420,
     "weight": "180 мл",
-    "image": "/uploads/migrated_dish_1781103144192_17.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -1392,7 +1338,7 @@
     },
     "price": 450,
     "weight": "220 мл",
-    "image": "/uploads/img_1782993697696_70fwrd.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1420,7 +1366,7 @@
     },
     "price": 380,
     "weight": "400 мл",
-    "image": "/uploads/img_1782993385359_t582t3.png",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1446,7 +1392,7 @@
     },
     "price": 470,
     "weight": "240 мл",
-    "image": "/uploads/img_1782045411272_oia5dj.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1475,7 +1421,7 @@
     },
     "price": 390,
     "weight": "250 мл",
-    "image": "/uploads/img_1782045790836_d7r8dv.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -1503,7 +1449,7 @@
     },
     "price": 490,
     "weight": "400 мл",
-    "image": "/uploads/migrated_dish_1781103144211_19.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1531,7 +1477,7 @@
     },
     "price": 550,
     "weight": "400 мл",
-    "image": "/uploads/img_1782046019446_y9p7c1.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1560,7 +1506,7 @@
     },
     "price": 550,
     "weight": "400 мл",
-    "image": "/uploads/img_1782047823985_o4rtii.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1644,7 +1590,7 @@
     },
     "price": 410,
     "weight": "330 мл",
-    "image": "/uploads/img_1786604578208_ydqziq.png",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1670,7 +1616,7 @@
     },
     "price": 430,
     "weight": "330 мл",
-    "image": "/uploads/img_1787836477753_lmmqxo.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1724,7 +1670,7 @@
     },
     "price": 450,
     "weight": "330 мл",
-    "image": "/uploads/img_1781386010874_kuiz9c.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1753,7 +1699,7 @@
     },
     "price": 650,
     "weight": "250 мл",
-    "image": "/uploads/img_1781385801171_dojk9p.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -1859,7 +1805,7 @@
     },
     "price": 650,
     "weight": "200 мл",
-    "image": "/uploads/img_1781385753198_0i20ys.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -1887,7 +1833,7 @@
     },
     "price": 550,
     "weight": "170 мл",
-    "image": "/uploads/migrated_dish_1781103144228_20.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1916,7 +1862,7 @@
     },
     "price": 480,
     "weight": "150 мл",
-    "image": "/uploads/img_1781281042458_pq08jj.jpg",
+    "image": "",
     "visible": true,
     "labels": [],
     "kbju": {
@@ -1942,7 +1888,7 @@
     },
     "price": 550,
     "weight": "250 мл",
-    "image": "/uploads/img_1781280911368_zjztt0.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -1971,7 +1917,7 @@
     },
     "price": 710,
     "weight": "150 мл",
-    "image": "/uploads/img_1781271630261_rbs4pv.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -2051,7 +1997,7 @@
     },
     "price": 580,
     "weight": "150 мл",
-    "image": "/uploads/img_1781204154176_rads2j.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
@@ -2107,7 +2053,7 @@
     },
     "price": 790,
     "weight": "150 мл",
-    "image": "/uploads/img_1781201023228_cc20qi.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -2162,7 +2108,7 @@
     },
     "price": 590,
     "weight": "50 мл",
-    "image": "/uploads/img_1781160962284_ot38n1.jpg",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended"
@@ -2350,7 +2296,7 @@
     },
     "price": 830,
     "weight": "50 мл",
-    "image": "/uploads/img_1781160920903_wx6b2d.png",
+    "image": "",
     "visible": true,
     "labels": [
       "recommended",
@@ -2379,7 +2325,7 @@
     },
     "price": 720,
     "weight": "50 мл",
-    "image": "/uploads/img_1781115410069_nnxu34.png",
+    "image": "",
     "visible": true,
     "labels": [
       "bestseller"
