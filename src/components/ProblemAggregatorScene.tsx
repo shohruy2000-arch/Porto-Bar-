@@ -33,7 +33,7 @@ export function ProblemAggregatorScene() {
   const phoneGlowOpacity = useTransform(smoothProgress, [0.2, 0.85], [0.35, 0.9]);
   const vortexRotate = useTransform(smoothProgress, [0, 1], [0, 16]);
 
-  // Golden pointer callout line («25–35% комиссия»)
+  // Golden pointer callout line («25–35% комиссия») - Desktop only
   const calloutOpacity = useTransform(smoothProgress, [0.6, 0.85], [0, 1]);
   const calloutScale = useTransform(smoothProgress, [0.6, 0.85], [0.85, 1]);
   const calloutY = useTransform(smoothProgress, [0.6, 0.85], [14, 0]);
@@ -126,7 +126,7 @@ export function ProblemAggregatorScene() {
           />
 
           {/* Left-side protective gradient: ensures 100% typography contrast, never clipped */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 sm:via-black/35 to-black/60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 sm:via-black/35 to-black/60 pointer-events-none" />
           {/* Vertical top & bottom vignette */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#050811] via-transparent to-[#050811]/85 pointer-events-none" />
 
@@ -165,16 +165,16 @@ export function ProblemAggregatorScene() {
             className="absolute inset-[-10%] rounded-full border border-amber-500/10 pointer-events-none opacity-40 blur-[1px]"
           />
 
-          {/* Elegant Callout Pointer Line matching reference photo */}
+          {/* Elegant Callout Pointer Line matching reference photo (Hidden on mobile to keep clean) */}
           <motion.div
             style={{ opacity: calloutOpacity, scale: calloutScale, y: calloutY }}
-            className="absolute -top-7 -left-16 sm:-left-24 flex items-center gap-2 pointer-events-none z-30"
+            className="absolute -top-7 -left-20 sm:-left-24 hidden sm:flex items-center gap-2 pointer-events-none z-30"
           >
-            <div className="flex flex-col items-start bg-black/60 px-3 py-1.5 rounded-lg border border-amber-400/20 backdrop-blur-md shadow-lg">
+            <div className="flex flex-col items-start bg-black/75 px-3 py-1.5 rounded-lg border border-amber-400/30 backdrop-blur-md shadow-lg">
               <span className="font-serif font-black text-amber-400 text-sm sm:text-base tracking-wider drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
                 25–35%
               </span>
-              <span className="text-[10px] font-bold text-amber-200/75 uppercase tracking-widest -mt-0.5">
+              <span className="text-[10px] font-bold text-amber-200/85 uppercase tracking-widest -mt-0.5">
                 комиссия
               </span>
             </div>
@@ -337,16 +337,16 @@ export function ProblemAggregatorScene() {
             {/* Card 1: 25-35% комиссия */}
             <motion.div
               style={{ opacity: card1Opacity, y: card1Y, scale: card1Scale }}
-              className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/25 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-2 sm:gap-2.5"
+              className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/90 sm:bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/30 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-1.5 sm:gap-2.5"
             >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-amber-400/40 bg-amber-500/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-amber-400/50 bg-amber-500/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Percent className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
               </div>
               <div>
                 <p className="text-xs sm:text-base font-serif font-black text-white leading-tight">
                   25–35%
                 </p>
-                <p className="text-[10px] sm:text-xs text-amber-200/70 font-medium mt-0.5">
+                <p className="text-[10px] sm:text-xs text-amber-200/80 font-medium mt-0.5">
                   комиссия
                 </p>
               </div>
@@ -355,16 +355,16 @@ export function ProblemAggregatorScene() {
             {/* Card 2: Клиенты — не ваши */}
             <motion.div
               style={{ opacity: card2Opacity, y: card2Y, scale: card2Scale }}
-              className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/25 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-2 sm:gap-2.5"
+              className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/90 sm:bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/30 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-1.5 sm:gap-2.5"
             >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-amber-400/40 bg-amber-500/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-amber-400/50 bg-amber-500/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Users className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
               </div>
               <div>
                 <p className="text-xs sm:text-base font-serif font-black text-white leading-tight">
                   Клиенты —
                 </p>
-                <p className="text-[10px] sm:text-xs text-amber-200/70 font-medium mt-0.5">
+                <p className="text-[10px] sm:text-xs text-amber-200/80 font-medium mt-0.5">
                   не ваши
                 </p>
               </div>
@@ -373,16 +373,16 @@ export function ProblemAggregatorScene() {
             {/* Card 3: Нет данных о гостях */}
             <motion.div
               style={{ opacity: card3Opacity, y: card3Y, scale: card3Scale }}
-              className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/25 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-2 sm:gap-2.5"
+              className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#090d16]/90 sm:bg-[#090d16]/80 backdrop-blur-2xl border border-amber-500/30 hover:border-amber-400/50 transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.7)] group will-change-transform flex flex-col items-start gap-1.5 sm:gap-2.5"
             >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-amber-400/40 bg-amber-500/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-amber-400/50 bg-amber-500/15 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Database className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
               </div>
               <div>
                 <p className="text-xs sm:text-base font-serif font-black text-white leading-tight">
                   Нет данных
                 </p>
-                <p className="text-[10px] sm:text-xs text-amber-200/70 font-medium mt-0.5">
+                <p className="text-[10px] sm:text-xs text-amber-200/80 font-medium mt-0.5">
                   о гостях
                 </p>
               </div>
