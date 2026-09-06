@@ -80,6 +80,18 @@ export function LandingPage() {
     setHeroVideoMuted(heroVideoRef.current.muted);
   };
 
+  // Ensure video autoplays smoothly on both Desktop and Mobile
+  useEffect(() => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.defaultMuted = true;
+      heroVideoRef.current.muted = true;
+      const p = heroVideoRef.current.play();
+      if (p !== undefined) {
+        p.catch(() => {});
+      }
+    }
+  }, []);
+
   // Scroll listener for sticky navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -246,9 +258,9 @@ export function LandingPage() {
       </header>
 
       {/* 2. HERO SECTION WITH RESPONSIVE AI VIDEO BACKGROUND */}
-      <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 pb-14 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 pb-14 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden isolate">
         {/* Full-width Responsive Background Video */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden -z-20">
+        <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
           <video
             ref={heroVideoRef}
             autoPlay
@@ -264,17 +276,17 @@ export function LandingPage() {
         </div>
 
         {/* Video Overlays for Contrast & Readability across Desktop & Mobile */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/75 to-slate-950 -z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/35 to-slate-950/85 z-[1] pointer-events-none" />
         <div
-          className="absolute inset-0 -z-10 pointer-events-none opacity-85"
+          className="absolute inset-0 z-[1] pointer-events-none opacity-50"
           style={{
-            background: 'radial-gradient(circle at center, transparent 15%, rgba(2,6,23,0.92) 85%)',
+            background: 'radial-gradient(circle at center, transparent 35%, rgba(2,6,23,0.75) 90%)',
           }}
         />
 
         {/* Ambient neon orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-amber-500/20 to-orange-600/20 blur-[140px] rounded-full pointer-events-none -z-10" />
-        <div className="absolute -top-10 right-10 w-[350px] h-[350px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-amber-500/20 to-orange-600/20 blur-[140px] rounded-full pointer-events-none z-[2]" />
+        <div className="absolute -top-10 right-10 w-[350px] h-[350px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none z-[2]" />
 
         {/* Floating Video Control Badge (Mobile + Desktop) */}
         <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex items-center gap-2 bg-black/60 hover:bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white shadow-2xl transition-all">
