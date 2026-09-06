@@ -7,7 +7,8 @@ import {
   Bell, Heart, SlidersHorizontal, ArrowRight, Flame,
   Coffee, Utensils, Gift, Percent, Maximize2, Minimize2,
   Smartphone, Monitor, ShoppingCart, Trash2, CheckCircle2,
-  Globe, Info, RefreshCw
+  Globe, Info, RefreshCw, Navigation, Car, Compass, Clock,
+  MapPin, PhoneCall, ShieldCheck
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────
@@ -39,6 +40,228 @@ const getDishName = (val: any): string => {
   if (typeof val === 'object') return val.ru || val.en || val.zh || Object.values(val)[0] || '';
   return String(val);
 };
+
+/* ═══════════════════════════════════════════════════════════
+   3D DELIVERY TRACKING PANEL (Batmobile Supercar Tracker)
+═══════════════════════════════════════════════════════════ */
+function DeliveryTrackingPanel({
+  restaurantName,
+  accentColor,
+  accentGlow,
+  onClose
+}: {
+  restaurantName: string;
+  accentColor: string;
+  accentGlow: string;
+  onClose?: () => void;
+}) {
+  const [progress, setProgress] = useState(38);
+  const [speed, setSpeed] = useState(72);
+  const [videoError, setVideoError] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress(p => (p >= 95 ? 20 : p + 1));
+      setSpeed(s => Math.floor(65 + Math.random() * 20));
+    }, 1500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div
+      className="rounded-3xl p-6 border-2 space-y-5 transition-all duration-500 relative overflow-hidden bg-[#090d16] text-white"
+      style={{
+        borderColor: accentColor + '60',
+        boxShadow: `0 20px 60px rgba(0,0,0,0.6), 0 0 50px ${accentGlow}`,
+      }}
+    >
+      {/* Background ambient radar glow */}
+      <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none"
+        style={{ background: accentColor }} />
+
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-black shadow-lg"
+            style={{ background: 'linear-gradient(135deg,#1f2430,#0f141f)', border: `1.5px solid ${accentColor}` }}>
+            <Car className="w-5 h-5" style={{ color: accentColor }} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-black uppercase tracking-wider text-white">GetMenu Экспресс 3D</h3>
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse">
+                В пути
+              </span>
+            </div>
+            <p className="text-xs text-slate-400">Суперкар доставки GetMenu • Заказ из {restaurantName}</p>
+          </div>
+        </div>
+
+        {onClose && (
+          <button onClick={onClose} className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20">
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {/* 3D Map / Video Canvas */}
+      <div className="relative h-64 rounded-2xl overflow-hidden border border-white/10 bg-[#04060a]">
+        {!videoError ? (
+          <video
+            src="/videos/getmenu-delivery-batmobile.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            onError={() => setVideoError(true)}
+            className="w-full h-full object-cover"
+          />
+        ) : null}
+
+        {/* Fallback Interactive 3D Holographic Map Animation */}
+        {videoError && (
+          <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+            {/* 3D Grid floor */}
+            <div
+              className="absolute inset-0 opacity-25"
+              style={{
+                backgroundImage: `linear-gradient(to right, ${accentColor}30 1px, transparent 1px), linear-gradient(to bottom, ${accentColor}30 1px, transparent 1px)`,
+                backgroundSize: '36px 36px',
+                transform: 'perspective(400px) rotateX(45deg) scale(1.4)',
+              }}
+            />
+
+            {/* Glowing route line */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 250">
+              <defs>
+                <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#22c55e" />
+                  <stop offset="50%" stopColor={accentColor} />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Route line */}
+              <path
+                d="M 40 180 Q 140 160, 200 120 T 360 60"
+                fill="none"
+                stroke="url(#routeGrad)"
+                strokeWidth="4"
+                filter="url(#glow)"
+                strokeDasharray="6 4"
+                className="animate-pulse"
+              />
+
+              {/* Origin dot */}
+              <circle cx="40" cy="180" r="7" fill="#22c55e" />
+              <text x="40" y="205" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">Ресторан</text>
+
+              {/* Destination dot */}
+              <circle cx="360" cy="60" r="7" fill="#3b82f6" />
+              <text x="360" y="85" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">Ваш адрес</text>
+            </svg>
+
+            {/* Moving Batmobile Supercar Element */}
+            <div
+              className="absolute z-20 transition-all duration-1000 ease-out flex flex-col items-center"
+              style={{
+                left: `${progress}%`,
+                top: `${55 - progress * 0.35}%`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              {/* Batmobile Icon/Badge */}
+              <div
+                className="p-2.5 rounded-2xl shadow-2xl flex items-center gap-1.5 border-2 animate-bounce"
+                style={{
+                  background: 'linear-gradient(135deg,#0a0c12,#161b26)',
+                  borderColor: accentColor,
+                  boxShadow: `0 0 30px ${accentGlow}, 0 10px 20px rgba(0,0,0,0.9)`,
+                }}
+              >
+                <span className="text-xl">🦇</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-wider">
+                  Get<span style={{ color: accentColor }}>Menu</span> Car
+                </span>
+              </div>
+              <div className="w-10 h-1 rounded-full blur-sm mt-1" style={{ background: accentColor }} />
+            </div>
+
+            {/* Radar Sweep Effect */}
+            <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[10px] text-slate-300">
+              <Compass className="w-3.5 h-3.5 animate-spin text-amber-400" />
+              <span>3D GPS Satellite Lock: 99.4%</span>
+            </div>
+          </div>
+        )}
+
+        {/* Telemetry HUD overlay bottom */}
+        <div className="absolute bottom-3 left-3 right-3 z-30 bg-black/75 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-amber-400" />
+            <div>
+              <p className="text-[9px] text-slate-400 uppercase font-bold">Прибытие через</p>
+              <p className="text-xs font-black text-white">~14 минут</p>
+            </div>
+          </div>
+
+          <div className="h-6 w-px bg-white/10" />
+
+          <div>
+            <p className="text-[9px] text-slate-400 uppercase font-bold">Скорость курьера</p>
+            <p className="text-xs font-black" style={{ color: accentColor }}>{speed} км/ч</p>
+          </div>
+
+          <div className="h-6 w-px bg-white/10" />
+
+          <div>
+            <p className="text-[9px] text-slate-400 uppercase font-bold">Дистанция</p>
+            <p className="text-xs font-black text-white">2.4 км</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Driver Card */}
+      <div className="p-3.5 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-sm text-black">
+            GM
+          </div>
+          <div>
+            <p className="text-xs font-black text-white">Курьер: Артём (Бэтмобиль #01) 🦇</p>
+            <div className="flex items-center gap-1 mt-0.5">
+              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <span className="text-[10px] text-slate-300 font-bold">5.0 (2,410 доставок без опозданий)</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={() => alert('Звонок курьеру: +7 (968) 000-22-27')}
+          className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-all"
+        >
+          <PhoneCall className="w-3.5 h-3.5 text-amber-400" />
+          <span className="hidden sm:inline">Связь</span>
+        </button>
+      </div>
+
+      {/* Video upload hint for user */}
+      <div className="text-[10px] text-slate-400 leading-relaxed bg-white/4 p-3 rounded-xl border border-white/5 flex items-start gap-2">
+        <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+        <span>
+          💡 <strong>Видео-слот активен:</strong> закиньте файл видео <code>public/videos/getmenu-delivery-batmobile.mp4</code>, и реальный видеоряд с машиной Бэтмена и логотипом GetMenu мгновенно заменит анимацию!
+        </span>
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════
    DISH DETAIL MODAL
@@ -102,7 +325,6 @@ function InteractiveDishModal({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Food Image */}
         <div className="relative h-52 bg-black/40 overflow-hidden">
           <img src={dish.image} alt={nameStr} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f131d] via-transparent to-transparent" />
@@ -125,7 +347,6 @@ function InteractiveDishModal({
             </p>
           </div>
 
-          {/* Options */}
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
               Дополнительно к блюду:
@@ -161,7 +382,6 @@ function InteractiveDishModal({
             </div>
           </div>
 
-          {/* Quantity & Add button */}
           <div className="pt-2 flex items-center gap-3">
             <div className="flex items-center gap-2 bg-white/6 border border-white/10 rounded-2xl p-1.5">
               <button
@@ -217,9 +437,9 @@ function InPhoneNotifications({
   onClose: () => void;
 }) {
   const NOTICES = [
+    { title: 'Доставка GetMenu активна', time: 'Сейчас', text: 'Суперкар GetMenu готов доставить ваш заказ в течение 25 минут!' },
     { title: 'Столик №12 подтверждён', time: '5 мин назад', text: 'Ждём вас сегодня к 19:30. Шеф подготовил комплимент.' },
     { title: 'Скидка 15% на первый заказ', time: '1 час назад', text: 'При заказе через QR-меню начисляется 350 бонусных баллов.' },
-    { title: 'Шеф рекомендует', time: 'Сегодня', text: 'Попробуйте сезонные новинки от шеф-повара со скидкой 10%.' }
   ];
 
   return (
@@ -258,26 +478,38 @@ function InPhoneNotifications({
 }
 
 /* ═══════════════════════════════════════════════════════════
-   IN-PHONE CART DRAWER
+   IN-PHONE CART & CHECKOUT DRAWER (WITH DELIVERY OPTIONS)
 ═══════════════════════════════════════════════════════════ */
 function InPhoneCartDrawer({
   items,
   accentColor,
   onClose,
   onUpdateQty,
-  onClear
+  onClear,
+  onLaunchTracking
 }: {
   items: CartItem[];
   accentColor: string;
   onClose: () => void;
   onUpdateQty: (id: string, delta: number) => void;
   onClear: () => void;
+  onLaunchTracking: () => void;
 }) {
+  const [deliveryType, setDeliveryType] = useState<'courier' | 'table' | 'pickup'>('courier');
   const [success, setSuccess] = useState(false);
   const total = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
 
+  const handleCheckout = () => {
+    setSuccess(true);
+    if (deliveryType === 'courier') {
+      setTimeout(() => {
+        onLaunchTracking();
+      }, 1200);
+    }
+  };
+
   return (
-    <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-md p-4 flex flex-col animate-fadeIn text-white">
+    <div className="absolute inset-0 z-40 bg-black/92 backdrop-blur-md p-4 flex flex-col animate-fadeIn text-white">
       <div className="flex items-center justify-between pb-3 border-b border-white/10">
         <div className="flex items-center gap-2">
           <ShoppingCart className="w-4 h-4" style={{ color: accentColor }} />
@@ -294,9 +526,11 @@ function InPhoneCartDrawer({
             style={{ borderColor: accentColor, background: accentColor + '20' }}>
             <Check className="w-7 h-7" style={{ color: accentColor }} />
           </div>
-          <h4 className="text-sm font-black">Заказ №PB-312 принят!</h4>
+          <h4 className="text-sm font-black">Заказ №PB-402 принят!</h4>
           <p className="text-[10px] text-slate-300 max-w-xs leading-relaxed">
-            Чек отправлен на кухню (iiko). Официант принесёт заказ к столику / в номер через ~18 мин.
+            {deliveryType === 'courier'
+              ? 'Курьер GetMenu на Бэтмобиле уже выехал с заказом! Открываем 3D трекер на карте...'
+              : 'Чек передан на кассу iiko. Официант принесёт заказ через ~18 мин.'}
           </p>
           <button
             onClick={() => {
@@ -317,27 +551,93 @@ function InPhoneCartDrawer({
         </div>
       ) : (
         <>
-          <div className="flex-1 overflow-y-auto py-3 space-y-2 scrollbar-none pr-1">
+          {/* Delivery Type Selector */}
+          <div className="pt-2 pb-1">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Способ получения:</p>
+            <div className="grid grid-cols-3 gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+              <button
+                type="button"
+                onClick={() => setDeliveryType('courier')}
+                className={`py-1.5 rounded-lg text-[9px] font-bold transition-all flex flex-col items-center gap-0.5 ${
+                  deliveryType === 'courier' ? 'bg-amber-500 text-black shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🏎️ Доставка</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliveryType('table')}
+                className={`py-1.5 rounded-lg text-[9px] font-bold transition-all flex flex-col items-center gap-0.5 ${
+                  deliveryType === 'table' ? 'bg-amber-500 text-black shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🛎️ Столик</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDeliveryType('pickup')}
+                className={`py-1.5 rounded-lg text-[9px] font-bold transition-all flex flex-col items-center gap-0.5 ${
+                  deliveryType === 'pickup' ? 'bg-amber-500 text-black shadow' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <span>🛍️ С собой</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Delivery Details info */}
+          <div className="p-2 rounded-xl bg-white/4 border border-white/8 text-[9px] text-slate-300 flex items-center justify-between mb-2">
+            {deliveryType === 'courier' && (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <Car className="w-3 h-3 text-amber-400" />
+                  <span>Курьер GetMenu • ул. Тверская 14</span>
+                </div>
+                <span className="font-bold text-amber-300">~25 мин</span>
+              </>
+            )}
+            {deliveryType === 'table' && (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <Utensils className="w-3 h-3 text-amber-400" />
+                  <span>Столик / Номер 214</span>
+                </div>
+                <span className="font-bold text-emerald-400">~15 мин</span>
+              </>
+            )}
+            {deliveryType === 'pickup' && (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <ShoppingBag className="w-3 h-3 text-amber-400" />
+                  <span>Забрать из ресторана</span>
+                </div>
+                <span className="font-bold text-blue-400">~10 мин</span>
+              </>
+            )}
+          </div>
+
+          {/* Items List */}
+          <div className="flex-1 overflow-y-auto py-1 space-y-1.5 scrollbar-none pr-1">
             {items.map(it => (
-              <div key={it.id} className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-white/5 border border-white/8">
-                <img src={it.image} alt={it.name} className="w-11 h-11 rounded-xl object-cover" />
+              <div key={it.id} className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/8">
+                <img src={it.image} alt={it.name} className="w-10 h-10 rounded-xl object-cover" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold text-white truncate">{it.name}</p>
-                  <p className="text-[10px] font-black" style={{ color: accentColor }}>
+                  <p className="text-[10px] font-bold text-white truncate">{it.name}</p>
+                  <p className="text-[9px] font-black" style={{ color: accentColor }}>
                     {it.price * it.quantity} ₽
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/10 rounded-xl p-1">
+                <div className="flex items-center gap-1 bg-white/10 rounded-xl p-0.5">
                   <button
                     onClick={() => onUpdateQty(it.id, -1)}
-                    className="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-[10px] font-black"
+                    className="w-4 h-4 rounded-md bg-white/10 flex items-center justify-center text-[9px] font-black"
                   >
                     -
                   </button>
-                  <span className="text-[10px] font-black px-1">{it.quantity}</span>
+                  <span className="text-[9px] font-black px-1">{it.quantity}</span>
                   <button
                     onClick={() => onUpdateQty(it.id, 1)}
-                    className="w-5 h-5 rounded-lg bg-white/10 flex items-center justify-center text-[10px] font-black"
+                    className="w-4 h-4 rounded-md bg-white/10 flex items-center justify-center text-[9px] font-black"
                   >
                     +
                   </button>
@@ -346,19 +646,20 @@ function InPhoneCartDrawer({
             ))}
           </div>
 
-          <div className="pt-3 border-t border-white/10 space-y-2">
+          {/* Bottom Total & Button */}
+          <div className="pt-2.5 border-t border-white/10 space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Итого к оплате:</span>
+              <span className="text-slate-400">Итого:</span>
               <span className="text-base font-black" style={{ color: accentColor }}>
                 {total} ₽
               </span>
             </div>
             <button
-              onClick={() => setSuccess(true)}
+              onClick={handleCheckout}
               className="w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-black flex items-center justify-center gap-1.5 shadow-lg active:scale-98 transition-all"
               style={{ background: accentColor }}
             >
-              <span>Оформить заказ</span>
+              <span>{deliveryType === 'courier' ? 'Оформить доставку' : 'Подтвердить заказ'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -380,6 +681,7 @@ function RestaurantAppView({
   onAddToCart,
   onUpdateCartQty,
   onClearCart,
+  onLaunchTracking,
   liveIframeUrl
 }: {
   restaurant: any;
@@ -390,6 +692,7 @@ function RestaurantAppView({
   onAddToCart: (d: DemoDish) => void;
   onUpdateCartQty: (id: string, delta: number) => void;
   onClearCart: () => void;
+  onLaunchTracking: () => void;
   liveIframeUrl?: string;
 }) {
   const [activeCat, setActiveCat] = useState(categories[0]?.id || 'all');
@@ -447,6 +750,7 @@ function RestaurantAppView({
           onClose={() => setShowCart(false)}
           onUpdateQty={onUpdateCartQty}
           onClear={onClearCart}
+          onLaunchTracking={onLaunchTracking}
         />
       )}
 
@@ -458,12 +762,11 @@ function RestaurantAppView({
             <span className="text-xl">{restaurant.emblem}</span>
             <div>
               <p className="text-[12px] font-black leading-none">{restaurant.name}</p>
-              <p className="text-[9px] text-slate-400 mt-0.5">{restaurant.taglineShort || 'QR Меню & Доставка'}</p>
+              <p className="text-[9px] text-slate-400 mt-0.5">🚀 Доставка & Меню</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Live website button for Chinanews */}
             {liveIframeUrl && (
               <button
                 onClick={() => setLiveMode(true)}
@@ -475,7 +778,6 @@ function RestaurantAppView({
               </button>
             )}
 
-            {/* Notifications Bell */}
             <button
               onClick={() => setShowNotices(true)}
               className="relative p-1.5 rounded-full bg-white/8 hover:bg-white/15 text-slate-300 transition-all"
@@ -484,7 +786,6 @@ function RestaurantAppView({
               <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-amber-400" />
             </button>
 
-            {/* Cart Trigger */}
             <button
               onClick={() => setShowCart(true)}
               className="relative p-1.5 rounded-full bg-white/8 hover:bg-white/15 text-slate-300 transition-all"
@@ -503,7 +804,7 @@ function RestaurantAppView({
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <div className="w-full bg-white/6 border border-white/10 text-slate-400 text-[10px] pl-9 pr-4 py-2 rounded-2xl">
-            Поиск блюд, напитков, десертов...
+            Поиск блюд, напитков, доставки...
           </div>
         </div>
       </div>
@@ -523,7 +824,7 @@ function RestaurantAppView({
               className="px-2 py-0.5 rounded-md text-[8px] font-black uppercase text-white shadow"
               style={{ background: restaurant.accentColor }}
             >
-              {restaurant.heroTag || 'Шеф рекомендует'}
+              {restaurant.heroTag || 'Доставка GetMenu'}
             </span>
             <p className="text-[13px] font-black text-white leading-tight mt-1">
               {restaurant.heroTitle || restaurant.name}
@@ -531,7 +832,7 @@ function RestaurantAppView({
           </div>
         </div>
 
-        {/* Categories with real photos */}
+        {/* Categories */}
         <div className="px-3 mt-3">
           <div className="flex gap-2.5 overflow-x-auto scrollbar-none pb-1">
             {categories.map(cat => {
@@ -623,7 +924,7 @@ function RestaurantAppView({
               <span>{cartTotalCount} блюда</span>
             </div>
             <div className="flex items-center gap-1">
-              <span>{cartTotalPrice} ₽</span>
+              <span>{cartTotalPrice} ₽ • Заказать доставку</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </button>
@@ -660,15 +961,12 @@ function IPhoneFrame({
         boxShadow: `0 50px 100px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 60px ${accentGlow}`,
       }}
     >
-      {/* Side buttons */}
       <div className="absolute -left-[3px] top-16 w-[3px] h-6 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -left-[3px] top-24 w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -left-[3px] top-[152px] w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -right-[3px] top-20 w-[3px] h-16 rounded-r-full bg-[#1a1f2e]" />
 
-      {/* Screen */}
       <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col">
-        {/* Dynamic island & Status bar */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-4.5 rounded-full bg-black flex items-center justify-between px-3 pointer-events-none shadow-md">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#181d29]" />
@@ -680,7 +978,7 @@ function IPhoneFrame({
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ALL 6 RESTAURANTS DATA WITH REAL FOOD PHOTOS
+   ALL 6 RESTAURANTS DATA
 ═══════════════════════════════════════════════════════════ */
 const RESTAURANTS_DATA = [
   {
@@ -694,10 +992,9 @@ const RESTAURANTS_DATA = [
     location: 'Милан, Италия',
     rating: '4.99',
     cuisine: 'Устрицы · Шампанское · Room Service',
-    tagline: 'Тёмная роскошь Michelin-уровня. Живая устричная витрина, тартары из тунца и винный пейринг.',
-    taglineShort: 'Room Service & Oysters',
+    tagline: 'Тёмная роскошь Michelin-уровня. Живая устричная витрина, тартары из тунца и экспресс-доставка.',
     heroImage: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800&q=80',
-    heroTitle: 'Морские деликатесы и премиальный сервис',
+    heroTitle: 'Морские деликатесы и премиальная доставка',
     heroTag: 'Шеф рекомендует',
     categories: [
       { id: 'oysters', name: 'Устрицы', image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=200&q=80' },
@@ -725,8 +1022,7 @@ const RESTAURANTS_DATA = [
     location: 'Шанхай / Москва',
     rating: '4.95',
     cuisine: 'Утка по-пекински · Димсамы · Лапша Вок',
-    tagline: 'Аутентичный азиатский концепт ресторана chinanews.moscow. Ручная тянутая лапша, димсамы на пару и утка.',
-    taglineShort: 'chinanews.moscow · Азия',
+    tagline: 'Аутентичный азиатский концепт ресторана chinanews.moscow. Ручная тянутая лапша, димсамы на пару и утка с доставкой.',
     liveIframeUrl: 'https://chinanews.moscow/',
     heroImage: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&q=80',
     heroTitle: 'Утка по-пекински и ручные димсамы',
@@ -757,8 +1053,7 @@ const RESTAURANTS_DATA = [
     location: 'Стокгольм, Швеция',
     rating: '4.84',
     cuisine: 'Бранч · Суфле-панкейки · Specialty Кофе',
-    tagline: 'Скандинавская эстетика: кремовые цвета, терракотовые акценты, пышные суфле-панкейки и боулы.',
-    taglineShort: 'Nordic Coffee & Brunch',
+    tagline: 'Скандинавская эстетика: кремовые цвета, терракотовые акценты, пышные суфле-панкейки и экспресс-доставка.',
     heroImage: 'https://images.unsplash.com/photo-1565299543923-37dd37887442?w=800&q=80',
     heroTitle: 'Воздушные японские суфле-панкейки',
     heroTag: 'Signature',
@@ -789,7 +1084,6 @@ const RESTAURANTS_DATA = [
     rating: '4.91',
     cuisine: 'Бургеры Black Angus · Комбо · Стриты',
     tagline: 'Тёмный стильный интерфейс в духе лучших мировых доставок еды. Промо-баннеры, комбо-наборы и аппетитные фото.',
-    taglineShort: 'Craft Burger Delivery',
     heroImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80',
     heroTitle: 'Spicy Burger Combo со скидкой 20%',
     heroTag: 'Limited Offer',
@@ -817,7 +1111,6 @@ const RESTAURANTS_DATA = [
     rating: '4.88',
     cuisine: 'Баскеты с курицей · Бургеры · Сеты',
     tagline: 'Светлый сетевой дизайн в стиле гигантов индустрии (KFC). Высокая скорость выбора, яркие бейджи акций и комбо.',
-    taglineShort: 'Chicken & Buckets',
     heroImage: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=800&q=80',
     heroTitle: 'CRISPY. JUICY. IRRESISTIBLE.',
     heroTag: '30% Скидка',
@@ -844,7 +1137,6 @@ const RESTAURANTS_DATA = [
     rating: '4.93',
     cuisine: 'Авторский кофе · Десерты · Выпечка',
     tagline: 'Изысканный европейский стиль кофейни. Тёплые пастельные тона, авторские десерты и премиальная кофейная карта.',
-    taglineShort: 'Specialty Coffee & Cakes',
     heroImage: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80',
     heroTitle: 'Sweet Moments Start Here',
     heroTag: 'Müil Coffee',
@@ -933,7 +1225,7 @@ function LeadModal({
               <h3 className="text-xl font-black">
                 Заказать дизайн как <span style={{ color: style.accentColor }}>{style.name}</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">Адаптируем под ваше меню за 24–48 часов</p>
+              <p className="text-xs text-slate-400 mt-1">Адаптируем под ваше меню и доставку за 24–48 часов</p>
             </div>
             {error && (
               <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs">
@@ -986,6 +1278,7 @@ function LeadModal({
 ═══════════════════════════════════════════════════════════ */
 export function DesignShowcaseGallery() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [rightTab, setRightTab] = useState<'info' | 'delivery'>('info');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMode, setFullscreenMode] = useState<'mobile' | 'desktop'>('mobile');
   const [selectedDish, setSelectedDish] = useState<DemoDish | null>(null);
@@ -1032,7 +1325,10 @@ export function DesignShowcaseGallery() {
     setCartItems([]);
   };
 
-  // Sync tab scroll
+  const handleLaunchTracking = () => {
+    setRightTab('delivery');
+  };
+
   useEffect(() => {
     const el = tabsRef.current?.children[activeIdx] as HTMLElement;
     el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -1057,17 +1353,17 @@ export function DesignShowcaseGallery() {
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 text-amber-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Интерактивные примеры готовых работ от наших дизайнеров</span>
+            <span>Интерактивные примеры готовых работ и 3D-трекинг доставки</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-black font-serif text-white leading-tight">
             Выберите стиль{' '}
             <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-              вашего меню
+              вашего меню и доставки
             </span>
           </h2>
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            Каждый дизайн — это полностью рабочее PWA-приложение с реальными фото блюд, работающими уведомлениями 🔔,
-            карточками модификаторов и живой корзиной 🛒.
+            Полноценное PWA-приложение с реальными фото, оформлением доставки курьером 🏎️, уведомлениями 🔔
+            и живым трекером заказов на 3D карте.
           </p>
         </div>
 
@@ -1139,6 +1435,7 @@ export function DesignShowcaseGallery() {
                   onAddToCart={d => handleAddToCart(d, 1)}
                   onUpdateCartQty={handleUpdateCartQty}
                   onClearCart={handleClearCart}
+                  onLaunchTracking={handleLaunchTracking}
                   liveIframeUrl={active.liveIframeUrl}
                 />
               </IPhoneFrame>
@@ -1160,133 +1457,152 @@ export function DesignShowcaseGallery() {
               ))}
             </div>
 
-            {/* Fullscreen Button under Phone */}
-            <div className="mt-4 flex flex-col sm:flex-row items-center gap-2">
+            {/* Fullscreen & 3D Tracking Button */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => setIsFullscreen(true)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-bold transition-all shadow-lg active:scale-95"
               >
                 <Maximize2 className="w-4 h-4 text-amber-400" />
-                <span>Открыть на весь экран и потыкать</span>
+                <span>Открыть на весь экран</span>
+              </button>
+
+              <button
+                onClick={() => setRightTab(t => t === 'delivery' ? 'info' : 'delivery')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all shadow-lg active:scale-95"
+              >
+                <Car className="w-4 h-4 text-amber-400" />
+                <span>{rightTab === 'delivery' ? 'О дизайне' : '3D Трекер доставки'}</span>
               </button>
             </div>
           </div>
 
-          {/* Info Card */}
-          <div
-            className="rounded-3xl p-6 sm:p-7 border-2 space-y-5 transition-all duration-500"
-            style={{
-              background: 'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))',
-              borderColor: active.accentColor + '40',
-              boxShadow: `0 20px 60px rgba(0,0,0,0.5), 0 0 40px ${active.accentGlow}`,
-            }}
-          >
-            {/* Designer */}
-            <div className="text-xs text-slate-400 flex items-center justify-between">
-              <span>
-                Дизайн: <span className="text-slate-200 font-semibold">{active.designer}</span> · {active.location}
-              </span>
-              {active.liveIframeUrl && (
-                <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
-                  РЕАЛЬНЫЙ РЕСТОРАН
-                </span>
-              )}
-            </div>
-
-            {/* Title */}
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white font-serif">{active.name}</h3>
-                <p className="text-sm font-bold mt-1" style={{ color: active.accentColor }}>
-                  {active.subtitle}
-                </p>
-                <p className="text-xs text-slate-400 mt-0.5">{active.cuisine}</p>
-              </div>
+          {/* Right Column: Switch between Info Card and 3D Delivery Tracking Panel */}
+          <div>
+            {rightTab === 'delivery' ? (
+              <DeliveryTrackingPanel
+                restaurantName={active.name}
+                accentColor={active.accentColor}
+                accentGlow={active.accentGlow}
+                onClose={() => setRightTab('info')}
+              />
+            ) : (
               <div
-                className="flex items-center gap-1 px-3 py-1.5 rounded-2xl border shrink-0"
+                className="rounded-3xl p-6 sm:p-7 border-2 space-y-5 transition-all duration-500"
                 style={{
-                  background: active.accentColor + '18',
+                  background: 'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))',
                   borderColor: active.accentColor + '40',
-                  color: active.accentColor,
+                  boxShadow: `0 20px 60px rgba(0,0,0,0.5), 0 0 40px ${active.accentGlow}`,
                 }}
               >
-                <Star className="w-3.5 h-3.5 fill-current" />
-                <span className="text-sm font-black">{active.rating}</span>
-              </div>
-            </div>
-
-            <p className="text-sm text-slate-300 leading-relaxed">{active.tagline}</p>
-
-            {/* Live website link if available */}
-            {active.liveIframeUrl && (
-              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs flex items-center justify-between">
-                <div className="flex items-center gap-2 text-amber-300">
-                  <Globe className="w-4 h-4" />
-                  <span>Оригинальный сайт заведения:</span>
+                {/* Designer */}
+                <div className="text-xs text-slate-400 flex items-center justify-between">
+                  <span>
+                    Дизайн: <span className="text-slate-200 font-semibold">{active.designer}</span> · {active.location}
+                  </span>
+                  {active.liveIframeUrl && (
+                    <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                      РЕАЛЬНЫЙ РЕСТОРАН
+                    </span>
+                  )}
                 </div>
-                <a
-                  href={active.liveIframeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-white font-bold underline hover:text-amber-400 transition-colors"
-                >
-                  <span>chinanews.moscow</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+
+                {/* Title */}
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white font-serif">{active.name}</h3>
+                    <p className="text-sm font-bold mt-1" style={{ color: active.accentColor }}>
+                      {active.subtitle}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-0.5">{active.cuisine}</p>
+                  </div>
+                  <div
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-2xl border shrink-0"
+                    style={{
+                      background: active.accentColor + '18',
+                      borderColor: active.accentColor + '40',
+                      color: active.accentColor,
+                    }}
+                  >
+                    <Star className="w-3.5 h-3.5 fill-current" />
+                    <span className="text-sm font-black">{active.rating}</span>
+                  </div>
+                </div>
+
+                <p className="text-sm text-slate-300 leading-relaxed">{active.tagline}</p>
+
+                {/* Live website link if available */}
+                {active.liveIframeUrl && (
+                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-amber-300">
+                      <Globe className="w-4 h-4" />
+                      <span>Оригинальный сайт заведения:</span>
+                    </div>
+                    <a
+                      href={active.liveIframeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-white font-bold underline hover:text-amber-400 transition-colors"
+                    >
+                      <span>chinanews.moscow</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+
+                {/* Delivery Features */}
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Включённый функционал доставки:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    {[
+                      'Оформление доставки курьером на дом/офис',
+                      'Заказ к столику или Room Service в номер',
+                      'Живой 3D-трекер курьера на карте города',
+                      'Интеграция с терминалом кухни (iiko / r_keeper)',
+                    ].map((f, i) => (
+                      <div
+                        key={i}
+                        className="flex items-start gap-2 text-xs text-slate-200 p-2 rounded-xl bg-black/30 border border-white/5"
+                      >
+                        <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: active.accentColor }} />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <button
+                    onClick={() =>
+                      setLeadStyle({
+                        name: active.name,
+                        accentColor: active.accentColor,
+                        accentGlow: active.accentGlow,
+                      })
+                    }
+                    className="flex-1 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-black flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-xl"
+                    style={{
+                      background: `linear-gradient(90deg,${active.accentColor},${active.accentColor}cc)`,
+                      boxShadow: `0 8px 30px ${active.accentGlow}`,
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4 text-black" />
+                    <span>Хочу такой дизайн</span>
+                  </button>
+
+                  <button
+                    onClick={() => setRightTab('delivery')}
+                    className="px-5 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                  >
+                    <Car className="w-4 h-4 text-amber-400" />
+                    <span>3D Доставка</span>
+                  </button>
+                </div>
               </div>
             )}
-
-            {/* Features */}
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
-                Включённый функционал дизайна:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {[
-                  'Реальные аппетитные фото блюд в высоком разрешении',
-                  'Интерактивная корзина с расчётом заказа',
-                  'Всплывающие уведомления и спецпредложения 🔔',
-                  'Модальное окно модификаторов блюд и порций',
-                ].map((f, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-2 text-xs text-slate-200 p-2 rounded-xl bg-black/30 border border-white/5"
-                  >
-                    <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: active.accentColor }} />
-                    <span>{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button
-                onClick={() =>
-                  setLeadStyle({
-                    name: active.name,
-                    accentColor: active.accentColor,
-                    accentGlow: active.accentGlow,
-                  })
-                }
-                className="flex-1 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-black flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-xl"
-                style={{
-                  background: `linear-gradient(90deg,${active.accentColor},${active.accentColor}cc)`,
-                  boxShadow: `0 8px 30px ${active.accentGlow}`,
-                }}
-              >
-                <Sparkles className="w-4 h-4 text-black" />
-                <span>Хочу такой дизайн</span>
-              </button>
-
-              <button
-                onClick={() => setIsFullscreen(true)}
-                className="px-5 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
-              >
-                <Maximize2 className="w-4 h-4 text-amber-400" />
-                <span>Тест-драйв</span>
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -1318,7 +1634,14 @@ export function DesignShowcaseGallery() {
 
             {/* Controls Right */}
             <div className="flex items-center gap-2.5">
-              {/* Mode Switcher */}
+              <button
+                onClick={() => setRightTab(t => t === 'delivery' ? 'info' : 'delivery')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold"
+              >
+                <Car className="w-3.5 h-3.5" />
+                <span>3D Доставка</span>
+              </button>
+
               <div className="hidden sm:flex items-center p-1 rounded-xl bg-white/6 border border-white/10">
                 <button
                   onClick={() => setFullscreenMode('mobile')}
@@ -1340,7 +1663,6 @@ export function DesignShowcaseGallery() {
                 </button>
               </div>
 
-              {/* Lead CTA */}
               <button
                 onClick={() => {
                   setLeadStyle({
@@ -1355,7 +1677,6 @@ export function DesignShowcaseGallery() {
                 Хочу такой дизайн
               </button>
 
-              {/* Close Button */}
               <button
                 onClick={() => setIsFullscreen(false)}
                 className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all ml-1"
@@ -1369,7 +1690,7 @@ export function DesignShowcaseGallery() {
           {/* Interactive Stage */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 flex items-center justify-center relative">
             {fullscreenMode === 'mobile' ? (
-              <div className="py-2 animate-fadeIn">
+              <div className="py-2 animate-fadeIn flex flex-col lg:flex-row items-center gap-8">
                 <IPhoneFrame accentGlow={active.accentGlow} isLarge={true}>
                   <RestaurantAppView
                     restaurant={active}
@@ -1380,9 +1701,19 @@ export function DesignShowcaseGallery() {
                     onAddToCart={d => handleAddToCart(d, 1)}
                     onUpdateCartQty={handleUpdateCartQty}
                     onClearCart={handleClearCart}
+                    onLaunchTracking={handleLaunchTracking}
                     liveIframeUrl={active.liveIframeUrl}
                   />
                 </IPhoneFrame>
+
+                {/* 3D Delivery Tracking panel right next to phone in fullscreen mode */}
+                <div className="w-full max-w-md">
+                  <DeliveryTrackingPanel
+                    restaurantName={active.name}
+                    accentColor={active.accentColor}
+                    accentGlow={active.accentGlow}
+                  />
+                </div>
               </div>
             ) : (
               /* Wide Screen Desktop / Tablet View */
@@ -1420,6 +1751,7 @@ export function DesignShowcaseGallery() {
                     onAddToCart={d => handleAddToCart(d, 1)}
                     onUpdateCartQty={handleUpdateCartQty}
                     onClearCart={handleClearCart}
+                    onLaunchTracking={handleLaunchTracking}
                     liveIframeUrl={active.liveIframeUrl}
                   />
                 </div>
