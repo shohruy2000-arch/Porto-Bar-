@@ -241,7 +241,7 @@ export function LivePhoneSimulator() {
 
   return (
     <section
-      id="demo"
+      id="simulator"
       className="relative py-28 sm:py-36 bg-[#02050e] text-white overflow-hidden isolate selection:bg-amber-500 selection:text-slate-950"
     >
       {/* Background ambient lighting */}
