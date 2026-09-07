@@ -93,6 +93,21 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
         <p>© 2026 Porto Bar. Все права защищены.</p>
         <p className="text-[9px] text-gray-600">Разработано в строгом соответствии с законодательством РФ</p>
       </div>
+
+      {/* Powered by GetMenu badge */}
+      <div className="pt-2 flex items-center justify-center">
+        <a
+          href="/landing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/10 hover:border-amber-400/50 text-[11px] text-gray-400 hover:text-white transition-all shadow-sm group"
+        >
+          <span>Сделано с</span>
+          <span className="font-extrabold text-amber-400 group-hover:text-amber-300 transition-colors flex items-center gap-1">
+            GetMenu <span className="text-xs">⚡</span>
+          </span>
+        </a>
+      </div>
     </footer>
   );
 };

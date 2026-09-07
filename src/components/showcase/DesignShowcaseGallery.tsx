@@ -8,7 +8,7 @@ import {
   Coffee, Utensils, Gift, Percent, Maximize2, Minimize2,
   Smartphone, Monitor, ShoppingCart, Trash2, CheckCircle2,
   Globe, Info, RefreshCw, Navigation, Car, Compass, Clock,
-  MapPin, PhoneCall, ShieldCheck
+  MapPin, PhoneCall, ShieldCheck, ChevronDown
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ const getDishName = (val: any): string => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   3D DELIVERY TRACKING PANEL (Batmobile Supercar Tracker)
+   ANIMATED VECTOR DELIVERY TRACKER (2D Neon Map, No 3D, No AI Video)
 ═══════════════════════════════════════════════════════════ */
 function DeliveryTrackingPanel({
   restaurantName,
@@ -55,66 +55,27 @@ function DeliveryTrackingPanel({
   accentGlow: string;
   onClose?: () => void;
 }) {
-  const [viewMode, setViewMode] = useState<'art' | 'radar' | 'video'>('art');
-  const [progress, setProgress] = useState(35);
-  const [speed, setSpeed] = useState(74);
-  const [isTurbo, setIsTurbo] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [videoError, setVideoError] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(48);
 
-  // Dynamic progress & speed cycle
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress(p => (p >= 96 ? 15 : p + 1));
-      if (!isTurbo) {
-        setSpeed(68 + Math.floor(Math.random() * 14));
-      }
-    }, 1800);
+      setProgress(p => (p >= 92 ? 22 : p + 1.4));
+    }, 1200);
     return () => clearInterval(timer);
-  }, [isTurbo]);
+  }, []);
 
-  // Turbo boost toggle
-  const triggerTurbo = () => {
-    setIsTurbo(true);
-    setSpeed(138);
-    setTimeout(() => {
-      setIsTurbo(false);
-      setSpeed(78);
-    }, 3500);
-  };
-
-  // Mouse tilt parallax effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
-    setTilt({ x, y });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
-  const distanceKm = Math.max(0.2, 2.4 * (1 - progress / 100)).toFixed(1);
-  const etaMinutes = Math.max(2, Math.ceil(15 * (1 - progress / 100)));
+  const distanceKm = Math.max(0.3, (1.8 * (1 - progress / 100))).toFixed(1);
+  const etaMinutes = Math.max(2, Math.round(14 * (1 - progress / 100)));
 
   return (
     <div
-      className="rounded-3xl p-5 sm:p-6 border-2 space-y-4 transition-all duration-500 relative overflow-hidden bg-[#090d16] text-white select-none"
+      className="rounded-3xl p-5 sm:p-6 border-2 space-y-4 relative overflow-hidden bg-[#070a13] text-white select-none shadow-2xl transition-all"
       style={{
-        borderColor: accentColor + '60',
-        boxShadow: `0 20px 60px rgba(0,0,0,0.6), 0 0 50px ${accentGlow}`,
+        borderColor: accentColor + '50',
+        boxShadow: `0 20px 60px rgba(0,0,0,0.7), 0 0 40px ${accentGlow}`,
       }}
     >
-      {/* Background ambient radar glow */}
-      <div
-        className="absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl opacity-20 pointer-events-none"
-        style={{ background: accentColor }}
-      />
-
-      {/* Header */}
+      {/* Top Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div
@@ -124,342 +85,179 @@ function DeliveryTrackingPanel({
               border: `1.5px solid ${accentColor}`,
             }}
           >
-            <Car className="w-5 h-5" style={{ color: accentColor }} />
+            <Navigation className="w-5 h-5" style={{ color: accentColor }} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-black uppercase tracking-wider text-white">GetMenu Экспресс 3D</h3>
-              <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase border animate-pulse ${
-                isTurbo
-                  ? 'bg-orange-500/30 text-orange-300 border-orange-500/50'
-                  : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-              }`}>
-                {isTurbo ? '⚡ ТУРБО-ФОРСАЖ' : '● В пути'}
+              <h3 className="text-sm sm:text-base font-black uppercase tracking-wider text-white">
+                Живой трекер курьера
+              </h3>
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 animate-pulse flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                В пути
               </span>
             </div>
-            <p className="text-xs text-slate-400">Суперкар доставки GetMenu • Заказ из {restaurantName}</p>
+            <p className="text-xs text-slate-400">
+              Заказ #4892 • {restaurantName}
+            </p>
           </div>
         </div>
 
         {onClose && (
-          <button onClick={onClose} className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20">
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            title="Закрыть трекер"
+          >
             <X className="w-4 h-4" />
           </button>
         )}
       </div>
 
-      {/* Mode Selector Tabs (Code 3D Art vs 3D Vector Radar vs AI Video) */}
-      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-white/10 text-xs">
-        <button
-          onClick={() => setViewMode('art')}
-          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
-            viewMode === 'art'
-              ? 'bg-amber-500 text-black shadow-md'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>3D Бэтмобиль</span>
-        </button>
-        <button
-          onClick={() => setViewMode('radar')}
-          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
-            viewMode === 'radar'
-              ? 'bg-amber-500 text-black shadow-md'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          <Compass className="w-3.5 h-3.5" />
-          <span>3D Кибер-радар</span>
-        </button>
-        <button
-          onClick={() => setViewMode('video')}
-          className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all flex items-center justify-center gap-1.5 ${
-            viewMode === 'video'
-              ? 'bg-amber-500 text-black shadow-md'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          <Navigation className="w-3.5 h-3.5" />
-          <span>AI Видео</span>
-        </button>
-      </div>
+      {/* 2D Animated Vector Route Map */}
+      <div className="relative h-48 sm:h-52 rounded-2xl overflow-hidden bg-[#04060c] border border-white/10 p-3 flex flex-col justify-between">
+        {/* City Streets Grid SVG Background */}
+        <svg className="absolute inset-0 w-full h-full opacity-35 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="streetGrid" width="36" height="36" patternUnits="userSpaceOnUse">
+              <path d="M 36 0 L 0 0 0 36" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#streetGrid)" />
+        </svg>
 
-      {/* Main 3D Display Stage */}
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-white/10 bg-[#04060a] cursor-crosshair perspective"
-        style={{ perspective: '1000px' }}
-      >
-        {/* MODE 1: INTERACTIVE 3D BATMOBILE WITH PARALLAX & CODE HUD */}
-        {viewMode === 'art' && (
+        {/* Animated Neon Route Vector */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 200" preserveAspectRatio="none">
+          <path
+            d="M 40 160 C 120 160, 100 60, 200 60 C 300 60, 280 140, 360 80"
+            fill="none"
+            stroke="rgba(255,255,255,0.12)"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M 40 160 C 120 160, 100 60, 200 60 C 300 60, 280 140, 360 80"
+            fill="none"
+            stroke={accentColor}
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray="6 8"
+            className="animate-pulse"
+          />
+        </svg>
+
+        {/* Top Floating Telemetry Badges */}
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-[10px]">
+            <Clock className="w-3.5 h-3.5 text-amber-400" />
+            <span>Прибытие: ~<strong className="text-white font-bold">{etaMinutes} мин</strong></span>
+          </div>
+
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-black/80 backdrop-blur-md border border-white/10 text-[10px]">
+            <Compass className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Осталось: <strong className="text-white font-bold">{distanceKm} км</strong></span>
+          </div>
+        </div>
+
+        {/* Waypoints & Moving Courier */}
+        <div className="relative z-10 flex items-center justify-between px-2">
+          {/* Kitchen */}
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.5)]">
+              <Utensils className="w-3.5 h-3.5" />
+            </div>
+            <span className="text-[9px] font-bold text-slate-300 mt-1 bg-black/80 px-1.5 py-0.5 rounded">Кухня</span>
+          </div>
+
+          {/* Courier */}
           <div
-            className="w-full h-full relative transition-transform duration-200 ease-out"
-            style={{
-              transform: `rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) scale(${isTurbo ? 1.05 : 1})`,
-            }}
+            className="flex flex-col items-center transition-all duration-700 ease-out"
+            style={{ transform: `translateX(${(progress - 50) * 1.6}px)` }}
           >
-            {/* Photorealistic Render Artwork */}
-            <img
-              src="/images/batmobile-delivery.jpg"
-              alt="GetMenu Batmobile Delivery Supercar"
-              className="w-full h-full object-cover select-none pointer-events-none"
-            />
-
-            {/* Dark vignette gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
-
-            {/* Live Holographic Target Reticle */}
-            <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-300"
-              style={{
-                width: isTurbo ? '240px' : '210px',
-                height: isTurbo ? '120px' : '100px',
-              }}
-            >
-              {/* Corner brackets */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-400" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-400" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-400" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-amber-400" />
-
-              {/* Tag */}
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono font-bold text-amber-400 border border-amber-400/40 whitespace-nowrap">
-                🎯 GETMENU TUMBLER #01 • GPS LOCK
+            <div className="relative">
+              <div className="w-9 h-9 rounded-full bg-emerald-500 text-black flex items-center justify-center font-bold shadow-[0_0_16px_rgba(16,185,129,0.8)] animate-bounce">
+                <Car className="w-4 h-4" />
               </div>
+              <span className="absolute -inset-1 rounded-full border border-emerald-400 animate-ping pointer-events-none" />
             </div>
-
-            {/* Animated Laser Scan Line */}
-            <div
-              className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_15px_#f59e0b] pointer-events-none animate-pulse"
-              style={{
-                top: `${(progress * 1.5) % 85 + 5}%`,
-                opacity: 0.7,
-              }}
-            />
-
-            {/* Turbo Boost Nitro Glow Overlay */}
-            {isTurbo && (
-              <div className="absolute inset-0 bg-orange-500/15 pointer-events-none mix-blend-screen animate-pulse" />
-            )}
-
-            {/* Top HUD Badges */}
-            <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-none">
-              <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 text-[9px] text-slate-200">
-                <Compass className="w-3 h-3 text-amber-400 animate-spin" />
-                <span>3D Спутник: 55.7558° N, 37.6173° E</span>
-              </div>
-
-              <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 text-[9px] text-slate-200 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>PWR: 94% ION</span>
-              </div>
-            </div>
-
-            {/* Turbo Boost Trigger Button */}
-            <div className="absolute top-12 right-3 z-30">
-              <button
-                type="button"
-                onClick={triggerTurbo}
-                className={`px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 shadow-xl transition-all active:scale-95 ${
-                  isTurbo
-                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white animate-bounce shadow-orange-500/50'
-                    : 'bg-black/80 hover:bg-black text-amber-400 border border-amber-500/40'
-                }`}
-              >
-                <Flame className="w-3.5 h-3.5" />
-                <span>{isTurbo ? '⚡ ФОРСАЖ!' : 'Турбо-буст'}</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* MODE 2: 3D CYBER RADAR (Animated Vector Map) */}
-        {viewMode === 'radar' && (
-          <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
-            {/* 3D Grid floor */}
-            <div
-              className="absolute inset-0 opacity-25"
-              style={{
-                backgroundImage: `linear-gradient(to right, ${accentColor}30 1px, transparent 1px), linear-gradient(to bottom, ${accentColor}30 1px, transparent 1px)`,
-                backgroundSize: '32px 32px',
-                transform: 'perspective(400px) rotateX(45deg) scale(1.4)',
-              }}
-            />
-
-            {/* Glowing route vector */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 250">
-              <defs>
-                <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#22c55e" />
-                  <stop offset="50%" stopColor={accentColor} />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="4" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {/* Route line */}
-              <path
-                d="M 40 190 Q 140 160, 200 120 T 360 60"
-                fill="none"
-                stroke="url(#routeGrad)"
-                strokeWidth="4"
-                filter="url(#glow)"
-                strokeDasharray="6 4"
-                className="animate-pulse"
-              />
-
-              {/* Origin dot */}
-              <circle cx="40" cy="190" r="7" fill="#22c55e" />
-              <text x="40" y="215" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">
-                {restaurantName}
-              </text>
-
-              {/* Destination dot */}
-              <circle cx="360" cy="60" r="7" fill="#3b82f6" />
-              <text x="360" y="85" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">
-                Адрес доставки
-              </text>
-            </svg>
-
-            {/* Moving Batmobile Supercar Element */}
-            <div
-              className="absolute z-20 transition-all duration-1000 ease-out flex flex-col items-center pointer-events-none"
-              style={{
-                left: `${progress}%`,
-                top: `${58 - progress * 0.35}%`,
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
-              <div
-                className="p-2.5 rounded-2xl shadow-2xl flex items-center gap-1.5 border-2 animate-bounce"
-                style={{
-                  background: 'linear-gradient(135deg,#0a0c12,#161b26)',
-                  borderColor: accentColor,
-                  boxShadow: `0 0 30px ${accentGlow}, 0 10px 20px rgba(0,0,0,0.9)`,
-                }}
-              >
-                <span className="text-xl">🦇</span>
-                <span className="text-[10px] font-black text-white uppercase tracking-wider">
-                  Get<span style={{ color: accentColor }}>Menu</span> Batmobile
-                </span>
-              </div>
-              <div className="w-10 h-1 rounded-full blur-sm mt-1" style={{ background: accentColor }} />
-            </div>
-
-            {/* Radar status */}
-            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[10px] text-slate-300 flex items-center gap-2">
-              <Compass className="w-3.5 h-3.5 animate-spin text-amber-400" />
-              <span>Holographic GPS Radar v4.2 Active</span>
-            </div>
-          </div>
-        )}
-
-        {/* MODE 3: AI VIDEO PLAYER */}
-        {viewMode === 'video' && (
-          <div className="w-full h-full relative flex items-center justify-center bg-black">
-            {!videoError ? (
-              <video
-                src="/videos/getmenu-delivery-batmobile.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                onError={() => setVideoError(true)}
-                className="w-full h-full object-cover"
-              />
-            ) : null}
-
-            {videoError && (
-              <div className="p-6 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mx-auto text-xl">
-                  🎬
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white">Видео в процессе добавления</h4>
-                  <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
-                    Закиньте сгенерированный ролик в <code>public/videos/getmenu-delivery-batmobile.mp4</code>.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('art')}
-                  className="px-4 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs"
-                >
-                  Переключить на 3D Бэтмобиль
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Telemetry HUD Overlay Bottom (Common across modes) */}
-        <div className="absolute bottom-3 left-3 right-3 z-30 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-amber-400" />
-            <div>
-              <p className="text-[9px] text-slate-400 uppercase font-bold">Прибытие через</p>
-              <p className="text-xs font-black text-white">~{etaMinutes} минут</p>
-            </div>
+            <span className="text-[9px] font-bold text-emerald-300 mt-1 bg-black/90 px-1.5 py-0.5 rounded border border-emerald-500/30 whitespace-nowrap">
+              Курьер • 42 км/ч
+            </span>
           </div>
 
-          <div className="h-6 w-px bg-white/10" />
-
-          <div>
-            <p className="text-[9px] text-slate-400 uppercase font-bold">Скорость курьера</p>
-            <p className={`text-xs font-black transition-all ${isTurbo ? 'text-orange-400 scale-110 font-mono' : ''}`} style={{ color: !isTurbo ? accentColor : undefined }}>
-              {speed} км/ч
-            </p>
+          {/* Destination */}
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400 flex items-center justify-center text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.5)]">
+              <MapPin className="w-3.5 h-3.5" />
+            </div>
+            <span className="text-[9px] font-bold text-slate-300 mt-1 bg-black/80 px-1.5 py-0.5 rounded">Гость</span>
           </div>
+        </div>
 
-          <div className="h-6 w-px bg-white/10" />
-
-          <div>
-            <p className="text-[9px] text-slate-400 uppercase font-bold">Дистанция</p>
-            <p className="text-xs font-black text-white">{distanceKm} км</p>
-          </div>
+        {/* Progress Bar */}
+        <div className="relative z-10 w-full bg-white/10 h-1.5 rounded-full overflow-hidden mt-1">
+          <div
+            className="h-full bg-gradient-to-r from-amber-500 via-emerald-400 to-emerald-300 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 
-      {/* Driver Card */}
-      <div className="p-3.5 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-sm text-black shadow-md">
-            GM
+      {/* Progress Timeline */}
+      <div className="space-y-1.5">
+        {[
+          { label: 'Заказ принят и передан на кухню', time: '15:20', done: true },
+          { label: 'Шеф-повар упаковал горячие блюда', time: '15:35', done: true },
+          { label: 'Курьер везёт заказ (термосумка +68°C)', time: '15:42', active: true },
+          { label: 'Вручение заказа гостю в руки', time: '~15:56', pending: true },
+        ].map((step, idx) => (
+          <div
+            key={idx}
+            className={`flex items-center justify-between p-2 rounded-xl text-xs ${
+              step.active
+                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold'
+                : step.done
+                ? 'bg-white/[0.02] text-slate-300'
+                : 'text-slate-500'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] ${
+                step.done || step.active ? 'bg-amber-500 text-black font-black' : 'bg-white/10 text-slate-400'
+              }`}>
+                {step.done || step.active ? '✓' : idx + 1}
+              </div>
+              <span className="truncate">{step.label}</span>
+            </div>
+            <span className="font-mono text-[10px] shrink-0 opacity-80">{step.time}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Courier Profile */}
+      <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-black font-black text-sm shadow">
+            АК
           </div>
           <div>
-            <p className="text-xs font-black text-white">Курьер: Артём (Бэтмобиль #01) 🦇</p>
-            <div className="flex items-center gap-1 mt-0.5">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span className="text-[10px] text-slate-300 font-bold">5.0 (2,410 доставок без опозданий)</span>
-            </div>
+            <p className="text-xs font-bold text-white leading-tight">Курьер Алишер К.</p>
+            <p className="text-[10px] text-amber-400 flex items-center gap-1 mt-0.5">
+              <span>★ 4.98</span>
+              <span className="text-slate-400">• 1 420 доставок</span>
+            </p>
           </div>
         </div>
 
         <button
           type="button"
-          onClick={() => alert('Звонок курьеру: +7 (968) 000-22-27')}
-          className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+          onClick={() => alert('Симуляция звонка курьеру: +7 (999) 000-48-92')}
+          className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
         >
-          <PhoneCall className="w-3.5 h-3.5 text-amber-400" />
-          <span className="hidden sm:inline">Связь</span>
+          <PhoneCall className="w-3.5 h-3.5" />
+          <span>Позвонить</span>
         </button>
-      </div>
-
-      {/* Interactive Helper Hint */}
-      <div className="text-[10px] text-slate-400 leading-relaxed bg-white/4 p-2.5 rounded-xl border border-white/5 flex items-start gap-2">
-        <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-        <span>
-          💡 <strong>Интерактив в коде:</strong> двигайте курсором мыши над Бэтмобилем для 3D-параллакса, нажимайте <strong>«Турбо-буст»</strong> для форсажа или переключайте режимы на 3D Кибер-радар.
-        </span>
       </div>
     </div>
   );
@@ -884,7 +682,10 @@ function RestaurantAppView({
   onUpdateCartQty,
   onClearCart,
   onLaunchTracking,
-  liveIframeUrl
+  liveIframeUrl,
+  allRestaurants,
+  onSelectRestaurant,
+  onToggleInteractive
 }: {
   restaurant: any;
   dishes: DemoDish[];
@@ -896,10 +697,14 @@ function RestaurantAppView({
   onClearCart: () => void;
   onLaunchTracking: () => void;
   liveIframeUrl?: string;
+  allRestaurants?: any[];
+  onSelectRestaurant?: (idx: number) => void;
+  onToggleInteractive?: () => void;
 }) {
   const [activeCat, setActiveCat] = useState(categories[0]?.id || 'all');
   const [showNotices, setShowNotices] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [showEstablishmentMenu, setShowEstablishmentMenu] = useState(false);
   const [liveMode, setLiveMode] = useState(Boolean(liveIframeUrl));
   const [iframeKey, setIframeKey] = useState(0);
 
@@ -917,15 +722,46 @@ function RestaurantAppView({
   if (liveMode && liveIframeUrl) {
     return (
       <div className="w-full h-full flex flex-col bg-black text-white relative">
-        <div className="bg-[#0b0e17] px-3 pt-7 pb-2 border-b border-white/10 flex items-center justify-between z-20 shrink-0">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            <span className="text-[10px] font-mono font-bold text-amber-400 truncate">
-              {restaurant.name}
-            </span>
+        <div className="bg-[#0b0e17] px-3 pt-7 pb-2 border-b border-white/10 flex items-center justify-between z-20 shrink-0 relative">
+          {/* Restaurant switcher inside phone */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowEstablishmentMenu(!showEstablishmentMenu)}
+              className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg text-[10px] font-bold text-white transition-all"
+            >
+              <span>{restaurant.emblem}</span>
+              <span className="truncate max-w-[90px]">{restaurant.name}</span>
+              <ChevronDown className="w-3 h-3 text-amber-400" />
+            </button>
+
+            {/* Dropdown menu inside phone */}
+            {showEstablishmentMenu && allRestaurants && (
+              <div className="absolute top-full left-0 mt-1 w-48 rounded-xl bg-[#0e1320] border border-white/15 shadow-2xl p-1.5 z-50 space-y-1 animate-fadeIn">
+                <p className="text-[8px] font-bold uppercase tracking-wider text-slate-400 px-2 py-1">
+                  Выберите заведение:
+                </p>
+                {allRestaurants.map((r, idx) => (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => {
+                      if (onSelectRestaurant) onSelectRestaurant(idx);
+                      setShowEstablishmentMenu(false);
+                    }}
+                    className={`w-full text-left flex items-center gap-2 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                      r.id === restaurant.id ? 'bg-amber-500 text-black' : 'text-slate-200 hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{r.emblem}</span>
+                    <span className="truncate">{r.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-1 shrink-0">
             <button
               onClick={() => setIframeKey(k => k + 1)}
               title="Перезагрузить сайт"
@@ -994,15 +830,44 @@ function RestaurantAppView({
       )}
 
       {/* Top Header */}
-      <div className="sticky top-0 z-20 px-4 pt-7 pb-2.5 border-b backdrop-blur-md"
+      <div className="sticky top-0 z-20 px-4 pt-7 pb-2.5 border-b backdrop-blur-md relative"
         style={{ background: (restaurant.bgTheme || '#0d0f14') + 'ee', borderColor: 'rgba(255,255,255,0.08)' }}>
         <div className="flex items-center justify-between mb-2.5">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">{restaurant.emblem}</span>
-            <div>
-              <p className="text-[12px] font-black leading-none">{restaurant.name}</p>
-              <p className="text-[9px] text-slate-400 mt-0.5">🚀 Доставка & Меню</p>
-            </div>
+          {/* Restaurant switcher dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowEstablishmentMenu(!showEstablishmentMenu)}
+              className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-xl text-[11px] font-bold text-white transition-all"
+            >
+              <span className="text-base leading-none">{restaurant.emblem}</span>
+              <span className="truncate max-w-[100px]">{restaurant.name}</span>
+              <ChevronDown className="w-3 h-3 text-amber-400" />
+            </button>
+
+            {showEstablishmentMenu && allRestaurants && (
+              <div className="absolute top-full left-0 mt-1 w-48 rounded-xl bg-[#0e1320] border border-white/15 shadow-2xl p-1.5 z-50 space-y-1 animate-fadeIn">
+                <p className="text-[8px] font-bold uppercase tracking-wider text-slate-400 px-2 py-1">
+                  Заведение:
+                </p>
+                {allRestaurants.map((r, idx) => (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => {
+                      if (onSelectRestaurant) onSelectRestaurant(idx);
+                      setShowEstablishmentMenu(false);
+                    }}
+                    className={`w-full text-left flex items-center gap-2 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                      r.id === restaurant.id ? 'bg-amber-500 text-black' : 'text-slate-200 hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{r.emblem}</span>
+                    <span className="truncate">{r.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -1179,18 +1044,28 @@ function RestaurantAppView({
 function IPhoneFrame({
   children,
   accentGlow,
-  isLarge = false
+  isLarge = false,
+  isInteractive = false,
+  onToggleInteractive
 }: {
   children: React.ReactNode;
   accentGlow: string;
   isLarge?: boolean;
+  isInteractive?: boolean;
+  onToggleInteractive?: () => void;
 }) {
   const width = isLarge ? 340 : 280;
   const height = isLarge ? 680 : 570;
 
   return (
     <div
-      className="relative mx-auto flex-shrink-0 transition-all duration-300"
+      className="relative mx-auto flex-shrink-0 transition-all duration-300 select-none"
+      onContextMenu={(e) => {
+        if (onToggleInteractive) {
+          e.preventDefault();
+          onToggleInteractive();
+        }
+      }}
       style={{
         width,
         height,
@@ -1205,12 +1080,48 @@ function IPhoneFrame({
       <div className="absolute -left-[3px] top-[152px] w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -right-[3px] top-20 w-[3px] h-16 rounded-r-full bg-[#1a1f2e]" />
 
-      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col">
+      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col relative">
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-4.5 rounded-full bg-black flex items-center justify-between px-3 pointer-events-none shadow-md">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#181d29]" />
         </div>
-        <div className="w-full h-full overflow-hidden relative">{children}</div>
+
+        {/* Screen Content */}
+        <div className={`w-full h-full overflow-hidden relative ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+          {children}
+        </div>
+
+        {/* Safe Scroll Overlay (When NOT interactive) */}
+        {!isInteractive && onToggleInteractive && (
+          <div
+            onClick={onToggleInteractive}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              onToggleInteractive();
+            }}
+            className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-7 bg-gradient-to-t from-black/80 via-transparent to-transparent cursor-pointer group"
+          >
+            <div className="bg-slate-900/95 border border-amber-400/50 text-white px-3.5 py-1.5 rounded-full text-[11px] font-bold shadow-2xl flex items-center gap-2 group-hover:scale-105 group-hover:border-amber-400 transition-all">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span>Нажмите ПКМ для управления</span>
+            </div>
+            <p className="text-[10px] text-slate-300 mt-1 opacity-80">
+              Колёсико мыши свободно листает страницу
+            </p>
+          </div>
+        )}
+
+        {/* Active Interaction Status Button */}
+        {isInteractive && onToggleInteractive && (
+          <button
+            type="button"
+            onClick={onToggleInteractive}
+            className="absolute top-10 left-1/2 -translate-x-1/2 z-40 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-xl flex items-center gap-1 transition-all cursor-pointer animate-fadeIn"
+            title="Кликните ПКМ или кнопку, чтобы вернуть листание страницы"
+          >
+            <span>● Управление активно (Выход)</span>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -1519,6 +1430,7 @@ function LeadModal({
 export function DesignShowcaseGallery() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [rightTab, setRightTab] = useState<'info' | 'delivery'>('info');
+  const [isPhoneInteractive, setIsPhoneInteractive] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMode, setFullscreenMode] = useState<'mobile' | 'desktop'>('mobile');
   const [selectedDish, setSelectedDish] = useState<DemoDish | null>(null);
@@ -1608,10 +1520,10 @@ export function DesignShowcaseGallery() {
         </div>
 
         {/* Tab Selector */}
-        <div className="relative mb-10">
+        <div className="relative mb-10 flex items-center justify-center">
           <div
             ref={tabsRef}
-            className="flex gap-2 overflow-x-auto scrollbar-none pb-2 px-1 justify-start lg:justify-center"
+            className="flex flex-wrap items-center justify-center gap-2.5 max-w-4xl mx-auto px-2"
           >
             {RESTAURANTS_DATA.map((r, i) => (
               <button
@@ -1647,7 +1559,7 @@ export function DesignShowcaseGallery() {
         </div>
 
         {/* Main Stage Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-14 items-center justify-center max-w-5xl mx-auto">
           {/* Phone Column */}
           <div className="flex flex-col items-center">
             <div className="relative">
@@ -1665,7 +1577,11 @@ export function DesignShowcaseGallery() {
                 <ChevronRight className="w-4 h-4" />
               </button>
 
-              <IPhoneFrame accentGlow={active.accentGlow}>
+              <IPhoneFrame
+                accentGlow={active.accentGlow}
+                isInteractive={isPhoneInteractive}
+                onToggleInteractive={() => setIsPhoneInteractive(prev => !prev)}
+              >
                 <RestaurantAppView
                   restaurant={active}
                   dishes={active.dishes}
@@ -1677,6 +1593,9 @@ export function DesignShowcaseGallery() {
                   onClearCart={handleClearCart}
                   onLaunchTracking={handleLaunchTracking}
                   liveIframeUrl={active.liveIframeUrl}
+                  allRestaurants={RESTAURANTS_DATA}
+                  onSelectRestaurant={setActiveIdx}
+                  onToggleInteractive={() => setIsPhoneInteractive(prev => !prev)}
                 />
               </IPhoneFrame>
             </div>
@@ -1940,7 +1859,11 @@ export function DesignShowcaseGallery() {
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 flex items-center justify-center relative">
             {fullscreenMode === 'mobile' ? (
               <div className="py-2 animate-fadeIn flex flex-col lg:flex-row items-center gap-8">
-                <IPhoneFrame accentGlow={active.accentGlow} isLarge={true}>
+                <IPhoneFrame
+                  accentGlow={active.accentGlow}
+                  isLarge={true}
+                  isInteractive={true}
+                >
                   <RestaurantAppView
                     restaurant={active}
                     dishes={active.dishes}
@@ -1952,6 +1875,8 @@ export function DesignShowcaseGallery() {
                     onClearCart={handleClearCart}
                     onLaunchTracking={handleLaunchTracking}
                     liveIframeUrl={active.liveIframeUrl}
+                    allRestaurants={RESTAURANTS_DATA}
+                    onSelectRestaurant={setActiveIdx}
                   />
                 </IPhoneFrame>
 
