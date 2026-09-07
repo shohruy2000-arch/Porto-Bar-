@@ -788,14 +788,16 @@ function RestaurantAppView({
           </div>
         </div>
 
-        <iframe
-          key={iframeKey}
-          src={liveIframeUrl}
-          className="w-full flex-1 border-0 bg-[#060a12]"
-          title={restaurant.name}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-        />
+        <div className="flex-1 w-full relative overflow-hidden bg-[#060a12]">
+          <iframe
+            key={iframeKey}
+            src={liveIframeUrl}
+            className="absolute inset-0 w-full h-full border-0"
+            title={restaurant.name}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          />
+        </div>
 
         <div className="h-4 bg-black flex items-center justify-center shrink-0">
           <div className="w-24 h-1 bg-white/30 rounded-full" />
@@ -1054,8 +1056,8 @@ function IPhoneFrame({
   isInteractive?: boolean;
   onToggleInteractive?: () => void;
 }) {
-  const width = isLarge ? 340 : 280;
-  const height = isLarge ? 680 : 570;
+  const width = isLarge ? 380 : 315;
+  const height = isLarge ? 760 : 640;
 
   return (
     <div
@@ -1080,14 +1082,14 @@ function IPhoneFrame({
       <div className="absolute -left-[3px] top-[152px] w-[3px] h-12 rounded-l-full bg-[#1a1f2e]" />
       <div className="absolute -right-[3px] top-20 w-[3px] h-16 rounded-r-full bg-[#1a1f2e]" />
 
-      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col relative">
+      <div className="absolute inset-[3px] rounded-[44px] overflow-hidden bg-black flex flex-col">
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-4.5 rounded-full bg-black flex items-center justify-between px-3 pointer-events-none shadow-md">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#181d29]" />
         </div>
 
         {/* Screen Content */}
-        <div className={`w-full h-full overflow-hidden relative ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        <div className={`w-full h-full flex flex-col overflow-hidden relative ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           {children}
         </div>
 
@@ -1111,15 +1113,16 @@ function IPhoneFrame({
           </div>
         )}
 
-        {/* Active Interaction Status Button */}
+        {/* Active Interaction Status Button (placed at bottom so it does not block top header) */}
         {isInteractive && onToggleInteractive && (
           <button
             type="button"
             onClick={onToggleInteractive}
-            className="absolute top-10 left-1/2 -translate-x-1/2 z-40 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[9px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-xl flex items-center gap-1 transition-all cursor-pointer animate-fadeIn"
-            title="Кликните ПКМ или кнопку, чтобы вернуть листание страницы"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 text-[10px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-2xl flex items-center gap-1.5 transition-all cursor-pointer backdrop-blur-md animate-fadeIn border border-emerald-300/40"
+            title="Кликните ПКМ или эту кнопку, чтобы вернуть обычное листание страницы"
           >
-            <span>● Управление активно (Выход)</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping" />
+            <span>Управление активно (ПКМ: Выход)</span>
           </button>
         )}
       </div>
