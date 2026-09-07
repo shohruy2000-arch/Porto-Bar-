@@ -40,7 +40,6 @@ import { DesignShowcaseGallery } from './showcase/DesignShowcaseGallery';
 import { ProblemAggregatorScene } from './ProblemAggregatorScene';
 import { InteractiveFeaturesBento } from './InteractiveFeaturesBento';
 import { LaunchTimeline } from './LaunchTimeline';
-import { LivePhoneSimulator } from './LivePhoneSimulator';
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -236,7 +235,7 @@ export function LandingPage() {
               Возможности
             </button>
             <button 
-              onClick={() => scrollToSection('simulator')} 
+              onClick={() => scrollToSection('demo')} 
               className="hover:text-amber-400 transition-colors cursor-pointer"
             >
               Демо
@@ -415,8 +414,6 @@ export function LandingPage() {
       {/* 5. HOW IT WORKS (Interactive 48-Hour Launch Timeline) */}
       <LaunchTimeline />
 
-      {/* 6. LIVE PWA PHONE SIMULATOR (Virtual iPhone 16 Pro Test-Drive) */}
-      <LivePhoneSimulator />
 
       {/* 7. SHOWCASE SECTION — Multi-Restaurant Interactive Design Gallery */}
       <DesignShowcaseGallery />
