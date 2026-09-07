@@ -529,7 +529,7 @@ function InPhoneCartDrawer({
           <h4 className="text-sm font-black">Заказ №PB-402 принят!</h4>
           <p className="text-[10px] text-slate-300 max-w-xs leading-relaxed">
             {deliveryType === 'courier'
-              ? 'Курьер GetMenu на Бэтмобиле уже выехал с заказом! Открываем 3D трекер на карте...'
+              ? 'Курьер GetMenu уже в пути с вашим заказом! Открываем живой трекер доставки...'
               : 'Чек передан на кассу iiko. Официант принесёт заказ через ~18 мин.'}
           </p>
           <button
@@ -1505,7 +1505,7 @@ export function DesignShowcaseGallery() {
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 text-amber-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Интерактивные примеры готовых работ и 3D-трекинг доставки</span>
+            <span>Интерактивные примеры готовых работ и трекинг доставки</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-black font-serif text-white leading-tight">
             Выберите стиль{' '}
@@ -1515,7 +1515,7 @@ export function DesignShowcaseGallery() {
           </h2>
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
             Полноценное PWA-приложение с реальными фото, оформлением доставки курьером 🏎️, уведомлениями 🔔
-            и живым трекером заказов на 3D карте.
+            и анимированным радаром курьера на карте.
           </p>
         </div>
 
@@ -1631,7 +1631,7 @@ export function DesignShowcaseGallery() {
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all shadow-lg active:scale-95"
               >
                 <Car className="w-4 h-4 text-amber-400" />
-                <span>{rightTab === 'delivery' ? 'О дизайне' : '3D Трекер доставки'}</span>
+                <span>{rightTab === 'delivery' ? 'О дизайне' : 'Трекер доставки'}</span>
               </button>
             </div>
           </div>
@@ -1727,7 +1727,7 @@ export function DesignShowcaseGallery() {
                     {[
                       'Оформление доставки курьером на дом/офис',
                       'Заказ к столику или Room Service в номер',
-                      'Живой 3D-трекер курьера на карте города',
+                      'Живой радар курьера на карте города',
                       'Интеграция с терминалом кухни (iiko / r_keeper)',
                     ].map((f, i) => (
                       <div
@@ -1766,7 +1766,7 @@ export function DesignShowcaseGallery() {
                     className="px-5 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                   >
                     <Car className="w-4 h-4 text-amber-400" />
-                    <span>3D Доставка</span>
+                    <span>Трекер доставки</span>
                   </button>
                 </div>
               </div>
@@ -1807,7 +1807,7 @@ export function DesignShowcaseGallery() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold"
               >
                 <Car className="w-3.5 h-3.5" />
-                <span>3D Доставка</span>
+                <span>Трекер доставки</span>
               </button>
 
               <div className="hidden sm:flex items-center p-1 rounded-xl bg-white/6 border border-white/10">
